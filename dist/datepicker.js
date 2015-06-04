@@ -151,8 +151,8 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.setState({ showPicker: false });
 		},
 
-		_eventDispatcher: function _eventDispatcher(event, data) {
-			var event = new CustomEvent(event, { 'detail': data });
+		_eventDispatcher: function _eventDispatcher(evt, data) {
+			var event = new CustomEvent(evt, { 'detail': data });
 			this.props.element.dispatchEvent(event);
 		},
 
@@ -271,7 +271,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		},
 
 		_getCellDate: function _getCellDate(cell) {
-			return '' + this.state.viewingYear.year() + '/' + this.state.viewingMonth.format('MM') + '/' + cell;
+			return this.state.viewingYear.year() + '/' + this.state.viewingMonth.format('MM') + '/' + cell;
 		},
 
 		_isSelectedDay: function _isSelectedDay(cell) {

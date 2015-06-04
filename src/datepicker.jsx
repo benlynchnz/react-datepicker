@@ -60,8 +60,8 @@ export default React.createClass({
 		this.setState({ showPicker: false });
 	},
 
-	_eventDispatcher: function(event, data) {
-		var event = new CustomEvent(event, { 'detail': data });
+	_eventDispatcher: function(evt, data) {
+		var event = new CustomEvent(evt, { 'detail': data });
 		this.props.element.dispatchEvent(event);
 	},
 
@@ -180,7 +180,7 @@ export default React.createClass({
 	},
 
 	_getCellDate: function(cell) {
-		return `${this.state.viewingYear.year()}/${this.state.viewingMonth.format('MM')}/${cell}`;
+		return this.state.viewingYear.year() + '/' + this.state.viewingMonth.format('MM') + '/' + cell;
 	},
 
 	_isSelectedDay: function(cell) {
