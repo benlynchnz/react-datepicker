@@ -2,7 +2,7 @@
 
 	<head>
 
-		<title>EROAD | Date Picker</title>
+		<title>React | Date Picker</title>
 
 		<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700italic,700,900,900italic' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" type="text/css" href="datepicker.css" />
@@ -24,11 +24,11 @@
 
 	<body>
 
-		<eroad-datepicker
+		<react-datepicker
 			id="myDatePicker"
-			selected-day="2015-06-01T00:00:00.000Z"
-			timezone="Pacific/Auckland">
-		</eroad-datepicker>
+			selected-day="2015-05-02T00:00:00.000Z"
+			min-date="2015-05-01T00:00:00.000Z">
+		</react-datepicker>
 
 		<script src="datepicker.js"></script>
 
@@ -36,16 +36,9 @@
 
 			var datepicker = document.getElementById('myDatePicker');
 
-			datepicker.addEventListener('show', function(e) {
-				console.log('onShow', e.detail);
-			});
-
-			datepicker.addEventListener('dateSelected', function(e) {
-				console.log('dateSelected', e.detail);
-			});
-
-			datepicker.addEventListener('close', function(e) {
-				console.log('onClose', e.detail);
+			datepicker.addEventListener('eventStream', function(e) {
+				console.log('EVENT:: ' + e.detail.eventType);
+				console.log('MESSAGE::', e.detail.message);
 			});
 
 

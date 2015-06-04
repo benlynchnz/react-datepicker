@@ -112,7 +112,7 @@
 	vertical-align: bottom;
 	border-bottom: 1px solid #e5e5e5;
 	padding: 20px 0 10px 0;
-	color: #e5e5e5;
+	color: #999;
 }
 
 .table tr > td {
@@ -120,6 +120,7 @@
 	border: none;
 	padding: 10px;
 	vertical-align: top;
+	color: #ddd;
 }
 
 .table tr > td a {
@@ -128,6 +129,7 @@
 	padding: 4px;
 	width: 20px;
 	height: 20px;
+	color: #444;
 }
 
 .table tr > td a.selected {
@@ -148,7 +150,7 @@
 	float: right;
 }
 
-.footer .buttons button {
+.btn {
 	margin-right: 30px;
 	background-color: transparent;
 	border: 0;
@@ -157,4 +159,16 @@
 	font-size: 15px;
 	text-transform: uppercase;
 	cursor: pointer;
+}
+
+.btn:hover {
+	color: #ddd;
+}
+
+.btn:focus {
+	outline: 0;
+}
+
+.btn:nth-of-type(2) {
+	margin-right: 10px;
 }

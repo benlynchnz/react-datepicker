@@ -12,6 +12,8 @@ export default React.createClass({
 			viewingDay: moment().endOf('day'),
 			viewingMonth: moment().endOf('month'),
 			viewingYear: moment().endOf('year'),
+			minDate: moment().subtract(100, 'years'),
+			maxDate: moment().add(100, 'years'),
 			showPicker: false
 		};
 	},
@@ -41,13 +43,30 @@ export default React.createClass({
 
 	_handlePassedProps: function(props) {
 		if (props['selected-day']) {
-			this.setState({ selectedDay: moment(props['selected-day']).endOf('day') });
+			this.setState({
+				selectedDay: moment(props['selected-day']).endOf('day'),
+				viewingMonth: moment(props['selected-day']).endOf('month'),
+				viewingYear: moment(props['selected-day']).endOf('year')
+			});
+		}
+
+		if (props['min-date']) {
+			this.setState({
+				minDate: moment(props['min-date'])
+			});
+		}
+
+		if (props['max-date']) {
+			this.setState({
+				maxDate: moment(props['max-date'])
+			});
 		}
 	},
 
 	_onFocus: function() {
 		this._eventDispatcher('show');
 		this.setState({ showPicker: true });
+		console.log(this.state);
 	},
 
 	_onCancelClick: function() {
@@ -60,8 +79,13 @@ export default React.createClass({
 		this.setState({ showPicker: false });
 	},
 
-	_eventDispatcher: function(evt, data) {
-		var event = new CustomEvent(evt, { 'detail': data });
+	_eventDispatcher: function(type, data) {
+		var event = new CustomEvent('eventStream', {
+			'detail': {
+				eventType: type,
+				message: data
+			}
+		});
 		this.props.element.dispatchEvent(event);
 	},
 
@@ -183,6 +207,10 @@ export default React.createClass({
 		return this.state.viewingYear.year() + '/' + this.state.viewingMonth.format('MM') + '/' + cell;
 	},
 
+	_getCellDateAsISO: function(cell) {
+		return moment(this._getCellDate(cell), 'YYYY/MM/DD');
+	},
+
 	_isSelectedDay: function(cell) {
 		if (cell && (this.state.selectedDay.format('YYYY/MM/DD') == this._getCellDate(cell))) {
 			return true;
@@ -230,15 +258,19 @@ export default React.createClass({
 										<tr key={i}>
 											{row.map(function(cell, j) {
 												if (cell) {
-													return (
-														<td key={j}>
-															<a
-																data-date={self._getCellDate(cell)}
-																className={self._isSelectedDay(cell) ? styles.selected : null}
-																onClick={self._onDayClick}>{cell}
-															</a>
-														</td>
-													);
+													if (self._getCellDateAsISO(cell).isBetween(self.state.minDate, self.state.maxDate, 'day')) {
+														return (
+															<td key={j}>
+																<a
+																	data-date={self._getCellDate(cell)}
+																	className={self._isSelectedDay(cell) ? styles.selected : null}
+																	onClick={self._onDayClick}>{cell}
+																</a>
+															</td>
+														);
+													} else {
+														return <td key={j}>{cell}</td>;
+													}
 												} else {
 													return <td key={j}></td>;
 												}
@@ -250,8 +282,8 @@ export default React.createClass({
 						</table>
 						<div className={styles.footer}>
 							<div className={styles.buttons}>
-								<button onClick={self._onCancelClick}>Cancel</button>
-								<button onClick={self._onOkClick}>OK</button>
+								<button className={styles.btn} onClick={self._onCancelClick}>Cancel</button>
+								<button className={styles.btn} onClick={self._onOkClick}>OK</button>
 							</div>
 						</div>
 					</div>

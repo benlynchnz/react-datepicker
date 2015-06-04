@@ -67,7 +67,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _datepickerJsx2 = _interopRequireDefault(_datepickerJsx);
 
 	if (typeof document !== 'undefined') {
-		var renderToElements = document.getElementsByTagName('eroad-datepicker');
+		var renderToElements = document.getElementsByTagName('react-datepicker');
 
 		Array.prototype.forEach.call(renderToElements, function (el) {
 			React.render(React.createElement(_datepickerJsx2['default'], { element: el }), el);
@@ -103,6 +103,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				viewingDay: moment().endOf('day'),
 				viewingMonth: moment().endOf('month'),
 				viewingYear: moment().endOf('year'),
+				minDate: moment().subtract(100, 'years'),
+				maxDate: moment().add(100, 'years'),
 				showPicker: false
 			};
 		},
@@ -132,13 +134,30 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		_handlePassedProps: function _handlePassedProps(props) {
 			if (props['selected-day']) {
-				this.setState({ selectedDay: moment(props['selected-day']).endOf('day') });
+				this.setState({
+					selectedDay: moment(props['selected-day']).endOf('day'),
+					viewingMonth: moment(props['selected-day']).endOf('month'),
+					viewingYear: moment(props['selected-day']).endOf('year')
+				});
+			}
+
+			if (props['min-date']) {
+				this.setState({
+					minDate: moment(props['min-date'])
+				});
+			}
+
+			if (props['max-date']) {
+				this.setState({
+					maxDate: moment(props['max-date'])
+				});
 			}
 		},
 
 		_onFocus: function _onFocus() {
 			this._eventDispatcher('show');
 			this.setState({ showPicker: true });
+			console.log(this.state);
 		},
 
 		_onCancelClick: function _onCancelClick() {
@@ -151,8 +170,13 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.setState({ showPicker: false });
 		},
 
-		_eventDispatcher: function _eventDispatcher(evt, data) {
-			var event = new CustomEvent(evt, { 'detail': data });
+		_eventDispatcher: function _eventDispatcher(type, data) {
+			var event = new CustomEvent('eventStream', {
+				'detail': {
+					eventType: type,
+					message: data
+				}
+			});
 			this.props.element.dispatchEvent(event);
 		},
 
@@ -274,6 +298,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			return this.state.viewingYear.year() + '/' + this.state.viewingMonth.format('MM') + '/' + cell;
 		},
 
+		_getCellDateAsISO: function _getCellDateAsISO(cell) {
+			return moment(this._getCellDate(cell), 'YYYY/MM/DD');
+		},
+
 		_isSelectedDay: function _isSelectedDay(cell) {
 			if (cell && this.state.selectedDay.format('YYYY/MM/DD') == this._getCellDate(cell)) {
 				return true;
@@ -375,18 +403,26 @@ return /******/ (function(modules) { // webpackBootstrap
 										{ key: i },
 										row.map(function (cell, j) {
 											if (cell) {
-												return React.createElement(
-													'td',
-													{ key: j },
-													React.createElement(
-														'a',
-														{
-															'data-date': self._getCellDate(cell),
-															className: self._isSelectedDay(cell) ? _DatePickerStyleCss2['default'].selected : null,
-															onClick: self._onDayClick },
+												if (self._getCellDateAsISO(cell).isBetween(self.state.minDate, self.state.maxDate, 'day')) {
+													return React.createElement(
+														'td',
+														{ key: j },
+														React.createElement(
+															'a',
+															{
+																'data-date': self._getCellDate(cell),
+																className: self._isSelectedDay(cell) ? _DatePickerStyleCss2['default'].selected : null,
+																onClick: self._onDayClick },
+															cell
+														)
+													);
+												} else {
+													return React.createElement(
+														'td',
+														{ key: j },
 														cell
-													)
-												);
+													);
+												}
 											} else {
 												return React.createElement('td', { key: j });
 											}
@@ -403,12 +439,12 @@ return /******/ (function(modules) { // webpackBootstrap
 								{ className: _DatePickerStyleCss2['default'].buttons },
 								React.createElement(
 									'button',
-									{ onClick: self._onCancelClick },
+									{ className: _DatePickerStyleCss2['default'].btn, onClick: self._onCancelClick },
 									'Cancel'
 								),
 								React.createElement(
 									'button',
-									{ onClick: self._onOkClick },
+									{ className: _DatePickerStyleCss2['default'].btn, onClick: self._onOkClick },
 									'OK'
 								)
 							)
@@ -428,7 +464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"wrapper":"DatePickerStyle__wrapper___3Emxc","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg"};
+	module.exports = {"wrapper":"DatePickerStyle__wrapper___3Emxc","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl"};
 
 /***/ }
 /******/ ])
