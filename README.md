@@ -2,7 +2,7 @@
 
 #### Requirements
 
-iojs > 2.x
+io.js > 2.x
 
 https://iojs.org/en/index.html
 
