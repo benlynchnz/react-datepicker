@@ -1,0 +1,161 @@
+.wrapper {
+	background-color: #fff;
+	border-radius: 0px;
+	box-shadow: 0px 1px 3px 3px rgba(0, 0, 0, 0.05);
+	min-height: 100px;
+	opacity: 1;
+	min-width: 100px;
+	color: #fcfcfc;
+    width: 320px;
+    position: relative;
+    bottom: -10px;
+    padding-bottom: 20px;
+}
+
+.header {
+    text-align: center;
+    padding: 10px;
+    background-color: #2E88C5;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.date {
+    background-color: #3498DB;
+    text-align: center;
+    padding: 10px;
+    font-weight: 300;
+}
+
+.left {
+    display: block;
+    float: left;
+    width: 20px;
+    height: 20px;
+    background-color: #2E88C5;
+}
+
+.right {
+    display: block;
+    float: right;
+    width: 20px;
+    height: 20px;
+    background-color: #2E88C5;
+}
+
+.hide {
+	display: none;
+}
+
+.show {
+	display: block;
+}
+
+.month {
+	font-size: 30px;
+	line-height: 35px;
+}
+
+.day {
+	font-size: 56px;
+	line-height: 60px;
+	padding-bottom: 10px;
+}
+
+.year {
+	font-size: 26px;
+	line-height: 35px;
+	opacity: 0.7;
+}
+
+.arrow-left {
+	cursor: pointer;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	margin-top: 7px;
+	float: left;
+	border-width: 10px 17.3px 10px 0;
+	border-color: transparent #2e89c5 transparent transparent;
+}
+
+.arrow-right {
+	cursor: pointer;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	margin-top: 7px;
+	float: right;
+	border-width: 10px 0 10px 17.3px;
+	border-color: transparent transparent transparent #2e89c5;
+}
+
+.arrow-left:hover {
+	border-color: transparent #1f5b83 transparent transparent;
+}
+
+.arrow-right:hover {
+	border-color: transparent transparent transparent #1f5b83;
+}
+
+.table {
+	width: 100%;
+	max-width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+	box-sizing: border-box;
+}
+
+.table tr > th {
+	color: #444;
+	text-align: center;
+	font-weight: 600;
+	vertical-align: bottom;
+	border-bottom: 1px solid #e5e5e5;
+	padding: 20px 0 10px 0;
+	color: #e5e5e5;
+}
+
+.table tr > td {
+	text-align: center;
+	border: none;
+	padding: 10px;
+	vertical-align: top;
+}
+
+.table tr > td a {
+	cursor: pointer;
+	border-radius: 50%;
+	padding: 4px;
+	width: 20px;
+	height: 20px;
+}
+
+.table tr > td a.selected {
+	background-color: #2e89c5;
+	color: #fcfcfc;
+}
+
+.table tr > td a:hover {
+	background-color: #2e89c5;
+	color: #fcfcfc;
+}
+
+.footer {
+	padding: 10px 10px 20px;
+}
+
+.footer .buttons {
+	float: right;
+}
+
+.footer .buttons button {
+	margin-right: 30px;
+	background-color: transparent;
+	border: 0;
+	font-family: 'Roboto';
+	color: #444;
+	font-size: 15px;
+	text-transform: uppercase;
+	cursor: pointer;
+}
