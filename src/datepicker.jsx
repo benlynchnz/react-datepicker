@@ -225,19 +225,23 @@ export default React.createClass({
 								</tr>
 							</thead>
 							<tbody>
-								{this._getDaysInMonth().map(function(row) {
+								{this._getDaysInMonth().map(function(row, i) {
 									return (
-										<tr>
-											{row.map(function(cell) {
-												return (
-													<td>
-														<a
-															data-date={self._getCellDate(cell)}
-															className={self._isSelectedDay(cell) ? styles.selected : null}
-															onClick={self._onDayClick}>{cell}
-														</a>
-													</td>
-												);
+										<tr key={i}>
+											{row.map(function(cell, j) {
+												if (cell) {
+													return (
+														<td key={j}>
+															<a
+																data-date={self._getCellDate(cell)}
+																className={self._isSelectedDay(cell) ? styles.selected : null}
+																onClick={self._onDayClick}>{cell}
+															</a>
+														</td>
+													);
+												} else {
+													return <td key={j}></td>;
+												}
 											})}
 										</tr>
 									);

@@ -369,23 +369,27 @@ return /******/ (function(modules) { // webpackBootstrap
 							React.createElement(
 								'tbody',
 								null,
-								this._getDaysInMonth().map(function (row) {
+								this._getDaysInMonth().map(function (row, i) {
 									return React.createElement(
 										'tr',
-										null,
-										row.map(function (cell) {
-											return React.createElement(
-												'td',
-												null,
-												React.createElement(
-													'a',
-													{
-														'data-date': self._getCellDate(cell),
-														className: self._isSelectedDay(cell) ? _DatePickerStyleCss2['default'].selected : null,
-														onClick: self._onDayClick },
-													cell
-												)
-											);
+										{ key: i },
+										row.map(function (cell, j) {
+											if (cell) {
+												return React.createElement(
+													'td',
+													{ key: j },
+													React.createElement(
+														'a',
+														{
+															'data-date': self._getCellDate(cell),
+															className: self._isSelectedDay(cell) ? _DatePickerStyleCss2['default'].selected : null,
+															onClick: self._onDayClick },
+														cell
+													)
+												);
+											} else {
+												return React.createElement('td', { key: j });
+											}
 										})
 									);
 								})
