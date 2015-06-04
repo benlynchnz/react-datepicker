@@ -1,5 +1,11 @@
 # React Datepicker
 
+#### Requirements
+
+iojs > 2.x
+
+https://iojs.org/en/index.html
+
 #### Installation
 
 `git clone git@github.com:benlynchnz/react-datepicker.git`
