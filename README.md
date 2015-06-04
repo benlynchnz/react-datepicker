@@ -9,3 +9,5 @@
 #### Run
 
 `gulp`
+
+Check out http://localhost:3000 in your browser
