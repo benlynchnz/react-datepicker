@@ -70,18 +70,57 @@ export default React.createClass({
 	},
 
 	_onFocus: function() {
-		this._eventDispatcher('show');
-		this.setState({ showPicker: true });
-
-		var handleClick = (e) => {
-			var match = utils.closest(e.target, 'react-datepicker');
-			if (!match) {
-				document.removeEventListener('click', handleClick);
+		var clickHandler = (e) => {
+			console.log('click');
+			var hasFocus = utils.closest(e.target, 'react-datepicker');
+			if (!hasFocus) {
+				document.removeEventListener('click', clickHandler);
+				document.removeEventListener('keyup', keyPressHandler);
 				this._onBlur();
 			}
 		}
 
-		document.addEventListener('click', handleClick);
+		var keyPressHandler = (e) => {
+			console.log(e.which);
+
+			// ENTER
+			if (e.which === 13) {
+				document.removeEventListener('keyup', keyPressHandler);
+				this._onOkClick();
+			}
+
+			// ESC
+			if (e.which === 27) {
+				document.removeEventListener('keyup', keyPressHandler);
+				this._onBlur();
+			}
+
+			// back
+			if (e.which === 37) {
+				this._handleKeyPress(-1);
+			}
+
+			// up
+			if (e.which === 38) {
+				this._handleKeyPress(-7);
+			}
+
+			// forward
+			if (e.which === 39) {
+				this._handleKeyPress(1);
+			}
+
+			// down
+			if (e.which === 40) {
+				this._handleKeyPress(7);
+			}
+		}
+
+		document.addEventListener('keyup', keyPressHandler);
+		document.addEventListener('click', clickHandler);
+
+		this._eventDispatcher('show');
+		this.setState({ showPicker: true });
 	},
 
 	_onBlur: function() {
@@ -150,18 +189,24 @@ export default React.createClass({
 		return state.format(format);
 	},
 
+	_handleKeyPress: function(move) {
+		var day = Number(this._getDate('DAYOFMONTH')),
+			month = this.state.viewingMonth.month(),
+			year = this.state.viewingYear.year(),
+			e = document.getElementsByClassName(styles.selected)[0],
+			moveTo = this.state.selectedDay.toISOString();
+
+		if (moment(moveTo).add(move, 'days').isBetween(this.state.minDate, this.state.maxDate, 'day')) {
+			this.setState({ selectedDay: this.state.selectedDay.add(move, 'days') });
+			this._eventDispatcher('dateSelected', this.state.selectedDay);
+		}
+	},
+
 	_onDayClick: function(e) {
 		var day = Number(e.target.getAttribute('data-date').split('/')[2]),
 			month = this.state.viewingMonth.month(),
 			year = this.state.viewingYear.year(),
-			els = document.getElementsByTagName('a'),
 			closeOnSelect = this.props['close-on-select'];
-
-		Array.prototype.forEach.call(els, function(item) {
-			item.classList.remove(styles.selected);
-		});
-
-		e.target.classList.add(styles.selected);
 
 		if (closeOnSelect) {
 			this._onOkClick();

@@ -6,7 +6,7 @@ function closest(elem, selector) {
 
     while (elem) {
         if (matchesSelector.bind(elem)(selector)) {
-            return elem;
+            return true;
         } else {
             elem = elem.parentElement;
         }
