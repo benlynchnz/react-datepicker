@@ -2,6 +2,7 @@
 
 import styles from './DatePickerStyle.css';
 import utils from './utils.js';
+import constants from './constants.js';
 
 export default React.createClass({
 
@@ -119,25 +120,25 @@ export default React.createClass({
 		document.addEventListener('keyup', keyPressHandler);
 		document.addEventListener('click', clickHandler);
 
-		this._eventDispatcher('show');
+		this._dispatch(constants.FOCUS);
 		this.setState({ showPicker: true });
 	},
 
 	_onBlur: function() {
-		this._eventDispatcher('blur');
+		this._dispatch(constants.BLUR);
 		this.setState({ showPicker: false });
 	},
 
 	_onOkClick: function() {
-		this._eventDispatcher('ok', this.state.selectedDay);
+		this._dispatch(constants.DATE_SELECTED, { date: this.state.selectedDay });
 		this._onBlur();
 	},
 
-	_eventDispatcher: function(type, data) {
+	_dispatch: function(type, payload) {
 		var event = new CustomEvent('eventStream', {
 			'detail': {
-				eventType: type,
-				message: data
+				type: type,
+				payload: payload
 			}
 		});
 
@@ -198,7 +199,7 @@ export default React.createClass({
 
 		if (moment(moveTo).add(move, 'days').isBetween(this.state.minDate, this.state.maxDate, 'day')) {
 			this.setState({ selectedDay: this.state.selectedDay.add(move, 'days') });
-			this._eventDispatcher('dateSelected', this.state.selectedDay);
+			this._dispatch(constants.DATE_SELECTED, { date: this.state.selectedDay });
 		}
 	},
 
@@ -214,7 +215,7 @@ export default React.createClass({
 
 		this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
 
-		this._eventDispatcher('dateSelected', this.state.selectedDay);
+		this._dispatch(constants.DATE_SELECTED, { date: this.state.selectedDay });
 	},
 
 	_onMonthClick: function(e) {

@@ -89,13 +89,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _DatePickerStyleCss = __webpack_require__(3);
+	var _DatePickerStyleCss = __webpack_require__(4);
 
 	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
 
 	var _utilsJs = __webpack_require__(2);
 
 	var _utilsJs2 = _interopRequireDefault(_utilsJs);
+
+	var _constantsJs = __webpack_require__(3);
+
+	var _constantsJs2 = _interopRequireDefault(_constantsJs);
 
 	exports['default'] = React.createClass({
 
@@ -215,25 +219,25 @@ return /******/ (function(modules) { // webpackBootstrap
 			document.addEventListener('keyup', keyPressHandler);
 			document.addEventListener('click', clickHandler);
 
-			this._eventDispatcher('show');
+			this._dispatch(_constantsJs2['default'].FOCUS);
 			this.setState({ showPicker: true });
 		},
 
 		_onBlur: function _onBlur() {
-			this._eventDispatcher('blur');
+			this._dispatch(_constantsJs2['default'].BLUR);
 			this.setState({ showPicker: false });
 		},
 
 		_onOkClick: function _onOkClick() {
-			this._eventDispatcher('ok', this.state.selectedDay);
+			this._dispatch(_constantsJs2['default'].DATE_SELECTED, { date: this.state.selectedDay });
 			this._onBlur();
 		},
 
-		_eventDispatcher: function _eventDispatcher(type, data) {
+		_dispatch: function _dispatch(type, payload) {
 			var event = new CustomEvent('eventStream', {
 				'detail': {
-					eventType: type,
-					message: data
+					type: type,
+					payload: payload
 				}
 			});
 
@@ -294,7 +298,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			if (moment(moveTo).add(move, 'days').isBetween(this.state.minDate, this.state.maxDate, 'day')) {
 				this.setState({ selectedDay: this.state.selectedDay.add(move, 'days') });
-				this._eventDispatcher('dateSelected', this.state.selectedDay);
+				this._dispatch(_constantsJs2['default'].DATE_SELECTED, { date: this.state.selectedDay });
 			}
 		},
 
@@ -310,7 +314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
 
-			this._eventDispatcher('dateSelected', this.state.selectedDay);
+			this._dispatch(_constantsJs2['default'].DATE_SELECTED, { date: this.state.selectedDay });
 		},
 
 		_onMonthClick: function _onMonthClick(e) {
@@ -554,6 +558,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var constants = {
+		FOCUS: "FOCUS",
+		BLUR: "BLUR",
+		DATE_SELECTED: "DATE_SELECTED"
+	};
+
+	exports["default"] = constants;
+	module.exports = exports["default"];
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin

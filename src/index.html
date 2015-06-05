@@ -35,11 +35,12 @@
 
 			var datepicker = document.getElementById('myDatePicker');
 
-			datepicker.addEventListener('eventStream', function(e) {
-				console.log('EVENT:: ' + e.detail.eventType);
-				console.log('MESSAGE::', e.detail.message);
-			});
+			var eventHandler = function(e) {
+				console.log('EVENT:: ' + e.detail.type);
+				console.log('MESSAGE::', e.detail.payload);
+			};
 
+			datepicker.addEventListener('eventStream', eventHandler);
 
 		</script>
 
