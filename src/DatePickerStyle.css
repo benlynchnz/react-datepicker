@@ -10,6 +10,10 @@
     padding-bottom: 20px;
 }
 
+.float-left {
+	float: left;
+}
+
 .header {
     text-align: center;
     padding: 10px;

@@ -1,6 +1,7 @@
 'use strict';
 
 import styles from './DatePickerStyle.css';
+import utils from './utils.js';
 
 export default React.createClass({
 
@@ -12,8 +13,9 @@ export default React.createClass({
 			viewingDay: moment().endOf('day'),
 			viewingMonth: moment().endOf('month'),
 			viewingYear: moment().endOf('year'),
-			minDate: moment().subtract(100, 'years'),
-			maxDate: moment().add(100, 'years'),
+			minDate: moment().subtract(999, 'years'),
+			maxDate: moment().add(999, 'years'),
+			closeOnSelect: false,
 			showPicker: false
 		};
 	},
@@ -61,22 +63,35 @@ export default React.createClass({
 				maxDate: moment(props['max-date'])
 			});
 		}
+
+		if (props['close-on-select']) {
+			this.setState({ closeOnSelect: true });
+		}
 	},
 
 	_onFocus: function() {
 		this._eventDispatcher('show');
 		this.setState({ showPicker: true });
-		console.log(this.state);
+
+		var handleClick = (e) => {
+			var match = utils.closest(e.target, 'react-datepicker');
+			if (!match) {
+				document.removeEventListener('click', handleClick);
+				this._onBlur();
+			}
+		}
+
+		document.addEventListener('click', handleClick);
 	},
 
-	_onCancelClick: function() {
-		this._eventDispatcher('close', this.state.selectedDay);
+	_onBlur: function() {
+		this._eventDispatcher('blur');
 		this.setState({ showPicker: false });
 	},
 
 	_onOkClick: function() {
-		this._eventDispatcher('close', this.state.selectedDay);
-		this.setState({ showPicker: false });
+		this._eventDispatcher('ok', this.state.selectedDay);
+		this._onBlur();
 	},
 
 	_eventDispatcher: function(type, data) {
@@ -86,6 +101,7 @@ export default React.createClass({
 				message: data
 			}
 		});
+
 		this.props.element.dispatchEvent(event);
 	},
 
@@ -137,13 +153,9 @@ export default React.createClass({
 	_onDayClick: function(e) {
 		var day = Number(e.target.getAttribute('data-date').split('/')[2]),
 			month = this.state.viewingMonth.month(),
-			year = this.state.viewingYear.year();
-
-		this.setState({
-			selectedDay: this.state.selectedDay.year(year).month(month).date(day)
-		});
-
-		var els = document.getElementsByTagName('a');
+			year = this.state.viewingYear.year(),
+			els = document.getElementsByTagName('a'),
+			closeOnSelect = this.props['close-on-select'];
 
 		Array.prototype.forEach.call(els, function(item) {
 			item.classList.remove(styles.selected);
@@ -151,12 +163,13 @@ export default React.createClass({
 
 		e.target.classList.add(styles.selected);
 
-		this._eventDispatcher('dateSelected', this.state.selectedDay);
-
-		var closeOnSelect = this.props['close-on-select'];
-		if (closeOnSelect === 'true') {
+		if (closeOnSelect) {
 			this._onOkClick();
 		}
+
+		this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
+
+		this._eventDispatcher('dateSelected', this.state.selectedDay);
 	},
 
 	_onMonthClick: function(e) {
@@ -223,7 +236,7 @@ export default React.createClass({
 
 		if (this.state.showPicker) {
 			return (
-				<div>
+				<div className={styles['float-left']}>
 					<input type="text" onFocus={self._onFocus} />
 					<div className={styles.wrapper}>
 						<div className={styles.header}>{this._getDate('DAYOFWEEK')}</div>
@@ -282,7 +295,7 @@ export default React.createClass({
 						</table>
 						<div className={styles.footer}>
 							<div className={styles.buttons}>
-								<button className={styles.btn} onClick={self._onCancelClick}>Cancel</button>
+								<button className={styles.btn} onClick={self._onBlur}>Cancel</button>
 								<button className={styles.btn} onClick={self._onOkClick}>OK</button>
 							</div>
 						</div>

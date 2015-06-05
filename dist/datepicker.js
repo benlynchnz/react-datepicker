@@ -89,9 +89,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _DatePickerStyleCss = __webpack_require__(2);
+	var _DatePickerStyleCss = __webpack_require__(3);
 
 	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
+
+	var _utilsJs = __webpack_require__(2);
+
+	var _utilsJs2 = _interopRequireDefault(_utilsJs);
 
 	exports['default'] = React.createClass({
 
@@ -103,8 +107,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				viewingDay: moment().endOf('day'),
 				viewingMonth: moment().endOf('month'),
 				viewingYear: moment().endOf('year'),
-				minDate: moment().subtract(100, 'years'),
-				maxDate: moment().add(100, 'years'),
+				minDate: moment().subtract(999, 'years'),
+				maxDate: moment().add(999, 'years'),
+				closeOnSelect: false,
 				showPicker: false
 			};
 		},
@@ -152,22 +157,37 @@ return /******/ (function(modules) { // webpackBootstrap
 					maxDate: moment(props['max-date'])
 				});
 			}
+
+			if (props['close-on-select']) {
+				this.setState({ closeOnSelect: true });
+			}
 		},
 
 		_onFocus: function _onFocus() {
+			var _this = this;
+
 			this._eventDispatcher('show');
 			this.setState({ showPicker: true });
-			console.log(this.state);
+
+			var handleClick = function handleClick(e) {
+				var match = _utilsJs2['default'].closest(e.target, 'react-datepicker');
+				if (!match) {
+					document.removeEventListener('click', handleClick);
+					_this._onBlur();
+				}
+			};
+
+			document.addEventListener('click', handleClick);
 		},
 
-		_onCancelClick: function _onCancelClick() {
-			this._eventDispatcher('close', this.state.selectedDay);
+		_onBlur: function _onBlur() {
+			this._eventDispatcher('blur');
 			this.setState({ showPicker: false });
 		},
 
 		_onOkClick: function _onOkClick() {
-			this._eventDispatcher('close', this.state.selectedDay);
-			this.setState({ showPicker: false });
+			this._eventDispatcher('ok', this.state.selectedDay);
+			this._onBlur();
 		},
 
 		_eventDispatcher: function _eventDispatcher(type, data) {
@@ -177,6 +197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					message: data
 				}
 			});
+
 			this.props.element.dispatchEvent(event);
 		},
 
@@ -228,13 +249,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		_onDayClick: function _onDayClick(e) {
 			var day = Number(e.target.getAttribute('data-date').split('/')[2]),
 			    month = this.state.viewingMonth.month(),
-			    year = this.state.viewingYear.year();
-
-			this.setState({
-				selectedDay: this.state.selectedDay.year(year).month(month).date(day)
-			});
-
-			var els = document.getElementsByTagName('a');
+			    year = this.state.viewingYear.year(),
+			    els = document.getElementsByTagName('a'),
+			    closeOnSelect = this.props['close-on-select'];
 
 			Array.prototype.forEach.call(els, function (item) {
 				item.classList.remove(_DatePickerStyleCss2['default'].selected);
@@ -242,12 +259,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			e.target.classList.add(_DatePickerStyleCss2['default'].selected);
 
-			this._eventDispatcher('dateSelected', this.state.selectedDay);
-
-			var closeOnSelect = this.props['close-on-select'];
-			if (closeOnSelect === 'true') {
+			if (closeOnSelect) {
 				this._onOkClick();
 			}
+
+			this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
+
+			this._eventDispatcher('dateSelected', this.state.selectedDay);
 		},
 
 		_onMonthClick: function _onMonthClick(e) {
@@ -315,7 +333,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			if (this.state.showPicker) {
 				return React.createElement(
 					'div',
-					null,
+					{ className: _DatePickerStyleCss2['default']['float-left'] },
 					React.createElement('input', { type: 'text', onFocus: self._onFocus }),
 					React.createElement(
 						'div',
@@ -439,7 +457,7 @@ return /******/ (function(modules) { // webpackBootstrap
 								{ className: _DatePickerStyleCss2['default'].buttons },
 								React.createElement(
 									'button',
-									{ className: _DatePickerStyleCss2['default'].btn, onClick: self._onCancelClick },
+									{ className: _DatePickerStyleCss2['default'].btn, onClick: self._onBlur },
 									'Cancel'
 								),
 								React.createElement(
@@ -463,8 +481,38 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var utils = {};
+
+	function closest(elem, selector) {
+
+	    var matchesSelector = elem.matches || elem.webkitMatchesSelector || elem.mozMatchesSelector || elem.msMatchesSelector;
+
+	    while (elem) {
+	        if (matchesSelector.bind(elem)(selector)) {
+	            return elem;
+	        } else {
+	            elem = elem.parentElement;
+	        }
+	    }
+	    return false;
+	}
+
+	utils.closest = closest;
+
+	exports["default"] = utils;
+	module.exports = exports["default"];
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// removed by extract-text-webpack-plugin
-	module.exports = {"wrapper":"DatePickerStyle__wrapper___3Emxc","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl"};
+	module.exports = {"wrapper":"DatePickerStyle__wrapper___3Emxc","float-left":"DatePickerStyle__float-left___3Rrij","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl"};
 
 /***/ }
 /******/ ])

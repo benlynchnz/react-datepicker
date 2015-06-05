@@ -28,6 +28,7 @@ gulp.task('server', function(done) {
 gulp.task('watch', ['server'], function() {
     livereload.listen({ basePath: 'dist' });
     gulp.watch('src/**/*.jsx', ['webpack']);
+    gulp.watch('src/**/*.js', ['webpack']);
     gulp.watch('src/**/*.css', ['webpack']);
     gulp.watch('src/**/*.html', ['html']);
 });
