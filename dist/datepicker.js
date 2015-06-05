@@ -333,7 +333,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			if (this.state.showPicker) {
 				return React.createElement(
 					'div',
-					{ className: _DatePickerStyleCss2['default']['float-left'] },
+					{ className: _DatePickerStyleCss2['default']['fade-in'] },
 					React.createElement('input', { type: 'text', onFocus: self._onFocus }),
 					React.createElement(
 						'div',
@@ -512,7 +512,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"wrapper":"DatePickerStyle__wrapper___3Emxc","float-left":"DatePickerStyle__float-left___3Rrij","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl"};
+	module.exports = {"wrapper":"DatePickerStyle__wrapper___3Emxc","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","fade-in":"DatePickerStyle__fade-in___1p2zN","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl"};
 
 /***/ }
 /******/ ])

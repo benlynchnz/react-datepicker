@@ -236,7 +236,7 @@ export default React.createClass({
 
 		if (this.state.showPicker) {
 			return (
-				<div className={styles['float-left']}>
+				<div className={styles['fade-in']}>
 					<input type="text" onFocus={self._onFocus} />
 					<div className={styles.wrapper}>
 						<div className={styles.header}>{this._getDate('DAYOFWEEK')}</div>

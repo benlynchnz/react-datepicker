@@ -1,49 +1,61 @@
 .DatePickerStyle__wrapper___3Emxc {
-		background-color: #fff;
-		border-radius: 2px;
-		box-shadow: 0px 1px 3px 3px rgba(0, 0, 0, 0.05);
-		min-width: 100px;
-		color: #fcfcfc;
-    width: 320px;
-    position: relative;
-    bottom: -10px;
-    padding-bottom: 20px;
+	background-color: #fff;
+	border-radius: 2px;
+	box-shadow: 0px 1px 3px 3px rgba(0, 0, 0, 0.05);
+	min-width: 100px;
+	color: #fcfcfc;
+	width: 320px;
+	position: relative;
+	bottom: -10px;
+	padding-bottom: 20px;
 }
 
-.DatePickerStyle__float-left___3Rrij {
+@-webkit-keyframes DatePickerStyle__fadeIn___pe3Rh { from { opacity: 0; } to { opacity: 1; } }
+@keyframes DatePickerStyle__fadeIn___pe3Rh { from { opacity: 0; } to { opacity: 1; } }
+
+.DatePickerStyle__fade-in___1p2zN {
 	float: left;
+	opacity: 0;
+	-webkit-animation:DatePickerStyle__fadeIn___pe3Rh ease-in 1;
+	animation:DatePickerStyle__fadeIn___pe3Rh ease-in 1;
+
+	-webkit-animation-fill-mode:forwards;
+	animation-fill-mode:forwards;
+
+	-webkit-animation-duration: 0.2s;
+	animation-duration: 0.2s;
 }
 
 .DatePickerStyle__header___IS3_k {
-    text-align: center;
-    padding: 10px;
-    background-color: #2E88C5;
-    font-size: 16px;
-    font-weight: 300;
-    border-radius: 2px 2px 0 0;
+	text-align: center;
+	padding: 10px;
+	background-color: #2E88C5;
+	font-size: 16px;
+	font-weight: 300;
+	border-radius: 2px 2px 0 0;
 }
 
 .DatePickerStyle__date___1vfXM {
-    background-color: #3498DB;
-    text-align: center;
-    padding: 10px;
-    font-weight: 300;
+	background-color: #3498DB;
+	text-align: center;
+	padding: 10px;
+	font-weight: 300;
 }
 
 .DatePickerStyle__left___g_KzY {
-    display: block;
-    float: left;
-    width: 20px;
-    height: 20px;
-    background-color: #2E88C5;
+	display: block;
+	float: left;
+	width: 20px;
+	height: 20px;
+	background-color: #2E88C5;
 }
 
 .DatePickerStyle__right___22ruE {
-    display: block;
-    float: right;
-    width: 20px;
-    height: 20px;
-    background-color: #2E88C5;
+	display: block;
+	float: right;
+	width: 20px;
+	height: 20px;
+	background-color: #2E88C5;
 }
 
 .DatePickerStyle__hide___13Weh {
