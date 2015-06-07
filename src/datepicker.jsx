@@ -2,6 +2,7 @@
 
 import styles from './DatePickerStyle.css';
 import utils from './utils';
+import constants from './constants';
 import {chunk} from 'lodash';
 
 export default React.createClass({
@@ -149,26 +150,24 @@ export default React.createClass({
 		document.addEventListener('keyup', keyUpHandler);
 		document.addEventListener('click', clickHandler);
 
-		this._eventDispatcher('show');
+		this._dispatch(constants.FOCUS);
 		this.setState({ showPicker: true });
 	},
 
 	_onBlur: function() {
-		this._eventDispatcher('blur');
+		this._dispatch(constants.BLUR);
 		this.setState({ showPicker: false });
 	},
 
 	_onOkClick: function() {
-		this._eventDispatcher('ok', this.state.selectedDay.toISOString());
+		this._dispatch(constants.OK);
 		this._onBlur();
 	},
 
-	_eventDispatcher: function(type, data) {
+
+	_dispatch: function(action, payload) {
 		var event = new CustomEvent('event', {
-			'detail': {
-				action: type,
-				payload: data
-			}
+			'detail': {action, payload}
 		});
 
 		this.props.element.dispatchEvent(event);
@@ -220,15 +219,11 @@ export default React.createClass({
 	},
 
 	_handleKeyPress: function(move) {
-		var day = Number(this._getDate('DAYOFMONTH')),
-			month = this.state.viewingMonth.month(),
-			year = this.state.viewingYear.year(),
-			e = document.getElementsByClassName(styles.selected)[0],
-			moveTo = this.state.selectedDay.toISOString();
+		var moveTo = this.state.selectedDay.toISOString();
 
 		if (moment(moveTo).add(move, 'days').isBetween(this.state.minDate, this.state.maxDate, 'day')) {
 			this.setState({ selectedDay: this.state.selectedDay.add(move, 'days') });
-			this._eventDispatcher('dateSelected', this.state.selectedDay.toISOString());
+			this._dispatch(constants.DATE_SELECTED, JSON.stringify({ date: this.state.selectedDay.toISOString() }));
 		}
 	},
 
@@ -243,8 +238,7 @@ export default React.createClass({
 		}
 
 		this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
-
-		this._eventDispatcher('dateSelected', this.state.selectedDay.toISOString());
+		this._dispatch(constants.DATE_SELECTED, JSON.stringify({ date: this.state.selectedDay.toISOString() }));
 	},
 
 	_onMonthClick: function(e) {

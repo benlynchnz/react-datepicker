@@ -89,7 +89,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _DatePickerStyleCss = __webpack_require__(4);
+	var _DatePickerStyleCss = __webpack_require__(5);
 
 	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
 
@@ -97,7 +97,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _lodash = __webpack_require__(3);
+	var _constants = __webpack_require__(3);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	var _lodash = __webpack_require__(4);
 
 	exports['default'] = React.createClass({
 
@@ -246,26 +250,23 @@ return /******/ (function(modules) { // webpackBootstrap
 			document.addEventListener('keyup', keyUpHandler);
 			document.addEventListener('click', clickHandler);
 
-			this._eventDispatcher('show');
+			this._dispatch(_constants2['default'].FOCUS);
 			this.setState({ showPicker: true });
 		},
 
 		_onBlur: function _onBlur() {
-			this._eventDispatcher('blur');
+			this._dispatch(_constants2['default'].BLUR);
 			this.setState({ showPicker: false });
 		},
 
 		_onOkClick: function _onOkClick() {
-			this._eventDispatcher('ok', this.state.selectedDay.toISOString());
+			this._dispatch(_constants2['default'].OK);
 			this._onBlur();
 		},
 
-		_eventDispatcher: function _eventDispatcher(type, data) {
+		_dispatch: function _dispatch(action, payload) {
 			var event = new CustomEvent('event', {
-				'detail': {
-					action: type,
-					payload: data
-				}
+				'detail': { action: action, payload: payload }
 			});
 
 			this.props.element.dispatchEvent(event);
@@ -317,15 +318,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		},
 
 		_handleKeyPress: function _handleKeyPress(move) {
-			var day = Number(this._getDate('DAYOFMONTH')),
-			    month = this.state.viewingMonth.month(),
-			    year = this.state.viewingYear.year(),
-			    e = document.getElementsByClassName(_DatePickerStyleCss2['default'].selected)[0],
-			    moveTo = this.state.selectedDay.toISOString();
+			var moveTo = this.state.selectedDay.toISOString();
 
 			if (moment(moveTo).add(move, 'days').isBetween(this.state.minDate, this.state.maxDate, 'day')) {
 				this.setState({ selectedDay: this.state.selectedDay.add(move, 'days') });
-				this._eventDispatcher('dateSelected', this.state.selectedDay.toISOString());
+				this._dispatch(_constants2['default'].DATE_SELECTED, JSON.stringify({ date: this.state.selectedDay.toISOString() }));
 			}
 		},
 
@@ -340,8 +337,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 
 			this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
-
-			this._eventDispatcher('dateSelected', this.state.selectedDay.toISOString());
+			this._dispatch(_constants2['default'].DATE_SELECTED, JSON.stringify({ date: this.state.selectedDay.toISOString() }));
 		},
 
 		_onMonthClick: function _onMonthClick(e) {
@@ -595,6 +591,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var constants = {
+		FOCUS: "FOCUS",
+		BLUR: "BLUR",
+		OK: "OK",
+		DATE_SELECTED: "DATE_SELECTED"
+	};
+
+	exports["default"] = constants;
+	module.exports = exports["default"];
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -12833,17 +12848,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)(module), (function() { return this; }())))
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"wrapper":"DatePickerStyle__wrapper___3Emxc","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","fade-in":"DatePickerStyle__fade-in___1p2zN","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl"};
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(module) {
