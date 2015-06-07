@@ -15,7 +15,6 @@
 			}
 		</style>
 
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons.js"></script>
 
@@ -25,21 +24,22 @@
 
 		<react-datepicker
 			id="myDatePicker"
-			selected-day="2015-05-02T00:00:00.000Z"
 			min-date="2015-05-01T00:00:00.000Z">
 		</react-datepicker>
 
 		<script src="datepicker.js"></script>
 
 		<script>
+			'use strict';
 
-			var datepicker = document.getElementById('myDatePicker');
+			let datePicker = document.getElementById('myDatePicker');
 
-			datepicker.addEventListener('eventStream', function(e) {
-				console.log('EVENT:: ' + e.detail.eventType);
-				console.log('MESSAGE::', e.detail.message);
-			});
+			let datePickerHandler = function(e) {
+				console.log('ACTION:: ' + e.detail.action);
+				console.log('PAYLOAD:: ' + e.detail.payload);
+			}
 
+			datePicker.addEventListener('event', datePickerHandler);
 
 		</script>
 

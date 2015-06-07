@@ -1,6 +1,6 @@
 let utils = {};
 
-function closest(elem, selector) {
+let closest = (elem, selector) => {
 
    let matchesSelector = elem.matches || elem.webkitMatchesSelector || elem.mozMatchesSelector || elem.msMatchesSelector;
 

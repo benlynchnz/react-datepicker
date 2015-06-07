@@ -2,12 +2,13 @@
 	background-color: #fff;
 	border-radius: 2px;
 	box-shadow: 0px 1px 3px 3px rgba(0, 0, 0, 0.05);
-	min-width: 100px;
 	color: #fcfcfc;
 	width: 320px;
-	position: relative;
-	bottom: -10px;
-	padding-bottom: 20px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-top: -300px;
+	margin-left: -160px;
 }
 
 @-webkit-keyframes DatePickerStyle__fadeIn___pe3Rh { from { opacity: 0; } to { opacity: 1; } }
@@ -160,6 +161,7 @@
 
 .DatePickerStyle__footer___2Blrk {
 	padding: 10px 10px 20px;
+	margin-bottom: 20px;
 }
 
 .DatePickerStyle__footer___2Blrk .DatePickerStyle__buttons___1oDgg {

@@ -1,7 +1,8 @@
 'use strict';
 
 import styles from './DatePickerStyle.css';
-import utils from './utils.js';
+import utils from './utils';
+import {chunk} from 'lodash';
 
 export default React.createClass({
 
@@ -71,52 +72,81 @@ export default React.createClass({
 
 	_onFocus: function() {
 		var clickHandler = (e) => {
-			console.log('click');
 			var hasFocus = utils.closest(e.target, 'react-datepicker');
 			if (!hasFocus) {
 				document.removeEventListener('click', clickHandler);
-				document.removeEventListener('keyup', keyPressHandler);
+				document.removeEventListener('keyup', keyUpHandler);
 				this._onBlur();
 			}
 		}
 
-		var keyPressHandler = (e) => {
-			console.log(e.which);
+		var keyUpHandler = (e) => {
 
-			// ENTER
-			if (e.which === 13) {
-				document.removeEventListener('keyup', keyPressHandler);
+			var SHIFT = e.shiftKey,
+				CTRL  = e.ctrlKey,
+				LEFT  = e.which === 37 ? true : false,
+				RIGHT = e.which === 39 ? true : false,
+				UP    = e.which === 38 ? true : false,
+				DOWN  = e.which === 40 ? true : false,
+				ENTER = e.which === 13 ? true : false,
+				ESC   = e.which === 27 ? true : false,
+				YEAR  = SHIFT && CTRL ? true : false,
+				MONTH = SHIFT && !CTRL ? true : false;
+
+			if (YEAR && LEFT) {
+				this._onYearClick(-1);
+				return;
+			}
+
+			if (YEAR && RIGHT) {
+				this._onYearClick(1);
+				return;
+			}
+
+			if (MONTH && LEFT) {
+				this._onMonthClick(-1);
+				return;
+			}
+
+			if (MONTH && RIGHT) {
+				this._onMonthClick(1);
+				return;
+			}
+
+			if (ENTER) {
+				document.removeEventListener('keyup', keyUpHandler);
 				this._onOkClick();
+				return;
 			}
 
-			// ESC
-			if (e.which === 27) {
-				document.removeEventListener('keyup', keyPressHandler);
+			if (ESC) {
+				document.removeEventListener('keyup', keyUpHandler);
 				this._onBlur();
+				return;
 			}
 
-			// back
-			if (e.which === 37) {
+			if (LEFT) {
 				this._handleKeyPress(-1);
+				return;
 			}
 
-			// up
-			if (e.which === 38) {
+			if (UP) {
 				this._handleKeyPress(-7);
+				return;
 			}
 
-			// forward
-			if (e.which === 39) {
+			if (RIGHT) {
 				this._handleKeyPress(1);
+				return;
 			}
 
-			// down
-			if (e.which === 40) {
+			if (DOWN) {
 				this._handleKeyPress(7);
+				return;
 			}
 		}
 
-		document.addEventListener('keyup', keyPressHandler);
+		document.addEventListener('keyup', keyUpHandler);
 		document.addEventListener('click', clickHandler);
 
 		this._eventDispatcher('show');
@@ -129,15 +159,15 @@ export default React.createClass({
 	},
 
 	_onOkClick: function() {
-		this._eventDispatcher('ok', this.state.selectedDay);
+		this._eventDispatcher('ok', this.state.selectedDay.toISOString());
 		this._onBlur();
 	},
 
 	_eventDispatcher: function(type, data) {
-		var event = new CustomEvent('eventStream', {
+		var event = new CustomEvent('event', {
 			'detail': {
-				eventType: type,
-				message: data
+				action: type,
+				payload: data
 			}
 		});
 
@@ -198,7 +228,7 @@ export default React.createClass({
 
 		if (moment(moveTo).add(move, 'days').isBetween(this.state.minDate, this.state.maxDate, 'day')) {
 			this.setState({ selectedDay: this.state.selectedDay.add(move, 'days') });
-			this._eventDispatcher('dateSelected', this.state.selectedDay);
+			this._eventDispatcher('dateSelected', this.state.selectedDay.toISOString());
 		}
 	},
 
@@ -214,12 +244,17 @@ export default React.createClass({
 
 		this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
 
-		this._eventDispatcher('dateSelected', this.state.selectedDay);
+		this._eventDispatcher('dateSelected', this.state.selectedDay.toISOString());
 	},
 
 	_onMonthClick: function(e) {
-		var moveBack = e.target.classList.contains(styles['arrow-left']) ? true : false,
-			update;
+		var moveBack, update;
+
+		if (e.target) {
+			moveBack = e.target.classList.contains(styles['arrow-left']) ? true : false;
+		} else {
+			moveBack = (e === -1) ? true : false;
+		}
 
 		if (moveBack) {
 			update = this.state.viewingMonth.subtract(1, 'month')
@@ -231,8 +266,13 @@ export default React.createClass({
 	},
 
 	_onYearClick: function(e) {
-		var moveBack = e.target.classList.contains(styles['arrow-left']) ? true : false,
-			update;
+		var moveBack, update;
+
+		if (e.target) {
+			moveBack = e.target.classList.contains(styles['arrow-left']) ? true : false;
+		} else {
+			moveBack = (e === -1) ? true : false;
+		}
 
 		if (moveBack) {
 			update = this.state.viewingYear.subtract(1, 'year')
@@ -254,7 +294,7 @@ export default React.createClass({
 			days.push(this.state.viewingMonth.startOf('month').add(x, 'days').format('DD'));
 		}
 
-		return _.chunk(days, 7);
+		return chunk(days, 7);
 	},
 
 	_getFirstDayOfMonth: function() {
