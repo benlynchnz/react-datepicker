@@ -190,7 +190,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		_removeOverlay: function _removeOverlay() {
 			var el = document.getElementById('overlay');
-			el.outerHTML = '';
+			if (el) {
+				el.outerHTML = '';
+			}
 		},
 
 		_onFocus: function _onFocus() {

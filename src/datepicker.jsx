@@ -92,7 +92,9 @@ export default React.createClass({
 
 	_removeOverlay: function() {
 		var el = document.getElementById('overlay');
-		el.outerHTML = '';
+		if (el) {
+			el.outerHTML = '';
+		}
 	},
 
 	_onFocus: function() {
