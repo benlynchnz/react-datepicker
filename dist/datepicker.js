@@ -110,13 +110,23 @@ return /******/ (function(modules) { // webpackBootstrap
 		getInitialState: function getInitialState() {
 			return {
 				selectedDay: moment().endOf('day'),
+				moveToDate: null,
 				viewingDay: moment().endOf('day'),
 				viewingMonth: moment().endOf('month'),
 				viewingYear: moment().endOf('year'),
 				minDate: moment().subtract(999, 'years'),
 				maxDate: moment().add(999, 'years'),
 				closeOnSelect: false,
-				showPicker: false
+				show: false,
+				powerKeys: {
+					active: false,
+					direction: null,
+					keys: [],
+					duration: 'Days',
+					style: {
+						display: 'none'
+					}
+				}
 			};
 		},
 
@@ -169,6 +179,20 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		},
 
+		_createOverlay: function _createOverlay() {
+			if (!document.getElementById('overlay')) {
+				var el = document.createElement('div');
+				el.id = 'overlay';
+				el.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);height:100%;width:100%;z-index:1040';
+				document.body.appendChild(el);
+			}
+		},
+
+		_removeOverlay: function _removeOverlay() {
+			var el = document.getElementById('overlay');
+			el.outerHTML = '';
+		},
+
 		_onFocus: function _onFocus() {
 			var _this = this;
 
@@ -181,10 +205,18 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 			};
 
+			this._createOverlay();
+
+			var waitForKeys = false,
+			    moveTo = this.state.selectedDay.toISOString();
+
 			var keyUpHandler = function keyUpHandler(e) {
 
 				var SHIFT = e.shiftKey,
 				    CTRL = e.ctrlKey,
+				    DELETE = e.which === 8 ? true : false,
+				    ADD = e.which === 187 ? true : false,
+				    SUBTRACT = e.which === 189 ? true : false,
 				    LEFT = e.which === 37 ? true : false,
 				    RIGHT = e.which === 39 ? true : false,
 				    UP = e.which === 38 ? true : false,
@@ -193,6 +225,85 @@ return /******/ (function(modules) { // webpackBootstrap
 				    ESC = e.which === 27 ? true : false,
 				    YEAR = SHIFT && CTRL ? true : false,
 				    MONTH = SHIFT && !CTRL ? true : false;
+
+				if (waitForKeys) {
+
+					if (e.which !== 16) {
+						var keys = _this.state.powerKeys.keys,
+						    key = String.fromCharCode(e.which).toLowerCase(),
+						    duration = _this.state.powerKeys.duration,
+						    moveTo,
+						    value;
+
+						if (!isNaN(Number(key))) {
+							if (keys.length) {
+								keys.push(key);
+							} else {
+								keys = [key];
+							}
+						} else if (key === 'd') {
+							duration = 'Days';
+						} else if (key === 'w') {
+							duration = 'Weeks';
+						} else if (key === 'y') {
+							duration = 'Years';
+						} else if (DELETE) {
+							keys.pop();
+						}
+
+						value = Number(keys.join(''));
+
+						if (keys.length === 1 && value === 1) {
+							duration = _.trimRight(duration, 's');
+						} else if (!_.endsWith(duration, 's')) {
+							duration += 's';
+						}
+
+						console.log(value, duration.toLowerCase());
+
+						if (_this.state.powerKeys.direction.indexOf('Add') !== -1) {
+							moveTo = moment(moveTo).add(value, duration.toLowerCase());
+						} else {
+							moveTo = moment(moveTo).subtract(value, duration.toLowerCase());
+						}
+
+						_this.setState({
+							powerKeys: {
+								active: true,
+								keys: keys,
+								direction: _this.state.powerKeys.direction,
+								duration: duration
+							},
+							moveToDate: moveTo
+						});
+					}
+				}
+
+				if (SHIFT && ADD) {
+					waitForKeys = true;
+					_this.setState({
+						powerKeys: {
+							active: true,
+							keys: _this.state.powerKeys.keys,
+							direction: 'Add',
+							duration: _this.state.powerKeys.duration
+						}
+					});
+					return;
+				}
+
+				if (SHIFT && SUBTRACT) {
+					waitForKeys = true;
+					_this.setState({
+						powerKeys: {
+							active: true,
+							keys: _this.state.powerKeys.keys,
+							direction: 'Subtract',
+							duration: _this.state.powerKeys.duration
+						}
+					});
+					return;
+				}
 
 				if (YEAR && LEFT) {
 					_this._onYearClick(-1);
@@ -251,12 +362,13 @@ return /******/ (function(modules) { // webpackBootstrap
 			document.addEventListener('click', clickHandler);
 
 			this._dispatch(_constants2['default'].FOCUS);
-			this.setState({ showPicker: true });
+			this.setState({ show: true });
 		},
 
 		_onBlur: function _onBlur() {
 			this._dispatch(_constants2['default'].BLUR);
-			this.setState({ showPicker: false });
+			this.setState({ show: false, powerKeys: { active: false, keys: [], duration: 'Days', style: { display: 'none' } } });
+			this._removeOverlay();
 		},
 
 		_onOkClick: function _onOkClick() {
@@ -332,12 +444,12 @@ return /******/ (function(modules) { // webpackBootstrap
 			    year = this.state.viewingYear.year(),
 			    closeOnSelect = this.props['close-on-select'];
 
+			this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
+			this._dispatch(_constants2['default'].DATE_SELECTED, JSON.stringify({ date: this.state.selectedDay.toISOString() }));
+
 			if (closeOnSelect) {
 				this._onOkClick();
 			}
-
-			this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
-			this._dispatch(_constants2['default'].DATE_SELECTED, JSON.stringify({ date: this.state.selectedDay.toISOString() }));
 		},
 
 		_onMonthClick: function _onMonthClick(e) {
@@ -402,157 +514,189 @@ return /******/ (function(modules) { // webpackBootstrap
 			return moment(this._getCellDate(cell), 'YYYY/MM/DD');
 		},
 
-		_isSelectedDay: function _isSelectedDay(cell) {
+		_getCellDateClass: function _getCellDateClass(cell) {
 			if (cell && this.state.selectedDay.format('YYYY/MM/DD') == this._getCellDate(cell)) {
-				return true;
+				return _DatePickerStyleCss2['default'].selected;
 			}
+
+			if (cell && this.state.moveToDate && this.state.moveToDate.format('YYYY/MM/DD') == this._getCellDate(cell)) {
+				return _DatePickerStyleCss2['default']['move-to'];
+			}
+
 			return false;
 		},
 
 		render: function render() {
-			var self = this;
+			var _this2 = this;
 
-			if (this.state.showPicker) {
+			if (this.state.show) {
 				return React.createElement(
 					'div',
-					{ className: _DatePickerStyleCss2['default']['fade-in'] },
-					React.createElement('input', { type: 'text', onFocus: self._onFocus }),
+					null,
+					React.createElement('input', { type: 'text', className: 'input', onFocus: this._onFocus }),
 					React.createElement(
 						'div',
-						{ className: _DatePickerStyleCss2['default'].wrapper },
+						{ className: _DatePickerStyleCss2['default'].modal },
 						React.createElement(
 							'div',
-							{ className: _DatePickerStyleCss2['default'].header },
-							this._getDate('DAYOFWEEK')
-						),
-						React.createElement(
-							'div',
-							{ className: _DatePickerStyleCss2['default'].date },
+							{ className: _DatePickerStyleCss2['default'].wrapper },
 							React.createElement(
 								'div',
-								{ className: _DatePickerStyleCss2['default'].month },
-								React.createElement('span', { className: _DatePickerStyleCss2['default']['arrow-left'], onClick: this._onMonthClick }),
-								this._getCalendarDate('MONTH'),
-								React.createElement('span', { className: _DatePickerStyleCss2['default']['arrow-right'], onClick: this._onMonthClick })
+								{ className: _DatePickerStyleCss2['default'].header },
+								this._getDate('DAYOFWEEK')
 							),
 							React.createElement(
 								'div',
-								{ className: _DatePickerStyleCss2['default'].day },
-								this._getDate('DAYOFMONTH')
-							),
-							React.createElement(
-								'div',
-								{ className: _DatePickerStyleCss2['default'].year },
-								React.createElement('span', { className: _DatePickerStyleCss2['default']['arrow-left'], onClick: this._onYearClick }),
-								this._getCalendarDate('YEAR'),
-								React.createElement('span', { className: _DatePickerStyleCss2['default']['arrow-right'], onClick: this._onYearClick })
-							)
-						),
-						React.createElement(
-							'table',
-							{ className: _DatePickerStyleCss2['default'].table },
-							React.createElement(
-								'thead',
-								null,
+								{ className: _DatePickerStyleCss2['default'].date },
 								React.createElement(
-									'tr',
+									'div',
+									{ className: _DatePickerStyleCss2['default'].month },
+									React.createElement('span', { className: _DatePickerStyleCss2['default']['arrow-left'], onClick: this._onMonthClick }),
+									this._getCalendarDate('MONTH'),
+									React.createElement('span', { className: _DatePickerStyleCss2['default']['arrow-right'], onClick: this._onMonthClick })
+								),
+								React.createElement(
+									'div',
+									{ className: _DatePickerStyleCss2['default'].day },
+									this._getDate('DAYOFMONTH')
+								),
+								React.createElement(
+									'div',
+									{ className: _DatePickerStyleCss2['default'].year },
+									React.createElement('span', { className: _DatePickerStyleCss2['default']['arrow-left'], onClick: this._onYearClick }),
+									this._getCalendarDate('YEAR'),
+									React.createElement('span', { className: _DatePickerStyleCss2['default']['arrow-right'], onClick: this._onYearClick })
+								)
+							),
+							React.createElement(
+								'table',
+								{ className: _DatePickerStyleCss2['default'].table },
+								React.createElement(
+									'thead',
 									null,
 									React.createElement(
-										'th',
+										'tr',
 										null,
-										'S'
+										React.createElement(
+											'th',
+											null,
+											'S'
+										),
+										React.createElement(
+											'th',
+											null,
+											'M'
+										),
+										React.createElement(
+											'th',
+											null,
+											'T'
+										),
+										React.createElement(
+											'th',
+											null,
+											'W'
+										),
+										React.createElement(
+											'th',
+											null,
+											'T'
+										),
+										React.createElement(
+											'th',
+											null,
+											'F'
+										),
+										React.createElement(
+											'th',
+											null,
+											'S'
+										)
+									)
+								),
+								React.createElement(
+									'tbody',
+									null,
+									this._getDaysInMonth().map(function (row, i) {
+										return React.createElement(
+											'tr',
+											{ key: i },
+											row.map(function (cell, j) {
+												if (cell) {
+													if (_this2._getCellDateAsISO(cell).isBetween(_this2.state.minDate, _this2.state.maxDate, 'day')) {
+														return React.createElement(
+															'td',
+															{ key: j },
+															React.createElement(
+																'a',
+																{
+																	'data-date': _this2._getCellDate(cell),
+																	className: _this2._getCellDateClass(cell),
+																	onClick: _this2._onDayClick },
+																cell
+															)
+														);
+													} else {
+														return React.createElement(
+															'td',
+															{ key: j },
+															cell
+														);
+													}
+												} else {
+													return React.createElement('td', { key: j });
+												}
+											})
+										);
+									})
+								)
+							),
+							React.createElement(
+								'div',
+								{ className: _DatePickerStyleCss2['default'].footer },
+								React.createElement(
+									'div',
+									{ className: _DatePickerStyleCss2['default'].buttons },
+									React.createElement(
+										'button',
+										{ className: _DatePickerStyleCss2['default'].btn, onClick: this._onBlur },
+										'Cancel'
 									),
 									React.createElement(
-										'th',
-										null,
-										'M'
-									),
-									React.createElement(
-										'th',
-										null,
-										'T'
-									),
-									React.createElement(
-										'th',
-										null,
-										'W'
-									),
-									React.createElement(
-										'th',
-										null,
-										'T'
-									),
-									React.createElement(
-										'th',
-										null,
-										'F'
-									),
-									React.createElement(
-										'th',
-										null,
-										'S'
+										'button',
+										{ className: _DatePickerStyleCss2['default'].btn, onClick: this._onOkClick },
+										'OK'
 									)
 								)
 							),
 							React.createElement(
-								'tbody',
-								null,
-								this._getDaysInMonth().map(function (row, i) {
-									return React.createElement(
-										'tr',
-										{ key: i },
-										row.map(function (cell, j) {
-											if (cell) {
-												if (self._getCellDateAsISO(cell).isBetween(self.state.minDate, self.state.maxDate, 'day')) {
-													return React.createElement(
-														'td',
-														{ key: j },
-														React.createElement(
-															'a',
-															{
-																'data-date': self._getCellDate(cell),
-																className: self._isSelectedDay(cell) ? _DatePickerStyleCss2['default'].selected : null,
-																onClick: self._onDayClick },
-															cell
-														)
-													);
-												} else {
-													return React.createElement(
-														'td',
-														{ key: j },
-														cell
-													);
-												}
-											} else {
-												return React.createElement('td', { key: j });
-											}
-										})
-									);
-								})
-							)
-						),
-						React.createElement(
-							'div',
-							{ className: _DatePickerStyleCss2['default'].footer },
-							React.createElement(
 								'div',
-								{ className: _DatePickerStyleCss2['default'].buttons },
+								{ className: _DatePickerStyleCss2['default']['power-keys'], style: this.state.powerKeys.style },
 								React.createElement(
-									'button',
-									{ className: _DatePickerStyleCss2['default'].btn, onClick: self._onBlur },
-									'Cancel'
+									'li',
+									{ className: _DatePickerStyleCss2['default']['power-keys-item'] },
+									this.state.powerKeys.direction
 								),
-								React.createElement(
-									'button',
-									{ className: _DatePickerStyleCss2['default'].btn, onClick: self._onOkClick },
-									'OK'
-								)
+								this.state.powerKeys.keys.length ? React.createElement(
+									'li',
+									{ className: _DatePickerStyleCss2['default']['power-keys-item'] },
+									this.state.powerKeys.keys
+								) : null,
+								this.state.powerKeys.keys.length ? React.createElement(
+									'li',
+									{ className: _DatePickerStyleCss2['default']['power-keys-item'] },
+									this.state.powerKeys.duration
+								) : null
 							)
 						)
 					)
 				);
 			} else {
-				return React.createElement('input', { type: 'text', onFocus: self._onFocus });
+				return React.createElement(
+					'div',
+					null,
+					React.createElement('input', { type: 'text', className: 'input', onFocus: this._onFocus })
+				);
 			}
 		}
 
@@ -12855,7 +12999,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"wrapper":"DatePickerStyle__wrapper___3Emxc","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","fade-in":"DatePickerStyle__fade-in___1p2zN","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl"};
+	module.exports = {"modal":"DatePickerStyle__modal___1ErLw","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","wrapper":"DatePickerStyle__wrapper___3Emxc","input":"DatePickerStyle__input___3oQ6t","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","move-to":"DatePickerStyle__move-to___jDGLn","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl","power-keys":"DatePickerStyle__power-keys___10dk6","power-keys-item":"DatePickerStyle__power-keys-item___1frz9"};
 
 /***/ },
 /* 6 */

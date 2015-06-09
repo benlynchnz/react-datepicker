@@ -12,13 +12,23 @@ export default React.createClass({
 	getInitialState: () => {
 		return {
 			selectedDay: moment().endOf('day'),
+			moveToDate: null,
 			viewingDay: moment().endOf('day'),
 			viewingMonth: moment().endOf('month'),
 			viewingYear: moment().endOf('year'),
 			minDate: moment().subtract(999, 'years'),
 			maxDate: moment().add(999, 'years'),
 			closeOnSelect: false,
-			showPicker: false
+			show: false,
+			powerKeys: {
+				active: false,
+				direction: null,
+				keys: [],
+				duration: 'Days',
+				style: {
+					display: 'none'
+				}
+			}
 		};
 	},
 
@@ -71,6 +81,20 @@ export default React.createClass({
 		}
 	},
 
+	_createOverlay: function() {
+		if (!document.getElementById('overlay')) {
+			var el = document.createElement('div');
+			el.id = 'overlay';
+			el.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);height:100%;width:100%;z-index:1040';
+			document.body.appendChild(el);
+		}
+	},
+
+	_removeOverlay: function() {
+		var el = document.getElementById('overlay');
+		el.outerHTML = '';
+	},
+
 	_onFocus: function() {
 		var clickHandler = (e) => {
 			var hasFocus = utils.closest(e.target, 'react-datepicker');
@@ -81,18 +105,104 @@ export default React.createClass({
 			}
 		}
 
+		this._createOverlay();
+
+		var waitForKeys = false,
+			moveTo = this.state.selectedDay.toISOString();
+
 		var keyUpHandler = (e) => {
 
-			var SHIFT = e.shiftKey,
-				CTRL  = e.ctrlKey,
-				LEFT  = e.which === 37 ? true : false,
-				RIGHT = e.which === 39 ? true : false,
-				UP    = e.which === 38 ? true : false,
-				DOWN  = e.which === 40 ? true : false,
-				ENTER = e.which === 13 ? true : false,
-				ESC   = e.which === 27 ? true : false,
-				YEAR  = SHIFT && CTRL ? true : false,
-				MONTH = SHIFT && !CTRL ? true : false;
+			var SHIFT    = e.shiftKey,
+				CTRL     = e.ctrlKey,
+				DELETE   = e.which === 8 ? true : false,
+				ADD      = e.which === 187 ? true : false,
+				SUBTRACT = e.which === 189 ? true : false,
+				LEFT     = e.which === 37 ? true : false,
+				RIGHT    = e.which === 39 ? true : false,
+				UP       = e.which === 38 ? true : false,
+				DOWN     = e.which === 40 ? true : false,
+				ENTER    = e.which === 13 ? true : false,
+				ESC      = e.which === 27 ? true : false,
+				YEAR     = SHIFT && CTRL ? true : false,
+				MONTH    = SHIFT && !CTRL ? true : false;
+
+			if (waitForKeys) {
+
+				if (e.which !== 16) {
+					var keys = this.state.powerKeys.keys,
+						key = String.fromCharCode(e.which).toLowerCase(),
+						duration = this.state.powerKeys.duration,
+						moveTo, value;
+
+					if (!isNaN(Number(key))) {
+						if (keys.length) {
+							keys.push(key);
+						} else {
+							keys = [key];
+						}
+					} else if (key === 'd') {
+						duration = 'Days';
+					} else if (key === 'w') {
+						duration = 'Weeks';
+					} else if (key === 'y') {
+						duration = 'Years';
+					} else if (DELETE) {
+						keys.pop();
+					}
+
+					value = Number(keys.join(''));
+
+					if (keys.length === 1 && value === 1) {
+						duration = _.trimRight(duration, 's');
+					} else if (!_.endsWith(duration, 's')) {
+						duration += 's';
+					}
+
+					console.log(value, duration.toLowerCase());
+
+					if (this.state.powerKeys.direction.indexOf('Add') !== -1) {
+						moveTo = moment(moveTo).add(value, duration.toLowerCase());
+					} else {
+						moveTo = moment(moveTo).subtract(value, duration.toLowerCase());
+					}
+
+					this.setState({
+						powerKeys: {
+							active: true,
+							keys: keys,
+							direction: this.state.powerKeys.direction,
+							duration: duration
+						},
+						moveToDate: moveTo
+					});
+				}
+			}
+
+			if (SHIFT && ADD) {
+				waitForKeys = true;
+				this.setState({
+					powerKeys: {
+						active: true,
+						keys: this.state.powerKeys.keys,
+						direction: 'Add',
+						duration: this.state.powerKeys.duration
+					}
+				});
+				return;
+			}
+
+			if (SHIFT && SUBTRACT) {
+				waitForKeys = true;
+				this.setState({
+					powerKeys: {
+						active: true,
+						keys: this.state.powerKeys.keys,
+						direction: 'Subtract',
+						duration: this.state.powerKeys.duration
+					}
+				});
+				return;
+			}
 
 			if (YEAR && LEFT) {
 				this._onYearClick(-1);
@@ -151,19 +261,19 @@ export default React.createClass({
 		document.addEventListener('click', clickHandler);
 
 		this._dispatch(constants.FOCUS);
-		this.setState({ showPicker: true });
+		this.setState({ show: true });
 	},
 
 	_onBlur: function() {
 		this._dispatch(constants.BLUR);
-		this.setState({ showPicker: false });
+		this.setState({ show: false, powerKeys: { active: false, keys: [], duration: 'Days', style: { display: 'none' } } });
+		this._removeOverlay();
 	},
 
 	_onOkClick: function() {
 		this._dispatch(constants.OK);
 		this._onBlur();
 	},
-
 
 	_dispatch: function(action, payload) {
 		var event = new CustomEvent('event', {
@@ -233,12 +343,12 @@ export default React.createClass({
 			year = this.state.viewingYear.year(),
 			closeOnSelect = this.props['close-on-select'];
 
+		this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
+		this._dispatch(constants.DATE_SELECTED, JSON.stringify({ date: this.state.selectedDay.toISOString() }));
+
 		if (closeOnSelect) {
 			this._onOkClick();
 		}
-
-		this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
-		this._dispatch(constants.DATE_SELECTED, JSON.stringify({ date: this.state.selectedDay.toISOString() }));
 	},
 
 	_onMonthClick: function(e) {
@@ -303,86 +413,107 @@ export default React.createClass({
 		return moment(this._getCellDate(cell), 'YYYY/MM/DD');
 	},
 
-	_isSelectedDay: function(cell) {
+	_getCellDateClass: function(cell) {
 		if (cell && (this.state.selectedDay.format('YYYY/MM/DD') == this._getCellDate(cell))) {
-			return true;
+			return styles.selected;
 		}
-		return false;
+
+		if (cell && this.state.moveToDate && (this.state.moveToDate.format('YYYY/MM/DD') == this._getCellDate(cell))) {
+			return styles['move-to'];
+		}
+
+		return false
 	},
 
 	render: function() {
-		var self = this;
 
-		if (this.state.showPicker) {
+		if (this.state.show) {
 			return (
-				<div className={styles['fade-in']}>
-					<input type="text" onFocus={self._onFocus} />
-					<div className={styles.wrapper}>
-						<div className={styles.header}>{this._getDate('DAYOFWEEK')}</div>
-						<div className={styles.date}>
-							<div className={styles.month}>
-								<span className={styles['arrow-left']} onClick={this._onMonthClick}></span>
-									{this._getCalendarDate('MONTH')}
-								<span className={styles['arrow-right']} onClick={this._onMonthClick}></span>
+				<div>
+					<input type="text" className="input" onFocus={this._onFocus} />
+						<div className={styles.modal}>
+						<div className={styles.wrapper}>
+							<div className={styles.header}>{this._getDate('DAYOFWEEK')}</div>
+							<div className={styles.date}>
+								<div className={styles.month}>
+									<span className={styles['arrow-left']} onClick={this._onMonthClick}></span>
+										{this._getCalendarDate('MONTH')}
+									<span className={styles['arrow-right']} onClick={this._onMonthClick}></span>
+								</div>
+								<div className={styles.day}>{this._getDate('DAYOFMONTH')}</div>
+								<div className={styles.year}>
+									<span className={styles['arrow-left']} onClick={this._onYearClick}></span>
+										{this._getCalendarDate('YEAR')}
+									<span className={styles['arrow-right']} onClick={this._onYearClick}></span>
+								</div>
 							</div>
-							<div className={styles.day}>{this._getDate('DAYOFMONTH')}</div>
-							<div className={styles.year}>
-								<span className={styles['arrow-left']} onClick={this._onYearClick}></span>
-									{this._getCalendarDate('YEAR')}
-								<span className={styles['arrow-right']} onClick={this._onYearClick}></span>
-							</div>
-						</div>
-						<table className={styles.table}>
-							<thead>
-								<tr>
-									<th>S</th>
-									<th>M</th>
-									<th>T</th>
-									<th>W</th>
-									<th>T</th>
-									<th>F</th>
-									<th>S</th>
-								</tr>
-							</thead>
-							<tbody>
-								{this._getDaysInMonth().map(function(row, i) {
-									return (
-										<tr key={i}>
-											{row.map(function(cell, j) {
-												if (cell) {
-													if (self._getCellDateAsISO(cell).isBetween(self.state.minDate, self.state.maxDate, 'day')) {
-														return (
-															<td key={j}>
-																<a
-																	data-date={self._getCellDate(cell)}
-																	className={self._isSelectedDay(cell) ? styles.selected : null}
-																	onClick={self._onDayClick}>{cell}
-																</a>
-															</td>
-														);
+							<table className={styles.table}>
+								<thead>
+									<tr>
+										<th>S</th>
+										<th>M</th>
+										<th>T</th>
+										<th>W</th>
+										<th>T</th>
+										<th>F</th>
+										<th>S</th>
+									</tr>
+								</thead>
+								<tbody>
+									{this._getDaysInMonth().map((row, i) => {
+										return (
+											<tr key={i}>
+												{row.map((cell, j) => {
+													if (cell) {
+														if (this._getCellDateAsISO(cell).isBetween(this.state.minDate, this.state.maxDate, 'day')) {
+															return (
+																<td key={j}>
+																	<a
+																		data-date={this._getCellDate(cell)}
+																		className={this._getCellDateClass(cell)}
+																		onClick={this._onDayClick}>{cell}
+																	</a>
+																</td>
+															);
+														} else {
+															return <td key={j}>{cell}</td>;
+														}
 													} else {
-														return <td key={j}>{cell}</td>;
+														return <td key={j}></td>;
 													}
-												} else {
-													return <td key={j}></td>;
-												}
-											})}
-										</tr>
-									);
-								})}
-							</tbody>
-						</table>
-						<div className={styles.footer}>
-							<div className={styles.buttons}>
-								<button className={styles.btn} onClick={self._onBlur}>Cancel</button>
-								<button className={styles.btn} onClick={self._onOkClick}>OK</button>
+												})}
+											</tr>
+										);
+									})}
+								</tbody>
+							</table>
+							<div className={styles.footer}>
+								<div className={styles.buttons}>
+									<button className={styles.btn} onClick={this._onBlur}>Cancel</button>
+									<button className={styles.btn} onClick={this._onOkClick}>OK</button>
+								</div>
+							</div>
+							<div className={styles['power-keys']} style={this.state.powerKeys.style}>
+								<li className={styles['power-keys-item']}>{this.state.powerKeys.direction}</li>
+								{(this.state.powerKeys.keys.length
+									? <li className={styles['power-keys-item']}>{this.state.powerKeys.keys}</li>
+									: null
+								)}
+								{(this.state.powerKeys.keys.length
+									? <li className={styles['power-keys-item']}>{this.state.powerKeys.duration}</li>
+									: null
+								)}
 							</div>
 						</div>
 					</div>
 				</div>
 			);
 		} else {
-			return <input type="text" onFocus={self._onFocus} />
+			return (
+				<div>
+					<input type="text" className="input" onFocus={this._onFocus} />
+				</div>
+			);
 		}
 
 	}
