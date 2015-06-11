@@ -3,7 +3,6 @@
 import styles from './DatePickerStyle.css';
 import utils from './utils';
 import constants from './constants';
-import {chunk} from 'lodash';
 
 export default React.createClass({
 
@@ -11,13 +10,15 @@ export default React.createClass({
 
 	getInitialState: () => {
 		return {
-			selectedDay: moment().endOf('day'),
+			selectedDate: moment().endOf('day'),
 			moveToDate: null,
+			today: moment().endOf('day'),
 			viewingDay: moment().endOf('day'),
 			viewingMonth: moment().endOf('month'),
 			viewingYear: moment().endOf('year'),
 			minDate: moment().subtract(999, 'years'),
 			maxDate: moment().add(999, 'years'),
+			displayFormat: 'DD MMM YYYY',
 			closeOnSelect: false,
 			show: false,
 			powerKeys: {
@@ -56,11 +57,26 @@ export default React.createClass({
 	},
 
 	_handlePassedProps: function(props) {
-		if (props['selected-day']) {
+		if (props['display-format']) {
 			this.setState({
-				selectedDay: moment(props['selected-day']).endOf('day'),
-				viewingMonth: moment(props['selected-day']).endOf('month'),
-				viewingYear: moment(props['selected-day']).endOf('year')
+				displayFormat: props['display-format']
+			});
+		}
+
+		if (props['selected-date']) {
+			var date;
+			if (props['selected-date-format']) {
+				date = moment(props['selected-date'], props['selected-date-format']);
+			} else {
+				date = moment(props['selected-date']);
+			}
+
+			var viewing = date.toISOString();
+
+			this.setState({
+				selectedDate: date.endOf('day'),
+				viewingMonth: moment(viewing).endOf('month'),
+				viewingYear: moment(viewing).endOf('year')
 			});
 		}
 
@@ -85,7 +101,7 @@ export default React.createClass({
 		if (!document.getElementById('overlay')) {
 			var el = document.createElement('div');
 			el.id = 'overlay';
-			el.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);height:100%;width:100%;z-index:1040';
+			el.classList.add(styles.overlay);
 			document.body.appendChild(el);
 		}
 	},
@@ -97,12 +113,14 @@ export default React.createClass({
 		}
 	},
 
-	_onFocus: function() {
+	_onFocus: function(e) {
+		// var wrapper = this.refs['wrapper'].getDOMNode();
+
 		var clickHandler = (e) => {
-			var hasFocus = utils.closest(e.target, 'react-datepicker');
+			var hasFocus = !e.target.classList.contains(styles.modal) ? true : false;
 			if (!hasFocus) {
 				document.removeEventListener('click', clickHandler);
-				document.removeEventListener('keyup', keyUpHandler);
+				// wrapper.removeEventListener('keyup', keyUpHandler);
 				this._onBlur();
 			}
 		}
@@ -110,7 +128,7 @@ export default React.createClass({
 		this._createOverlay();
 
 		var waitForKeys = false,
-			moveTo = this.state.selectedDay.toISOString();
+			moveTo = this.state.selectedDate.toISOString();
 
 		var keyUpHandler = (e) => {
 
@@ -131,10 +149,46 @@ export default React.createClass({
 			if (waitForKeys) {
 
 				if (e.which !== 16) {
+
+					if (ESC) {
+						waitForKeys = false;
+						this.setState({
+							powerKeys: {
+								active: false,
+								keys: [],
+								direction: null,
+								duration: 'Days',
+								style: {
+									display: 'none'
+								}
+							}
+						});
+						return;
+					}
+
+					if (ENTER) {
+						waitForKeys = false;
+						this.setState({
+							powerKeys: {
+								active: false,
+								keys: [],
+								direction: null,
+								duration: 'Days',
+								style: {
+									display: 'none'
+								}
+							}
+						});
+						this._updateDate(this.state.moveToDate);
+						return;
+					}
+
 					var keys = this.state.powerKeys.keys,
 						key = String.fromCharCode(e.which).toLowerCase(),
 						duration = this.state.powerKeys.duration,
-						moveTo, value;
+						direction = this.state.powerKeys.direction,
+						moveTo = this.state.selectedDate.toISOString(),
+						value;
 
 					if (!isNaN(Number(key))) {
 						if (keys.length) {
@@ -146,6 +200,8 @@ export default React.createClass({
 						duration = 'Days';
 					} else if (key === 'w') {
 						duration = 'Weeks';
+					} else if (key === 'm') {
+						duration = 'Months';
 					} else if (key === 'y') {
 						duration = 'Years';
 					} else if (DELETE) {
@@ -160,9 +216,17 @@ export default React.createClass({
 						duration += 's';
 					}
 
-					console.log(value, duration.toLowerCase());
+					if (SHIFT && ADD) {
+						direction = 'Add';
+					}
 
-					if (this.state.powerKeys.direction.indexOf('Add') !== -1) {
+					if (SHIFT && SUBTRACT) {
+						direction = 'Subtract';
+					}
+
+					console.log(direction, value, duration.toLowerCase());
+
+					if (direction.indexOf('Add') !== -1) {
 						moveTo = moment(moveTo).add(value, duration.toLowerCase());
 					} else {
 						moveTo = moment(moveTo).subtract(value, duration.toLowerCase());
@@ -172,12 +236,14 @@ export default React.createClass({
 						powerKeys: {
 							active: true,
 							keys: keys,
-							direction: this.state.powerKeys.direction,
+							direction: direction,
 							duration: duration
 						},
 						moveToDate: moveTo
 					});
 				}
+
+				return;
 			}
 
 			if (SHIFT && ADD) {
@@ -268,7 +334,17 @@ export default React.createClass({
 
 	_onBlur: function() {
 		this._dispatch(constants.BLUR);
-		this.setState({ show: false, powerKeys: { active: false, keys: [], duration: 'Days', style: { display: 'none' } } });
+		this.setState({
+			show: false,
+			powerKeys: {
+				active: false,
+				keys: [],
+				duration: 'Days',
+				style: {
+					display: 'none'
+				}
+			}
+		});
 		this._removeOverlay();
 	},
 
@@ -303,7 +379,7 @@ export default React.createClass({
 				break;
 		}
 
-		return this.state.selectedDay.format(format);
+		return this.state.selectedDate.format(format);
 	},
 
 	_getCalendarDate: function(type) {
@@ -331,24 +407,27 @@ export default React.createClass({
 	},
 
 	_handleKeyPress: function(move) {
-		var moveTo = this.state.selectedDay.toISOString();
+		var moveTo = this.state.selectedDate.toISOString();
 
 		if (moment(moveTo).add(move, 'days').isBetween(this.state.minDate, this.state.maxDate, 'day')) {
-			this.setState({ selectedDay: this.state.selectedDay.add(move, 'days') });
-			this._dispatch(constants.DATE_SELECTED, JSON.stringify({ date: this.state.selectedDay.toISOString() }));
+			this._updateDate(this.state.selectedDate.add(move, 'days'));
 		}
+	},
+
+	_updateDate: function(date) {
+		this.setState({ selectedDate: date });
+		this.refs['datepicker-input'].getDOMNode().value = this.state.selectedDate.format(this.state.displayFormat);
+		this._dispatch(constants.DATE_SELECTED, JSON.stringify({ date: this.state.selectedDate.toISOString() }));
 	},
 
 	_onDayClick: function(e) {
 		var day = Number(e.target.getAttribute('data-date').split('/')[2]),
 			month = this.state.viewingMonth.month(),
-			year = this.state.viewingYear.year(),
-			closeOnSelect = this.props['close-on-select'];
+			year = this.state.viewingYear.year();
 
-		this.setState({ selectedDay: this.state.selectedDay.year(year).month(month).date(day) });
-		this._dispatch(constants.DATE_SELECTED, JSON.stringify({ date: this.state.selectedDay.toISOString() }));
+		this._updateDate(this.state.selectedDate.year(year).month(month).date(day));
 
-		if (closeOnSelect) {
+		if (this.state.closeOnSelect) {
 			this._onOkClick();
 		}
 	},
@@ -400,7 +479,7 @@ export default React.createClass({
 			days.push(this.state.viewingMonth.startOf('month').add(x, 'days').format('DD'));
 		}
 
-		return chunk(days, 7);
+		return _.chunk(days, 7);
 	},
 
 	_getFirstDayOfMonth: function() {
@@ -416,7 +495,7 @@ export default React.createClass({
 	},
 
 	_getCellDateClass: function(cell) {
-		if (cell && (this.state.selectedDay.format('YYYY/MM/DD') == this._getCellDate(cell))) {
+		if (cell && (this.state.selectedDate.format('YYYY/MM/DD') == this._getCellDate(cell))) {
 			return styles.selected;
 		}
 
@@ -424,17 +503,18 @@ export default React.createClass({
 			return styles['move-to'];
 		}
 
-		return false
+		if (cell && this.state.today.format('YYYY/MM/DD') == this._getCellDate(cell)) {
+			return styles.today;
+		}
 	},
 
 	render: function() {
-
 		if (this.state.show) {
 			return (
-				<div>
-					<input type="text" className="input" onFocus={this._onFocus} />
+				<div ref="wrapper">
+					<input type="text" ref="datepicker-input" className="input" onFocus={this._onFocus} value={this.state.selectedDate.format(this.state.displayFormat)} />
 						<div className={styles.modal}>
-						<div className={styles.wrapper}>
+						<div className={styles.wrapper} ref="wrapper">
 							<div className={styles.header}>{this._getDate('DAYOFWEEK')}</div>
 							<div className={styles.date}>
 								<div className={styles.month}>
@@ -513,7 +593,7 @@ export default React.createClass({
 		} else {
 			return (
 				<div>
-					<input type="text" className="input" onFocus={this._onFocus} />
+					<input type="text" className="input" ref="datepicker-input" onFocus={this._onFocus} value={this.state.selectedDate.format(this.state.displayFormat)} readOnly/>
 				</div>
 			);
 		}

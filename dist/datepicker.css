@@ -1,3 +1,15 @@
+.DatePickerStyle__overlay___2LzVe {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.5);
+	height: 100%;
+	width: 100%;
+	z-index: 1040;
+}
+
 .DatePickerStyle__modal___1ErLw {
 	opacity: 0;
 	-webkit-animation:DatePickerStyle__fadeIn___pe3Rh ease-in 1;
@@ -78,18 +90,21 @@
 .DatePickerStyle__month___2gpUF {
 	font-size: 30px;
 	line-height: 35px;
+	font-weight: 300;
 }
 
 .DatePickerStyle__day___2hqAq {
 	font-size: 56px;
 	line-height: 60px;
 	padding-bottom: 10px;
+	font-weight: 300;
 }
 
 .DatePickerStyle__year___1n785 {
 	font-size: 26px;
 	line-height: 35px;
 	opacity: 0.7;
+	font-weight: 300;
 }
 
 .DatePickerStyle__arrow-left___3mDM7 {
@@ -146,6 +161,7 @@
 	vertical-align: top;
 	color: #ddd;
 	width: auto;
+	font-size: 15px;
 }
 
 .DatePickerStyle__table___4qAHf tr > td a {
@@ -167,9 +183,14 @@
 	color: #fcfcfc;
 }
 
+.DatePickerStyle__table___4qAHf tr > td a.DatePickerStyle__today___C9UIO {
+	background-color: rgba(52,152,219,0.2);
+}
+
 .DatePickerStyle__table___4qAHf tr > td a:hover {
 	background-color: #2e89c5;
 	color: #fcfcfc;
+	text-decoration: none;
 }
 
 .DatePickerStyle__footer___2Blrk {
