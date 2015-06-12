@@ -44,6 +44,10 @@
 	width: 100%;
 }
 
+.DatePickerStyle__hidden-input___2-B40 {
+	display: none;
+}
+
 @-webkit-keyframes DatePickerStyle__fadeIn___pe3Rh { from { opacity: 0; } to { opacity: 1; } }
 @keyframes DatePickerStyle__fadeIn___pe3Rh { from { opacity: 0; } to { opacity: 1; } }
 

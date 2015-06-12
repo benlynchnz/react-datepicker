@@ -108,7 +108,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		getInitialState: function getInitialState() {
 			return {
 				selectedDate: moment().endOf('day'),
-				moveToDate: null,
+				moveToDate: moment().endOf('day'),
 				today: moment().endOf('day'),
 				viewingDay: moment().endOf('day'),
 				viewingMonth: moment().endOf('month'),
@@ -122,6 +122,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					active: false,
 					direction: null,
 					keys: [],
+					value: 0,
 					duration: 'Days',
 					style: {
 						display: 'none'
@@ -153,6 +154,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			this._handlePassedProps(nextProps);
 		},
 
+		componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+			this._keepFocus();
+		},
+
 		_handlePassedProps: function _handlePassedProps(props) {
 			if (props['display-format']) {
 				this.setState({
@@ -172,6 +177,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				this.setState({
 					selectedDate: date.endOf('day'),
+					moveToDate: moment(viewing).endOf('day'),
 					viewingMonth: moment(viewing).endOf('month'),
 					viewingYear: moment(viewing).endOf('year')
 				});
@@ -210,17 +216,25 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		},
 
+		_keepFocus: function _keepFocus() {
+			var input = this.refs['hidden-input'];
+			if (input) {
+				input.getDOMNode().focus();
+			}
+		},
+
 		_onFocus: function _onFocus(e) {
 			var _this = this;
 
-			// var wrapper = this.refs['wrapper'].getDOMNode();
-
+			var input = e.target;
 			var clickHandler = function clickHandler(e) {
-				var hasFocus = !e.target.classList.contains(_DatePickerStyleCss2['default'].modal) ? true : false;
-				if (!hasFocus) {
+				var lostFocus = e.target.classList.contains(_DatePickerStyleCss2['default'].modal);
+				if (lostFocus) {
 					document.removeEventListener('click', clickHandler);
-					// wrapper.removeEventListener('keyup', keyUpHandler);
+					input.removeEventListener('keydown', keyUpHandler);
 					_this._onBlur();
+				} else {
+					_this._keepFocus();
 				}
 			};
 
@@ -231,204 +245,161 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			var keyUpHandler = function keyUpHandler(e) {
 
-				var SHIFT = e.shiftKey,
-				    CTRL = e.ctrlKey,
-				    DELETE = e.which === 8 ? true : false,
-				    ADD = e.which === 187 ? true : false,
-				    SUBTRACT = e.which === 189 ? true : false,
-				    LEFT = e.which === 37 ? true : false,
-				    RIGHT = e.which === 39 ? true : false,
-				    UP = e.which === 38 ? true : false,
-				    DOWN = e.which === 40 ? true : false,
-				    ENTER = e.which === 13 ? true : false,
-				    ESC = e.which === 27 ? true : false,
-				    YEAR = SHIFT && CTRL ? true : false,
-				    MONTH = SHIFT && !CTRL ? true : false;
+				var keyMap = _utils2['default'].keyMap(e),
+				    duration = _this.state.powerKeys.duration,
+				    direction = _this.state.powerKeys.direction,
+				    moveTo = _this.state.selectedDate.toISOString(),
+				    keys = _this.state.powerKeys.keys,
+				    key = keyMap.KEY,
+				    value;
 
 				if (waitForKeys) {
 
-					if (e.which !== 16) {
-
-						if (ESC) {
-							waitForKeys = false;
-							_this.setState({
-								powerKeys: {
-									active: false,
-									keys: [],
-									direction: null,
-									duration: 'Days',
-									style: {
-										display: 'none'
-									}
+					if (keyMap.ESC || keyMap.ENTER) {
+						waitForKeys = false;
+						_this.setState({
+							powerKeys: {
+								active: false,
+								keys: [],
+								direction: null,
+								value: 0,
+								duration: 'Days',
+								style: {
+									display: 'none'
 								}
-							});
-							return;
-						}
-
-						if (ENTER) {
-							waitForKeys = false;
-							_this.setState({
-								powerKeys: {
-									active: false,
-									keys: [],
-									direction: null,
-									duration: 'Days',
-									style: {
-										display: 'none'
-									}
-								}
-							});
-							_this._updateDate(_this.state.moveToDate);
-							return;
-						}
-
-						var keys = _this.state.powerKeys.keys,
-						    key = String.fromCharCode(e.which).toLowerCase(),
-						    duration = _this.state.powerKeys.duration,
-						    direction = _this.state.powerKeys.direction,
-						    moveTo = _this.state.selectedDate.toISOString(),
-						    value;
-
-						if (!isNaN(Number(key))) {
-							if (keys.length) {
-								keys.push(key);
-							} else {
-								keys = [key];
 							}
-						} else if (key === 'd') {
-							duration = 'Days';
-						} else if (key === 'w') {
-							duration = 'Weeks';
-						} else if (key === 'm') {
-							duration = 'Months';
-						} else if (key === 'y') {
-							duration = 'Years';
-						} else if (DELETE) {
-							keys.pop();
+						});
+
+						if (keyMap.ENTER) {
+							_this._updateDate(_this.state.moveToDate);
+							e.preventDefault();
+							e.stopPropagation();
 						}
 
-						value = Number(keys.join(''));
-
-						if (keys.length === 1 && value === 1) {
-							duration = _.trimRight(duration, 's');
-						} else if (!_.endsWith(duration, 's')) {
-							duration += 's';
+						if (keyMap.ESC) {
+							_this.setState({ moveToDate: _this.state.selectedDate });
+							e.preventDefault();
+							e.stopPropagation();
 						}
 
-						if (SHIFT && ADD) {
+						return;
+					}
+
+					if (keyMap.VALUE || keyMap.VALUE === 0) {
+						if (keys.length) {
+							keys.push(keyMap.VALUE);
+						} else {
+							keys = [keyMap.VALUE];
+						}
+					} else if (keyMap.DURATION_DAYS) {
+						duration = 'Days';
+					} else if (keyMap.DURATION_WEEKS) {
+						duration = 'Weeks';
+					} else if (keyMap.DURATION_MONTHS) {
+						duration = 'Months';
+					} else if (keyMap.DURATION_YEARS) {
+						duration = 'Years';
+					} else if (keyMap.DELETE) {
+						keys.pop();
+					}
+
+					if (keyMap.ACTION_ADD) {
+						direction = 'Add';
+					}
+
+					if (keyMap.ACTION_SUBTRACT) {
+						direction = 'Subtract';
+					}
+
+					if (keyMap.RIGHT) {
+						var update = Number(keys.join('')) + 1;
+						keys = [update];
+						if (update > 0) {
 							direction = 'Add';
 						}
+					}
 
-						if (SHIFT && SUBTRACT) {
+					if (keyMap.LEFT) {
+						var update = Number(keys.join('')) - 1;
+						if (update < 0) {
 							direction = 'Subtract';
 						}
+						keys = [update];
+					}
 
-						console.log(direction, value, duration.toLowerCase());
+					value = keys.join('');
 
-						if (direction.indexOf('Add') !== -1) {
-							moveTo = moment(moveTo).add(value, duration.toLowerCase());
-						} else {
-							moveTo = moment(moveTo).subtract(value, duration.toLowerCase());
-						}
+					if (value > 0 && direction === 'Subtract' || value < 0 && direction === 'Add') {
+						var update = Number(keys.join('')) * -1;
+						keys = [update];
+						value = keys.join('');
+					}
 
+					if (keys.length === 1 && Math.abs(Number(value)) === 1) {
+						duration = _.trimRight(duration, 's');
+					} else if (!_.endsWith(duration, 's')) {
+						duration += 's';
+					}
+
+					moveTo = moment(moveTo).add(value, duration.toLowerCase());
+
+					_this.setState({
+						powerKeys: {
+							active: true,
+							keys: keys,
+							value: value,
+							direction: direction,
+							duration: duration
+						},
+						moveToDate: moveTo
+					});
+				} else {
+
+					var initPowerKeys = function initPowerKeys(keys, direction) {
+						waitForKeys = true;
 						_this.setState({
 							powerKeys: {
 								active: true,
 								keys: keys,
-								direction: direction,
-								duration: duration
-							},
-							moveToDate: moveTo
+								direction: direction ? direction : 'Add',
+								duration: _this.state.powerKeys.duration
+							}
 						});
+					};
+
+					if (keyMap.ACTION_ADD || keyMap.ACTION_SUBTRACT) {
+						var direction = keyMap.ACTION_ADD ? 'Add' : 'Subtract';
+						initPowerKeys(_this.state.powerKeys.keys, direction);
 					}
 
-					return;
-				}
+					if (keyMap.RIGHT) {
+						initPowerKeys(_this.state.powerKeys.keys);
+					}
 
-				if (SHIFT && ADD) {
-					waitForKeys = true;
-					_this.setState({
-						powerKeys: {
-							active: true,
-							keys: _this.state.powerKeys.keys,
-							direction: 'Add',
-							duration: _this.state.powerKeys.duration
-						}
-					});
-					return;
-				}
+					if (keyMap.LEFT) {
+						initPowerKeys(_this.state.powerKeys.keys, 'Subtract');
+					}
 
-				if (SHIFT && SUBTRACT) {
-					waitForKeys = true;
-					_this.setState({
-						powerKeys: {
-							active: true,
-							keys: _this.state.powerKeys.keys,
-							direction: 'Subtract',
-							duration: _this.state.powerKeys.duration
-						}
-					});
-					return;
-				}
+					if (keyMap.ENTER) {
+						input.removeEventListener('keydown', keyUpHandler);
+						_this._updateDate(_this.state.moveToDate);
+						_this._onOkClick();
+						e.preventDefault();
+						e.stopPropagation();
+					}
 
-				if (YEAR && LEFT) {
-					_this._onYearClick(-1);
-					return;
-				}
-
-				if (YEAR && RIGHT) {
-					_this._onYearClick(1);
-					return;
-				}
-
-				if (MONTH && LEFT) {
-					_this._onMonthClick(-1);
-					return;
-				}
-
-				if (MONTH && RIGHT) {
-					_this._onMonthClick(1);
-					return;
-				}
-
-				if (ENTER) {
-					document.removeEventListener('keyup', keyUpHandler);
-					_this._onOkClick();
-					return;
-				}
-
-				if (ESC) {
-					document.removeEventListener('keyup', keyUpHandler);
-					_this._onBlur();
-					return;
-				}
-
-				if (LEFT) {
-					_this._handleKeyPress(-1);
-					return;
-				}
-
-				if (UP) {
-					_this._handleKeyPress(-7);
-					return;
-				}
-
-				if (RIGHT) {
-					_this._handleKeyPress(1);
-					return;
-				}
-
-				if (DOWN) {
-					_this._handleKeyPress(7);
-					return;
+					if (keyMap.ESC) {
+						input.removeEventListener('keydown', keyUpHandler);
+						_this._onBlur();
+					}
 				}
 			};
 
-			document.addEventListener('keyup', keyUpHandler);
+			input.addEventListener('keydown', keyUpHandler);
 			document.addEventListener('click', clickHandler);
 
-			this._dispatch(_constants2['default'].FOCUS);
 			this.setState({ show: true });
+			this._dispatch(_constants2['default'].FOCUS);
 		},
 
 		_onBlur: function _onBlur() {
@@ -442,7 +413,8 @@ return /******/ (function(modules) { // webpackBootstrap
 					style: {
 						display: 'none'
 					}
-				}
+				},
+				moveToDate: this.state.selectedDate
 			});
 			this._removeOverlay();
 		},
@@ -505,18 +477,14 @@ return /******/ (function(modules) { // webpackBootstrap
 			return state.format(format);
 		},
 
-		_handleKeyPress: function _handleKeyPress(move) {
-			var moveTo = this.state.selectedDate.toISOString();
-
-			if (moment(moveTo).add(move, 'days').isBetween(this.state.minDate, this.state.maxDate, 'day')) {
-				this._updateDate(this.state.selectedDate.add(move, 'days'));
+		_updateDate: function _updateDate(date, moveTo) {
+			if (moveTo) {
+				this.setState({ moveToDate: date });
+			} else {
+				this.setState({ selectedDate: date });
+				this.refs['datepicker-input'].getDOMNode().value = this.state.selectedDate.format(this.state.displayFormat);
+				this._dispatch(_constants2['default'].DATE_SELECTED, JSON.stringify({ date: this.state.selectedDate.toISOString() }));
 			}
-		},
-
-		_updateDate: function _updateDate(date) {
-			this.setState({ selectedDate: date });
-			this.refs['datepicker-input'].getDOMNode().value = this.state.selectedDate.format(this.state.displayFormat);
-			this._dispatch(_constants2['default'].DATE_SELECTED, JSON.stringify({ date: this.state.selectedDate.toISOString() }));
 		},
 
 		_onDayClick: function _onDayClick(e) {
@@ -525,6 +493,18 @@ return /******/ (function(modules) { // webpackBootstrap
 			    year = this.state.viewingYear.year();
 
 			this._updateDate(this.state.selectedDate.year(year).month(month).date(day));
+
+			this.setState({
+				powerKeys: {
+					active: false,
+					keys: [],
+					duration: 'Days',
+					style: {
+						display: 'none'
+					}
+				},
+				moveToDate: this.state.selectedDate
+			});
 
 			if (this.state.closeOnSelect) {
 				this._onOkClick();
@@ -614,7 +594,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				return React.createElement(
 					'div',
 					{ ref: 'wrapper' },
-					React.createElement('input', { type: 'text', ref: 'datepicker-input', className: 'input', onFocus: this._onFocus, value: this.state.selectedDate.format(this.state.displayFormat) }),
+					React.createElement('input', { type: 'text', ref: 'datepicker-input', className: 'input', value: this.state.selectedDate.format(this.state.displayFormat) }),
 					React.createElement(
 						'div',
 						{ className: _DatePickerStyleCss2['default'].modal },
@@ -761,13 +741,18 @@ return /******/ (function(modules) { // webpackBootstrap
 								this.state.powerKeys.keys.length ? React.createElement(
 									'li',
 									{ className: _DatePickerStyleCss2['default']['power-keys-item'] },
-									this.state.powerKeys.keys
+									Math.abs(this.state.powerKeys.value)
 								) : null,
 								this.state.powerKeys.keys.length ? React.createElement(
 									'li',
 									{ className: _DatePickerStyleCss2['default']['power-keys-item'] },
 									this.state.powerKeys.duration
 								) : null
+							),
+							React.createElement(
+								'div',
+								{ className: _DatePickerStyleCss2['default']['hidden-input'] },
+								React.createElement('input', { type: 'text', ref: 'hidden-input', onFocus: this._onFocus })
 							)
 						)
 					)
@@ -776,7 +761,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				return React.createElement(
 					'div',
 					null,
-					React.createElement('input', { type: 'text', className: 'input', ref: 'datepicker-input', onFocus: this._onFocus, value: this.state.selectedDate.format(this.state.displayFormat), readOnly: true })
+					React.createElement('input', { type: 'text', className: 'input', ref: 'datepicker-input', onFocus: this._onFocus, onClick: this._onFocus, value: this.state.selectedDate.format(this.state.displayFormat), readOnly: true })
 				);
 			}
 		}
@@ -791,25 +776,127 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+		value: true
 	});
 	var utils = {};
 
 	var closest = function closest(elem, selector) {
 
-	    var matchesSelector = elem.matches || elem.webkitMatchesSelector || elem.mozMatchesSelector || elem.msMatchesSelector;
+		var matchesSelector = elem.matches || elem.webkitMatchesSelector || elem.mozMatchesSelector || elem.msMatchesSelector;
 
-	    while (elem) {
-	        if (matchesSelector.bind(elem)(selector)) {
-	            return true;
-	        } else {
-	            elem = elem.parentElement;
-	        }
-	    }
-	    return false;
+		while (elem) {
+			if (matchesSelector.bind(elem)(selector)) {
+				return true;
+			} else {
+				elem = elem.parentElement;
+			}
+		}
+		return false;
 	};
 
 	utils.closest = closest;
+
+	var keyMap = function keyMap(e) {
+
+		var code = e.which,
+		    SHIFT = e.shiftKey,
+		    CTRL = e.ctrlKey,
+		    DELETE = code === 8,
+		    ADD = code === 187,
+		    NUMPAD_ADD = code === 107,
+		    NUMPAD_SUBTRACT = code === 109,
+		    SUBTRACT = code === 189,
+		    LEFT = code === 37,
+		    RIGHT = code === 39,
+		    UP = code === 38,
+		    DOWN = code === 40,
+		    ENTER = code === 13,
+		    ESC = code === 27,
+		    YEAR = SHIFT && CTRL,
+		    MONTH = SHIFT && !CTRL,
+		    DURATION_DAYS = code === 68,
+		    DURATION_WEEKS = code === 87,
+		    DURATION_MONTHS = code === 77,
+		    DURATION_YEARS = code === 89,
+		    ACTION_ADD = SHIFT && ADD || NUMPAD_ADD,
+		    ACTION_SUBTRACT = SHIFT && SUBTRACT || NUMPAD_SUBTRACT,
+		    ONE = code === 49 || code === 97,
+		    TWO = code === 50 || code === 98,
+		    THREE = code === 51 || code === 99,
+		    FOUR = code === 52 || code === 100,
+		    FIVE = code === 53 || code === 101,
+		    SIX = code === 54 || code === 102,
+		    SEVEN = code === 55 || code === 103,
+		    EIGHT = code === 56 || code === 104,
+		    NINE = code === 57 || code === 105,
+		    ZERO = code === 96 || code === 48,
+		    VALUE = null;
+
+		if (ONE) {
+			VALUE = 1;
+		}
+
+		if (TWO) {
+			VALUE = 2;
+		}
+
+		if (THREE) {
+			VALUE = 3;
+		}
+
+		if (FOUR) {
+			VALUE = 4;
+		}
+
+		if (FIVE) {
+			VALUE = 5;
+		}
+
+		if (SIX) {
+			VALUE = 6;
+		}
+
+		if (SEVEN) {
+			VALUE = 7;
+		}
+
+		if (EIGHT) {
+			VALUE = 8;
+		}
+
+		if (NINE) {
+			VALUE = 9;
+		}
+
+		if (ZERO) {
+			VALUE = 0;
+		}
+
+		return {
+			SHIFT: SHIFT,
+			ADD: ADD,
+			SUBTRACT: SUBTRACT,
+			DELETE: DELETE,
+			CTRL: CTRL,
+			LEFT: LEFT,
+			RIGHT: RIGHT,
+			UP: UP,
+			DOWN: DOWN,
+			ENTER: ENTER,
+			ESC: ESC,
+			YEAR: YEAR,
+			MONTH: MONTH,
+			DURATION_DAYS: DURATION_DAYS,
+			DURATION_WEEKS: DURATION_WEEKS,
+			DURATION_MONTHS: DURATION_MONTHS,
+			DURATION_YEARS: DURATION_YEARS,
+			ACTION_ADD: ACTION_ADD,
+			ACTION_SUBTRACT: ACTION_SUBTRACT,
+			VALUE: VALUE
+		};
+	};
+
+	utils.keyMap = keyMap;
 
 	exports["default"] = utils;
 	module.exports = exports["default"];
@@ -838,7 +925,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"overlay":"DatePickerStyle__overlay___2LzVe","modal":"DatePickerStyle__modal___1ErLw","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","wrapper":"DatePickerStyle__wrapper___3Emxc","input":"DatePickerStyle__input___3oQ6t","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","move-to":"DatePickerStyle__move-to___jDGLn","today":"DatePickerStyle__today___C9UIO","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl","power-keys":"DatePickerStyle__power-keys___10dk6","power-keys-item":"DatePickerStyle__power-keys-item___1frz9"};
+	module.exports = {"overlay":"DatePickerStyle__overlay___2LzVe","modal":"DatePickerStyle__modal___1ErLw","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","wrapper":"DatePickerStyle__wrapper___3Emxc","input":"DatePickerStyle__input___3oQ6t","hidden-input":"DatePickerStyle__hidden-input___2-B40","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","move-to":"DatePickerStyle__move-to___jDGLn","today":"DatePickerStyle__today___C9UIO","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl","power-keys":"DatePickerStyle__power-keys___10dk6","power-keys-item":"DatePickerStyle__power-keys-item___1frz9"};
 
 /***/ }
 /******/ ])

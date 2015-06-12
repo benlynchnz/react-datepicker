@@ -11,7 +11,7 @@ export default React.createClass({
 	getInitialState: () => {
 		return {
 			selectedDate: moment().endOf('day'),
-			moveToDate: null,
+			moveToDate: moment().endOf('day'),
 			today: moment().endOf('day'),
 			viewingDay: moment().endOf('day'),
 			viewingMonth: moment().endOf('month'),
@@ -25,6 +25,7 @@ export default React.createClass({
 				active: false,
 				direction: null,
 				keys: [],
+				value: 0,
 				duration: 'Days',
 				style: {
 					display: 'none'
@@ -56,6 +57,10 @@ export default React.createClass({
 		this._handlePassedProps(nextProps);
 	},
 
+	componentDidUpdate: function (prevProps, prevState) {
+		this._keepFocus();
+	},
+
 	_handlePassedProps: function(props) {
 		if (props['display-format']) {
 			this.setState({
@@ -75,6 +80,7 @@ export default React.createClass({
 
 			this.setState({
 				selectedDate: date.endOf('day'),
+				moveToDate: moment(viewing).endOf('day'),
 				viewingMonth: moment(viewing).endOf('month'),
 				viewingYear: moment(viewing).endOf('year')
 			});
@@ -113,15 +119,23 @@ export default React.createClass({
 		}
 	},
 
-	_onFocus: function(e) {
-		// var wrapper = this.refs['wrapper'].getDOMNode();
+	_keepFocus: function() {
+		var input = this.refs['hidden-input'];
+		if (input) {
+			input.getDOMNode().focus();
+		}
+	},
 
+	_onFocus: function(e) {
+		var input = e.target;
 		var clickHandler = (e) => {
-			var hasFocus = !e.target.classList.contains(styles.modal) ? true : false;
-			if (!hasFocus) {
+			var lostFocus = e.target.classList.contains(styles.modal);
+			if (lostFocus) {
 				document.removeEventListener('click', clickHandler);
-				// wrapper.removeEventListener('keyup', keyUpHandler);
+				input.removeEventListener('keydown', keyUpHandler);
 				this._onBlur();
+			} else {
+				this._keepFocus();
 			}
 		}
 
@@ -132,204 +146,162 @@ export default React.createClass({
 
 		var keyUpHandler = (e) => {
 
-			var SHIFT    = e.shiftKey,
-				CTRL     = e.ctrlKey,
-				DELETE   = e.which === 8 ? true : false,
-				ADD      = e.which === 187 ? true : false,
-				SUBTRACT = e.which === 189 ? true : false,
-				LEFT     = e.which === 37 ? true : false,
-				RIGHT    = e.which === 39 ? true : false,
-				UP       = e.which === 38 ? true : false,
-				DOWN     = e.which === 40 ? true : false,
-				ENTER    = e.which === 13 ? true : false,
-				ESC      = e.which === 27 ? true : false,
-				YEAR     = SHIFT && CTRL ? true : false,
-				MONTH    = SHIFT && !CTRL ? true : false;
+			var keyMap = utils.keyMap(e),
+				duration = this.state.powerKeys.duration,
+				direction = this.state.powerKeys.direction,
+				moveTo = this.state.selectedDate.toISOString(),
+				keys = this.state.powerKeys.keys,
+				key = keyMap.KEY,
+				value;
 
 			if (waitForKeys) {
 
-				if (e.which !== 16) {
-
-					if (ESC) {
-						waitForKeys = false;
-						this.setState({
-							powerKeys: {
-								active: false,
-								keys: [],
-								direction: null,
-								duration: 'Days',
-								style: {
-									display: 'none'
-								}
+				if (keyMap.ESC || keyMap.ENTER) {
+					waitForKeys = false;
+					this.setState({
+						powerKeys: {
+							active: false,
+							keys: [],
+							direction: null,
+							value: 0,
+							duration: 'Days',
+							style: {
+								display: 'none'
 							}
-						});
-						return;
-					}
-
-					if (ENTER) {
-						waitForKeys = false;
-						this.setState({
-							powerKeys: {
-								active: false,
-								keys: [],
-								direction: null,
-								duration: 'Days',
-								style: {
-									display: 'none'
-								}
-							}
-						});
-						this._updateDate(this.state.moveToDate);
-						return;
-					}
-
-					var keys = this.state.powerKeys.keys,
-						key = String.fromCharCode(e.which).toLowerCase(),
-						duration = this.state.powerKeys.duration,
-						direction = this.state.powerKeys.direction,
-						moveTo = this.state.selectedDate.toISOString(),
-						value;
-
-					if (!isNaN(Number(key))) {
-						if (keys.length) {
-							keys.push(key);
-						} else {
-							keys = [key];
 						}
-					} else if (key === 'd') {
-						duration = 'Days';
-					} else if (key === 'w') {
-						duration = 'Weeks';
-					} else if (key === 'm') {
-						duration = 'Months';
-					} else if (key === 'y') {
-						duration = 'Years';
-					} else if (DELETE) {
-						keys.pop();
+					});
+
+					if (keyMap.ENTER) {
+						this._updateDate(this.state.moveToDate);
+						e.preventDefault();
+						e.stopPropagation();
 					}
 
-					value = Number(keys.join(''));
-
-					if (keys.length === 1 && value === 1) {
-						duration = _.trimRight(duration, 's');
-					} else if (!_.endsWith(duration, 's')) {
-						duration += 's';
+					if (keyMap.ESC) {
+						this.setState({ moveToDate: this.state.selectedDate });
+						e.preventDefault();
+						e.stopPropagation();
 					}
 
-					if (SHIFT && ADD) {
+					return;
+				}
+
+				if (keyMap.VALUE || keyMap.VALUE === 0) {
+					if (keys.length) {
+						keys.push(keyMap.VALUE);
+					} else {
+						keys = [keyMap.VALUE];
+					}
+				} else if (keyMap.DURATION_DAYS) {
+					duration = 'Days';
+				} else if (keyMap.DURATION_WEEKS) {
+					duration = 'Weeks';
+				} else if (keyMap.DURATION_MONTHS) {
+					duration = 'Months';
+				} else if (keyMap.DURATION_YEARS) {
+					duration = 'Years';
+				} else if (keyMap.DELETE) {
+					keys.pop();
+				}
+
+				if (keyMap.ACTION_ADD) {
+					direction = 'Add';
+				}
+
+				if (keyMap.ACTION_SUBTRACT) {
+					direction = 'Subtract';
+				}
+
+				if (keyMap.RIGHT) {
+					var update = Number(keys.join('')) + 1;
+					keys = [update];
+					if (update > 0) {
 						direction = 'Add';
 					}
+				}
 
-					if (SHIFT && SUBTRACT) {
+				if (keyMap.LEFT) {
+					var update = Number(keys.join('')) - 1;
+					if (update < 0) {
 						direction = 'Subtract';
 					}
+					keys = [update];
+				}
 
-					console.log(direction, value, duration.toLowerCase());
+				value = keys.join('');
 
-					if (direction.indexOf('Add') !== -1) {
-						moveTo = moment(moveTo).add(value, duration.toLowerCase());
-					} else {
-						moveTo = moment(moveTo).subtract(value, duration.toLowerCase());
-					}
+				if ((value > 0 && direction === 'Subtract') || (value < 0 && direction === 'Add')) {
+					var update = Number(keys.join('')) * -1;
+					keys = [update];
+					value = keys.join('');
+				}
 
+				if (keys.length === 1 && Math.abs(Number(value)) === 1) {
+					duration = _.trimRight(duration, 's');
+				} else if (!_.endsWith(duration, 's')) {
+					duration += 's';
+				}
+
+				moveTo = moment(moveTo).add(value, duration.toLowerCase());
+
+				this.setState({
+					powerKeys: {
+						active: true,
+						keys: keys,
+						value: value,
+						direction: direction,
+						duration: duration
+					},
+					moveToDate: moveTo
+				});
+
+			} else {
+
+				var initPowerKeys = (keys, direction) => {
+					waitForKeys = true;
 					this.setState({
 						powerKeys: {
 							active: true,
 							keys: keys,
-							direction: direction,
-							duration: duration
-						},
-						moveToDate: moveTo
+							direction: direction ? direction : 'Add',
+							duration: this.state.powerKeys.duration
+						}
 					});
 				}
 
-				return;
-			}
+				if (keyMap.ACTION_ADD || keyMap.ACTION_SUBTRACT) {
+					var direction = keyMap.ACTION_ADD ? 'Add' : 'Subtract';
+					initPowerKeys(this.state.powerKeys.keys, direction);
+				}
 
-			if (SHIFT && ADD) {
-				waitForKeys = true;
-				this.setState({
-					powerKeys: {
-						active: true,
-						keys: this.state.powerKeys.keys,
-						direction: 'Add',
-						duration: this.state.powerKeys.duration
-					}
-				});
-				return;
-			}
+				if (keyMap.RIGHT) {
+					initPowerKeys(this.state.powerKeys.keys);
+				}
 
-			if (SHIFT && SUBTRACT) {
-				waitForKeys = true;
-				this.setState({
-					powerKeys: {
-						active: true,
-						keys: this.state.powerKeys.keys,
-						direction: 'Subtract',
-						duration: this.state.powerKeys.duration
-					}
-				});
-				return;
-			}
+				if (keyMap.LEFT) {
+					initPowerKeys(this.state.powerKeys.keys, 'Subtract');
+				}
 
-			if (YEAR && LEFT) {
-				this._onYearClick(-1);
-				return;
-			}
+				if (keyMap.ENTER) {
+					input.removeEventListener('keydown', keyUpHandler);
+					this._updateDate(this.state.moveToDate);
+					this._onOkClick();
+					e.preventDefault();
+					e.stopPropagation();
+				}
 
-			if (YEAR && RIGHT) {
-				this._onYearClick(1);
-				return;
-			}
-
-			if (MONTH && LEFT) {
-				this._onMonthClick(-1);
-				return;
-			}
-
-			if (MONTH && RIGHT) {
-				this._onMonthClick(1);
-				return;
-			}
-
-			if (ENTER) {
-				document.removeEventListener('keyup', keyUpHandler);
-				this._onOkClick();
-				return;
-			}
-
-			if (ESC) {
-				document.removeEventListener('keyup', keyUpHandler);
-				this._onBlur();
-				return;
-			}
-
-			if (LEFT) {
-				this._handleKeyPress(-1);
-				return;
-			}
-
-			if (UP) {
-				this._handleKeyPress(-7);
-				return;
-			}
-
-			if (RIGHT) {
-				this._handleKeyPress(1);
-				return;
-			}
-
-			if (DOWN) {
-				this._handleKeyPress(7);
-				return;
+				if (keyMap.ESC) {
+					input.removeEventListener('keydown', keyUpHandler);
+					this._onBlur();
+				}
 			}
 		}
 
-		document.addEventListener('keyup', keyUpHandler);
+		input.addEventListener('keydown', keyUpHandler);
 		document.addEventListener('click', clickHandler);
 
-		this._dispatch(constants.FOCUS);
 		this.setState({ show: true });
+		this._dispatch(constants.FOCUS);
 	},
 
 	_onBlur: function() {
@@ -343,7 +315,8 @@ export default React.createClass({
 				style: {
 					display: 'none'
 				}
-			}
+			},
+			moveToDate: this.state.selectedDate
 		});
 		this._removeOverlay();
 	},
@@ -406,18 +379,14 @@ export default React.createClass({
 		return state.format(format);
 	},
 
-	_handleKeyPress: function(move) {
-		var moveTo = this.state.selectedDate.toISOString();
-
-		if (moment(moveTo).add(move, 'days').isBetween(this.state.minDate, this.state.maxDate, 'day')) {
-			this._updateDate(this.state.selectedDate.add(move, 'days'));
+	_updateDate: function(date, moveTo) {
+		if (moveTo) {
+			this.setState({ moveToDate: date });
+		} else {
+			this.setState({ selectedDate: date });
+			this.refs['datepicker-input'].getDOMNode().value = this.state.selectedDate.format(this.state.displayFormat);
+			this._dispatch(constants.DATE_SELECTED, JSON.stringify({ date: this.state.selectedDate.toISOString() }));
 		}
-	},
-
-	_updateDate: function(date) {
-		this.setState({ selectedDate: date });
-		this.refs['datepicker-input'].getDOMNode().value = this.state.selectedDate.format(this.state.displayFormat);
-		this._dispatch(constants.DATE_SELECTED, JSON.stringify({ date: this.state.selectedDate.toISOString() }));
 	},
 
 	_onDayClick: function(e) {
@@ -426,6 +395,18 @@ export default React.createClass({
 			year = this.state.viewingYear.year();
 
 		this._updateDate(this.state.selectedDate.year(year).month(month).date(day));
+
+		this.setState({
+			powerKeys: {
+				active: false,
+				keys: [],
+				duration: 'Days',
+				style: {
+					display: 'none'
+				}
+			},
+			moveToDate: this.state.selectedDate
+		});
 
 		if (this.state.closeOnSelect) {
 			this._onOkClick();
@@ -512,7 +493,7 @@ export default React.createClass({
 		if (this.state.show) {
 			return (
 				<div ref="wrapper">
-					<input type="text" ref="datepicker-input" className="input" onFocus={this._onFocus} value={this.state.selectedDate.format(this.state.displayFormat)} />
+					<input type="text" ref="datepicker-input" className="input" value={this.state.selectedDate.format(this.state.displayFormat)} />
 						<div className={styles.modal}>
 						<div className={styles.wrapper} ref="wrapper">
 							<div className={styles.header}>{this._getDate('DAYOFWEEK')}</div>
@@ -578,13 +559,16 @@ export default React.createClass({
 							<div className={styles['power-keys']} style={this.state.powerKeys.style}>
 								<li className={styles['power-keys-item']}>{this.state.powerKeys.direction}</li>
 								{(this.state.powerKeys.keys.length
-									? <li className={styles['power-keys-item']}>{this.state.powerKeys.keys}</li>
+									? <li className={styles['power-keys-item']}>{Math.abs(this.state.powerKeys.value)}</li>
 									: null
 								)}
 								{(this.state.powerKeys.keys.length
 									? <li className={styles['power-keys-item']}>{this.state.powerKeys.duration}</li>
 									: null
 								)}
+							</div>
+							<div className={styles['hidden-input']}>
+								<input type="text" ref="hidden-input" onFocus={this._onFocus} />
 							</div>
 						</div>
 					</div>
@@ -593,7 +577,7 @@ export default React.createClass({
 		} else {
 			return (
 				<div>
-					<input type="text" className="input" ref="datepicker-input" onFocus={this._onFocus} value={this.state.selectedDate.format(this.state.displayFormat)} readOnly/>
+					<input type="text" className="input" ref="datepicker-input" onFocus={this._onFocus} onClick={this._onFocus} value={this.state.selectedDate.format(this.state.displayFormat)} readOnly/>
 				</div>
 			);
 		}
