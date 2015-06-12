@@ -355,29 +355,24 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				} else {
 
-					var initPowerKeys = function initPowerKeys(keys, direction) {
+					var initPowerKeys = function initPowerKeys(subtract) {
 						waitForKeys = true;
 						_this.setState({
 							powerKeys: {
 								active: true,
-								keys: keys,
-								direction: direction ? direction : 'Add',
+								keys: [],
+								direction: subtract ? 'Subtract' : 'Add',
 								duration: _this.state.powerKeys.duration
 							}
 						});
 					};
 
 					if (keyMap.ACTION_ADD || keyMap.ACTION_SUBTRACT) {
-						var direction = keyMap.ACTION_ADD ? 'Add' : 'Subtract';
-						initPowerKeys(_this.state.powerKeys.keys, direction);
+						initPowerKeys(keyMap.ACTION_SUBTRACT);
 					}
 
-					if (keyMap.RIGHT) {
-						initPowerKeys(_this.state.powerKeys.keys);
-					}
-
-					if (keyMap.LEFT) {
-						initPowerKeys(_this.state.powerKeys.keys, 'Subtract');
+					if (keyMap.LEFT || keyMap.RIGHT) {
+						initPowerKeys(keyMap.LEFT);
 					}
 
 					if (keyMap.ENTER) {

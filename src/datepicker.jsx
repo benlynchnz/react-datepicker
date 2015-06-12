@@ -257,29 +257,24 @@ export default React.createClass({
 
 			} else {
 
-				var initPowerKeys = (keys, direction) => {
+				var initPowerKeys = (subtract) => {
 					waitForKeys = true;
 					this.setState({
 						powerKeys: {
 							active: true,
-							keys: keys,
-							direction: direction ? direction : 'Add',
+							keys: [],
+							direction: subtract ? 'Subtract' : 'Add',
 							duration: this.state.powerKeys.duration
 						}
 					});
 				}
 
 				if (keyMap.ACTION_ADD || keyMap.ACTION_SUBTRACT) {
-					var direction = keyMap.ACTION_ADD ? 'Add' : 'Subtract';
-					initPowerKeys(this.state.powerKeys.keys, direction);
+					initPowerKeys(keyMap.ACTION_SUBTRACT);
 				}
 
-				if (keyMap.RIGHT) {
-					initPowerKeys(this.state.powerKeys.keys);
-				}
-
-				if (keyMap.LEFT) {
-					initPowerKeys(this.state.powerKeys.keys, 'Subtract');
+				if (keyMap.LEFT || keyMap.RIGHT) {
+					initPowerKeys(keyMap.LEFT);
 				}
 
 				if (keyMap.ENTER) {
