@@ -1,38 +1,30 @@
-import styles from '../../DatePickerStyle.css';
+'use strict';
+
 import Store from '../store';
+import utils from '../utils';
 import Constants from '../constants';
 import Calendar from './Calendar.jsx';
 
-export default React.createClass({
+export default class DatePickerSingleView extends React.Component {
 
-	displayName: 'datepicker-single',
+	displayName: 'datepicker-single'
 
-	getInitialState: () => {
-		return Store.getState();
-	},
+	constructor(props) {
+		super(props);
+		this.state = Store.getState();
 
-	componentDidMount: function() {
-		var rootNode = this.getDOMNode(),
-			hasNextProps = false,
-			nextProps = {},
-			parentNode = rootNode.parentNode;
+		this._updateState = this._updateState.bind(this);
+		this._onBlur = this._onBlur.bind(this);
+		this._onFocus = this._onFocus.bind(this);
+		this._onOk = this._onOk.bind(this);
+		this._onUpdate = this._onUpdate.bind(this);
+	}
 
-		Object.keys(parentNode.attributes).forEach(function(key) {
-			var namedNode;
+	componentDidMount() {
+		return utils.componentDidMount(this);
+	}
 
-			if (key !== 'length') {
-				hasNextProps = true;
-				namedNode = parentNode.attributes[key];
-				nextProps[namedNode.name] = namedNode.value;
-			}
-		});
-
-		if (hasNextProps) {
-			this._updateState(nextProps);
-		}
-	},
-
-	_updateState: function(props) {
+	_updateState(props) {
 		if (props['display-format']) {
 			this.setState({
 				displayFormat: props['display-format']
@@ -40,14 +32,14 @@ export default React.createClass({
 		}
 
 		if (props['selected-date']) {
-			var date;
+			let date;
 			if (props['selected-date-format']) {
 				date = moment(props['selected-date'], props['selected-date-format']);
 			} else {
 				date = moment(props['selected-date']);
 			}
 
-			var viewing = date.toISOString();
+			let viewing = date.toISOString();
 
 			this.setState({
 				selectedDate: date.endOf('day'),
@@ -72,36 +64,28 @@ export default React.createClass({
 		if (props['close-on-select']) {
 			this.setState({ closeOnSelect: true });
 		}
-	},
+	}
 
-	_onBlur: function() {
+	_onBlur() {
 		this.setState({ show: false });
-		this._dispatch(Constants.BLUR, JSON.stringify({ date: this.state.selectedDate }));
-	},
+		utils.dispatch(this, Constants.BLUR, JSON.stringify({ date: this.state.selectedDate }));
+	}
 
-	_onFocus: function() {
+	_onFocus() {
 		this.setState({ moveToDate: this.props.selectedDate });
 		this.setState({ show: true });
-	},
+	}
 
-	_onUpdate: function(date) {
+	_onUpdate(date) {
 		this.setState({ selectedDate: date });
-		this._dispatch(Constants.DATE_SELECTED, JSON.stringify({ date: date }));
-	},
+		utils.dispatch(this, Constants.DATE_SELECTED, JSON.stringify({ date: date }));
+	}
 
-	_onOk: function() {
+	_onOk() {
 		this._onBlur();
-	},
+	}
 
-	_dispatch: function(action, payload) {
-		var event = new CustomEvent('event', {
-			'detail': {action, payload}
-		});
-
-		this.props.element.dispatchEvent(event);
-	},
-
-	render: function() {
+	render() {
 		if (!this.state.show) {
 			return (
 				<input
@@ -133,4 +117,4 @@ export default React.createClass({
 		}
 	}
 
-});
+};

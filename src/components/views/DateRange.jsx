@@ -1,38 +1,32 @@
-import styles from '../../DatePickerStyle.css';
+'use strict';
+
 import Store from '../store';
+import utils from '../utils';
 import Constants from '../constants';
 import Calendar from './Calendar.jsx';
 
-export default React.createClass({
+export default class DatePickerRangeView extends React.Component {
 
-	displayName: 'datepicker-range',
+	displayName: 'datepicker-range'
 
-	getInitialState: () => {
-		return Store.getState();
-	},
+	constructor(props) {
+		super(props);
+		this.state = Store.getState();
 
-	componentDidMount: function() {
-		var rootNode = this.getDOMNode(),
-			hasNextProps = false,
-			nextProps = {},
-			parentNode = rootNode.parentNode;
+		this._updateState = this._updateState.bind(this);
+		this._onBlur = this._onBlur.bind(this);
+		this._onFocus = this._onFocus.bind(this);
+		this._onUpdate = this._onUpdate.bind(this);
+		this._onOk = this._onOk.bind(this);
+		this._getConvenienceDatesAsHTML = this._getConvenienceDatesAsHTML.bind(this);
+		this._onDateChange = this._onDateChange.bind(this);
+	}
 
-		Object.keys(parentNode.attributes).forEach(function(key) {
-			var namedNode;
+	componentDidMount() {
+		return utils.componentDidMount(this);
+	}
 
-			if (key !== 'length') {
-				hasNextProps = true;
-				namedNode = parentNode.attributes[key];
-				nextProps[namedNode.name] = namedNode.value;
-			}
-		});
-
-		if (hasNextProps) {
-			this._updateState(nextProps);
-		}
-	},
-
-	_updateState: function(props) {
+	_updateState(props) {
 		if (props['display-format']) {
 			this.setState({
 				displayFormat: props['display-format']
@@ -40,19 +34,19 @@ export default React.createClass({
 		}
 
 		if (props['default-range']) {
-			var range = props['default-range'];
+			let range = props['default-range'];
 			this.setState({ selectedDateRange: _.findWhere(Store.getConvenienceDates(), { name: range }) });
 		}
 
 		if (props['selected-date']) {
-			var date;
+			let date;
 			if (props['selected-date-format']) {
 				date = moment(props['selected-date'], props['selected-date-format']);
 			} else {
 				date = moment(props['selected-date']);
 			}
 
-			var viewing = date.toISOString();
+			let viewing = date.toISOString();
 
 			this.setState({
 				selectedDate: date.endOf('day'),
@@ -82,15 +76,15 @@ export default React.createClass({
 			fromDate: this.state.selectedDateRange.dates.from,
 			toDate: this.state.selectedDateRange.dates.to
 		});
-	},
+	}
 
-	_onBlur: function() {
+	_onBlur() {
 		this.setState({ show: false });
-		this._dispatch(Constants.BLUR, JSON.stringify(this.state.selectedDateRange));
-	},
+		utils.dispatch(this, Constants.BLUR, JSON.stringify(this.state.selectedDateRange));
+	}
 
-	_onFocus: function(e) {
-		var isFrom = (e.target.getAttribute('data-range') === 'from') ? true : false;
+	_onFocus(e) {
+		let isFrom = (e.target.getAttribute('data-range') === 'from') ? true : false;
 
 		this.setState({
 			isFrom: isFrom,
@@ -99,13 +93,12 @@ export default React.createClass({
 			show: true
 		});
 
-		this._dispatch(Constants.FOCUS);
-	},
+		utils.dispatch(this, Constants.FOCUS);
+	}
 
-	_onUpdate: function(date) {
-		var isFrom = this.state.isFrom;
-
-		var customRange = _.findWhere(Store.getConvenienceDates(), { name: 'Custom' });
+	_onUpdate(date) {
+		let isFrom = this.state.isFrom,
+			customRange = _.findWhere(Store.getConvenienceDates(), { name: 'Custom' });
 
 		customRange.dates = this.state.selectedDateRange.dates;
 
@@ -124,48 +117,39 @@ export default React.createClass({
 		}
 
 		this.refs['select'].getDOMNode().selectedIndex = _.findIndex(Store.getConvenienceDates(), { name: 'Custom' });
-	},
+	}
 
-	_onOk: function() {
+	_onOk() {
 		this._onBlur();
-	},
+	}
 
-	_getConvenienceDatesAsHTML: function() {
-		var dates = Store.getConvenienceDates(),
-			names = [],
-			self = this;
+	_getConvenienceDatesAsHTML() {
+		let dates = Store.getConvenienceDates(),
+			names = [];
 
-		function itemDefault(item) {
-			if (item.name === self.state.selectedDateRange.name) {
+		let itemDefault = (item) => {
+			if (item.name === this.state.selectedDateRange.name) {
 				return 'selected';
 			}
 		};
 
-		dates.forEach(function(item) {
+		dates.forEach((item) => {
 			names.push('<option value="' + item.name + '"' + itemDefault(item) + '>' + item.name + '</option>');
 		});
 
 		return { __html: names.join('') };
-	},
+	}
 
-	_onDateChange: function(e) {
-		var value = e.target.options[e.target.selectedIndex].value,
+	_onDateChange(e) {
+		let value = e.target.options[e.target.selectedIndex].value,
 			ranges = Store.getConvenienceDates(),
 			selected = _.findWhere(ranges, { name: value });
 
 		this.setState({ selectedDateRange: selected });
-		this._dispatch(Constants.DATE_RANGE_CHANGE, JSON.stringify(selected));
-	},
+		utils.dispatch(this, Constants.DATE_RANGE_CHANGE, JSON.stringify(selected));
+	}
 
-	_dispatch: function(action, payload) {
-		var event = new CustomEvent('event', {
-			'detail': {action, payload}
-		});
-
-		this.props.element.dispatchEvent(event);
-	},
-
-	render: function() {
+	render() {
 		if (!this.state.show) {
 			return (
 				<div>
@@ -189,5 +173,4 @@ export default React.createClass({
 		}
 	}
 
-});
-
+};

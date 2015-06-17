@@ -1,53 +1,30 @@
 'use strict';
 
-import styles from './DatePickerStyle.css';
 import utils from './components/utils';
-import Store from './components/store';
-import Constants from './components/constants';
-
 import SingleDateView from './components/views/SingleDate.jsx';
 import DateRangeView from './components/views/DateRange.jsx';
 
-export default React.createClass({
+export default class DatePickerView extends React.Component {
 
-	displayName: 'datepicker-view',
+	displayName: 'datepicker-view'
 
-	componentDidMount: function() {
-		var rootNode = this.getDOMNode(),
-			hasNextProps = false,
-			nextProps = {},
-			parentNode = rootNode.parentNode;
+	constructor(props) {
+		super(props);
+		this.state = { range: false };
+		this._updateState = this._updateState.bind(this);
+	}
 
-		Object.keys(parentNode.attributes).forEach(function(key) {
-			var namedNode;
+	componentDidMount() {
+		return utils.componentDidMount(this);
+	}
 
-			if (key !== 'length') {
-				hasNextProps = true;
-				namedNode = parentNode.attributes[key];
-				nextProps[namedNode.name] = namedNode.value;
-			}
-		});
-
-		if (hasNextProps) {
-			this._updateState(nextProps);
-		}
-	},
-
-	_updateState: function(props) {
+	_updateState(props) {
 		if (props['range'] === 'true') {
 			this.setState({ range: true });
 		}
+	}
 
-		this.setState({ element: this.props.element });
-	},
-
-	getInitialState: function () {
-	    return {
-	        range: false
-	    };
-	},
-
-	render: function() {
+	render() {
 		if (this.state.range) {
 			return <DateRangeView {...this.state} />
 		} else {
@@ -55,4 +32,4 @@ export default React.createClass({
 		}
 	}
 
-});
+};

@@ -1,3 +1,5 @@
+'use strict';
+
 let utils = {};
 
 let closest = (elem, selector) => {
@@ -184,5 +186,39 @@ let convenienceDates = [
 
 utils.convenienceDates = convenienceDates;
 
-export default utils;
+let componentDidMount = (ctx) => {
+    let rootNode = React.findDOMNode(ctx),
+		hasNextProps = false,
+		nextProps = {},
+		parentNode = rootNode.parentNode;
 
+	Object.keys(parentNode.attributes).forEach(function(key) {
+		let namedNode;
+
+		if (key !== 'length') {
+			hasNextProps = true;
+			namedNode = parentNode.attributes[key];
+			nextProps[namedNode.name] = namedNode.value;
+		}
+	});
+
+	if (hasNextProps) {
+	       ctx._updateState(nextProps);
+	}
+
+	ctx.setState({ element: ctx.props.element });
+};
+
+utils.componentDidMount = componentDidMount;
+
+let dispatch = (ctx, action, payload) => {
+    let event = new CustomEvent('event', {
+        'detail': {action, payload}
+    });
+
+    ctx.props.element.dispatchEvent(event);
+}
+
+utils.dispatch = dispatch;
+
+export default utils;

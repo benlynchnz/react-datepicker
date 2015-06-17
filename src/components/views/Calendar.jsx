@@ -1,14 +1,34 @@
+'use strict';
+
 import styles from '../../DatePickerStyle.css';
-import Store from '../store';
 import utils from '../utils';
 
-export default React.createClass({
+export default class CalendarView extends React.Component {
 
-	displayName: 'datepicker-calendar',
+	displayName: 'datepicker-calendar'
 
-	componentWillMount: function () {
-		this.setState(this.props);
+	constructor(props) {
+		super(props);
+		this.state = this.props;
 
+		this._createOverlay = this._createOverlay.bind(this);
+		this._attachEvents = this._attachEvents.bind(this);
+		this._removeOverlay = this._removeOverlay.bind(this);
+		this._onBlur = this._onBlur.bind(this);
+		this._onOkClick = this._onOkClick.bind(this);
+		this._onDayClick = this._onDayClick.bind(this);
+		this._onMonthClick = this._onMonthClick.bind(this);
+		this._onYearClick = this._onYearClick.bind(this);
+		this._getDate = this._getDate.bind(this);
+		this._getCalendarDate = this._getCalendarDate.bind(this);
+		this._getDaysInMonth = this._getDaysInMonth.bind(this);
+		this._getFirstDayOfMonth = this._getFirstDayOfMonth.bind(this);
+		this._getCellDate = this._getCellDate.bind(this);
+		this._getCellDateAsISO = this._getCellDateAsISO.bind(this);
+		this._getCellDateClass = this._getCellDateClass.bind(this);
+	}
+
+	componentWillMount() {
 		if (this.props.range) {
 			if (this.props.isFrom) {
 				this.setState({ selectedDate: this.props.selectedDateRange.dates.from });
@@ -16,10 +36,10 @@ export default React.createClass({
 				this.setState({ selectedDate: this.props.selectedDateRange.dates.to });
 			}
 		}
-	},
+	}
 
-	componentDidMount: function () {
-		var selectedDate = this.state.selectedDate.toISOString();
+	componentDidMount() {
+		let selectedDate = this.state.selectedDate.toISOString();
 
 		this.setState({
 			viewingDay: moment(selectedDate).endOf('day'),
@@ -29,30 +49,29 @@ export default React.createClass({
 
 		this._createOverlay();
 		this._attachEvents();
-	},
+	}
 
-	_attachEvents: function() {
-		var input = this.refs['hidden-input'].getDOMNode();
+	_attachEvents() {
+		let input = this.refs['hidden-input'].getDOMNode();
 		input.focus();
 
-		var clickHandler = (e) => {
-			var lostFocus = e.target.classList.contains(styles.modal);
+		let clickHandler = (e) => {
+			let lostFocus = e.target.classList.contains(styles.modal);
 			if (lostFocus) {
 				document.removeEventListener('click', clickHandler);
 				input.removeEventListener('keydown', keyUpHandler);
 				this._onBlur();
 			} else {
 				input.focus();
-				// input.removeEventListener('keydown', keyUpHandler);
 			}
 		}
 
-		var waitForKeys = false,
+		let waitForKeys = false,
 			moveTo = this.state.selectedDate.toISOString();
 
-		var keyUpHandler = (e) => {
+		let keyUpHandler = (e) => {
 
-			var keyMap = utils.keyMap(e),
+			let keyMap = utils.keyMap(e),
 				duration = this.state.powerKeys.duration,
 				direction = this.state.powerKeys.direction,
 				moveTo = this.state.selectedDate.toISOString(),
@@ -120,7 +139,7 @@ export default React.createClass({
 				}
 
 				if (keyMap.RIGHT) {
-					var update = Number(keys.join('')) + 1;
+					let update = Number(keys.join('')) + 1;
 					keys = [update];
 					if (update > 0) {
 						direction = 'Add';
@@ -128,7 +147,7 @@ export default React.createClass({
 				}
 
 				if (keyMap.LEFT) {
-					var update = Number(keys.join('')) - 1;
+					let update = Number(keys.join('')) - 1;
 					if (update < 0) {
 						direction = 'Subtract';
 					}
@@ -138,7 +157,7 @@ export default React.createClass({
 				value = keys.join('');
 
 				if ((value > 0 && direction === 'Subtract') || (value < 0 && direction === 'Add')) {
-					var update = Number(keys.join('')) * -1;
+					let update = Number(keys.join('')) * -1;
 					keys = [update];
 					value = keys.join('');
 				}
@@ -164,7 +183,7 @@ export default React.createClass({
 
 			} else {
 
-				var initPowerKeys = (subtract) => {
+				let initPowerKeys = (subtract) => {
 					waitForKeys = true;
 					this.setState({
 						powerKeys: {
@@ -205,38 +224,36 @@ export default React.createClass({
 
 		input.addEventListener('keydown', keyUpHandler);
 		document.addEventListener('click', clickHandler);
+	}
 
-		// this._dispatch(constants.FOCUS);
-	},
-
-	_createOverlay: function() {
+	_createOverlay() {
 		if (!document.getElementById('overlay')) {
-			var el = document.createElement('div');
+			let el = document.createElement('div');
 			el.id = 'overlay';
 			el.classList.add(styles.overlay);
 			document.body.appendChild(el);
 		}
-	},
+	}
 
-	_removeOverlay: function() {
-		var el = document.getElementById('overlay');
+	_removeOverlay() {
+		let el = document.getElementById('overlay');
 		if (el) {
 			el.outerHTML = '';
 		}
-	},
+	}
 
-	_onBlur: function() {
+	_onBlur() {
 		this.props.onBlur();
 		this._removeOverlay();
-	},
+	}
 
-	_onOkClick: function() {
+	_onOkClick() {
 		this.props.onOK();
 		this._removeOverlay();
-	},
+	}
 
-	_onDayClick: function(e) {
-		var day = Number(e.target.getAttribute('data-date').split('/')[2]),
+	_onDayClick(e) {
+		let day = Number(e.target.getAttribute('data-date').split('/')[2]),
 			month = this.state.viewingMonth.month(),
 			year = this.state.viewingYear.year(),
 			newDate = moment().year(year).month(month).date(day);
@@ -246,10 +263,10 @@ export default React.createClass({
 			selectedDate: newDate,
 			moveToDate: newDate
 		});
-	},
+	}
 
-	_onMonthClick: function(e) {
-		var moveBack, update;
+	_onMonthClick(e) {
+		let moveBack, update;
 
 		if (e.target) {
 			moveBack = e.target.classList.contains(styles['arrow-left']) ? true : false;
@@ -264,10 +281,10 @@ export default React.createClass({
 		}
 
 		this.setState({ viewingMonth: update });
-	},
+	}
 
-	_onYearClick: function(e) {
-		var moveBack, update;
+	_onYearClick(e) {
+		let moveBack, update;
 
 		if (e.target) {
 			moveBack = e.target.classList.contains(styles['arrow-left']) ? true : false;
@@ -282,10 +299,10 @@ export default React.createClass({
 		}
 
 		this.setState({ viewingYear: update });
-	},
+	}
 
-	_getDate: function(type) {
-		var format;
+	_getDate(type) {
+		let format;
 
 		switch (type) {
 			case 'DAYOFWEEK':
@@ -303,10 +320,10 @@ export default React.createClass({
 		}
 
 		return this.state.selectedDate.format(format);
-	},
+	}
 
-	_getCalendarDate: function(type) {
-		var format,
+	_getCalendarDate(type) {
+		let format,
 			state = this.state.viewingMonth;
 
 		switch (type) {
@@ -327,10 +344,10 @@ export default React.createClass({
 		}
 
 		return state.format(format);
-	},
+	}
 
-	_getDaysInMonth: function() {
-		var days = [];
+	_getDaysInMonth() {
+		let days = [];
 
 		for (var x = 0; x < this._getFirstDayOfMonth(); x++) {
 		   days.push('');
@@ -341,21 +358,21 @@ export default React.createClass({
 		}
 
 		return _.chunk(days, 7);
-	},
+	}
 
-	_getFirstDayOfMonth: function() {
+	_getFirstDayOfMonth() {
 		return Number(this.state.viewingMonth.startOf('month').format('d'));
-	},
+	}
 
-	_getCellDate: function(cell) {
+	_getCellDate(cell) {
 		return this.state.viewingYear.year() + '/' + this.state.viewingMonth.format('MM') + '/' + cell;
-	},
+	}
 
-	_getCellDateAsISO: function(cell) {
+	_getCellDateAsISO(cell) {
 		return moment(this._getCellDate(cell), 'YYYY/MM/DD');
-	},
+	}
 
-	_getCellDateClass: function(cell) {
+	_getCellDateClass(cell) {
 		if (cell && (this.state.selectedDate.format('YYYY/MM/DD') == this._getCellDate(cell))) {
 			return styles.selected;
 		}
@@ -367,9 +384,9 @@ export default React.createClass({
 		if (cell && this.state.today.format('YYYY/MM/DD') == this._getCellDate(cell)) {
 			return styles.today;
 		}
-	},
+	}
 
-	render: function() {
+	render() {
 		return (
 			<div ref="wrapper">
 					<div className={styles.modal}>
@@ -454,4 +471,4 @@ export default React.createClass({
 		);
 	}
 
-});
+};
