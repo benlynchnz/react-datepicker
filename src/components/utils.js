@@ -118,5 +118,71 @@ let keyMap = (e) => {
 
 utils.keyMap = keyMap;
 
+let END_OF_TODAY = moment().endOf('day');
+
+let last_x_days = (days) => {
+	return {
+		from: moment().subtract(days, 'days').startOf('day'),
+		to: END_OF_TODAY
+	};
+}
+
+let last_x_period = (amount, period) => {
+	return {
+		from: moment().subtract(amount, period).startOf(period),
+		to: moment().subtract(amount, period).endOf(period)
+	};
+}
+
+let convenienceDates = [
+	{
+		name: 'Last 7 days',
+		dates: last_x_days(7)
+	},
+	{
+		name: 'Last 30 days',
+		dates: last_x_days(30),
+		default: true
+	},
+	{
+		name: 'This week',
+		dates: last_x_period(0, 'isoweek')
+	},
+	{
+		name: 'Last week',
+		dates: last_x_period(1, 'week')
+	},
+	{
+		name: 'This month',
+		dates: last_x_period(0, 'month')
+	},
+	{
+		name: 'Last month',
+		dates: last_x_period(1, 'month')
+	},
+	{
+		name: 'This quarter',
+		dates: last_x_period(0, 'quarter')
+	},
+	{
+		name: 'Last quarter',
+		dates: last_x_period(1, 'quarter')
+	},
+	{
+		name: 'This year',
+		dates: last_x_period(0, 'year')
+	},
+	{
+		name: 'Last year',
+		dates: last_x_period(1, 'year')
+	},
+	{
+		name: 'Custom',
+		dates: { from: null, to: null }
+	}
+];
+
+utils.convenienceDates = convenienceDates;
+
 export default utils;
 

@@ -48,7 +48,8 @@
 }
 
 .hidden-input {
-	display: none;
+	opacity: 0.01;
+	height: 0;
 }
 
 @-webkit-keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -192,7 +193,8 @@
 }
 
 .table tr > td a.today {
-	background-color: rgba(52,152,219,0.2);
+	color: rgba(52,152,219,1);
+	font-weight: 500;
 }
 
 .table tr > td a:hover {

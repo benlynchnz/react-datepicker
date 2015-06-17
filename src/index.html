@@ -13,6 +13,20 @@
 				padding: 20px;
 				font-family: 'Roboto', sans-serif;
 			}
+			h1 {
+				font-size: 26px;
+				font-weight: 400;
+			}
+			.component {
+				margin-bottom: 50px;
+			}
+
+			input {
+				height: 48px;
+				width: 300px;
+				line-height: 48px;
+				padding-left: 10px;
+			}
 		</style>
 
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
@@ -23,13 +37,32 @@
 
 	<body>
 
-		<react-datepicker
-			id="myDatePicker"
-			selected-date="Wed Jun 24 07:00:00 NZST 2015"
-			selected-date-format="ddd MMM DD HH:mm:ss YYYY"
-			display-format="DD MMMM, YYYY"
-			min-date="2015-05-01T00:00:00.000Z">
-		</react-datepicker>
+		<div class="component">
+			<h1>Single Date</h1>
+			<react-datepicker
+				id="myDatePicker"
+				selected-date="Wed Jun 24 07:00:00 NZST 2015"
+				selected-date-format="ddd MMM DD HH:mm:ss YYYY"
+				display-format="DD MMMM, YYYY"
+				min-date="2015-05-01T00:00:00.000Z">
+			</react-datepicker>
+		</div>
+
+		<div class="component">
+			<h1>Single Date with no defaults</h1>
+			<react-datepicker
+				id="myDatePicker2">
+			</react-datepicker>
+		</div>
+
+		<div class="component">
+			<h1>Date range</h1>
+			<react-datepicker
+				id="myDateRangePicker"
+				range="true"
+				default-range="This month">
+			</react-datepicker>
+		</div>
 
 		<script src="datepicker.js"></script>
 
@@ -41,9 +74,21 @@
 			let datePickerHandler = function(e) {
 				console.log('ACTION:: ' + e.detail.action);
 				console.log('PAYLOAD:: ' + e.detail.payload);
+				var test = moment(JSON.parse(e.detail.payload).date).format('ddd DD MMM');
+				console.log(test);
 			}
 
 			datePicker.addEventListener('event', datePickerHandler);
+
+
+			let dateRangePicker = document.getElementById('myDateRangePicker');
+
+			let dateRangePickerHandler = function(e) {
+				console.log('ACTION:: ' + e.detail.action);
+				console.log('PAYLOAD:: ' + e.detail.payload);
+			}
+
+			dateRangePicker.addEventListener('event', dateRangePickerHandler);
 
 		</script>
 
