@@ -1343,7 +1343,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				return React.createElement(
 					'div',
-					{ ref: 'wrapper', className: 'test' },
+					{ ref: 'wrapper' },
 					React.createElement(
 						'div',
 						{ className: _DatePickerStyleCss2['default'].modal },
