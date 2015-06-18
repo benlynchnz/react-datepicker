@@ -388,7 +388,7 @@ export default class CalendarView extends React.Component {
 
 	render() {
 		return (
-			<div ref="wrapper">
+			<div ref="wrapper" className="test">
 					<div className={styles.modal}>
 					<div className={styles.wrapper} ref="wrapper">
 						<div className={styles.header}>{this._getDate('DAYOFWEEK')}</div>

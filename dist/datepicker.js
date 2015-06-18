@@ -158,9 +158,9 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function render() {
 				if (this.state.range) {
 					return React.createElement(_componentsViewsDateRangeJsx2['default'], this.state);
-				} else {
-					return React.createElement(_componentsViewsSingleDateJsx2['default'], this.state);
 				}
+
+				return React.createElement(_componentsViewsSingleDateJsx2['default'], this.state);
 			}
 		}]);
 
@@ -1343,7 +1343,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				return React.createElement(
 					'div',
-					{ ref: 'wrapper' },
+					{ ref: 'wrapper', className: 'test' },
 					React.createElement(
 						'div',
 						{ className: _DatePickerStyleCss2['default'].modal },

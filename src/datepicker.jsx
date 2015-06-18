@@ -27,9 +27,8 @@ export default class DatePickerView extends React.Component {
 	render() {
 		if (this.state.range) {
 			return <DateRangeView {...this.state} />
-		} else {
-			return <SingleDateView {...this.state} />
 		}
-	}
 
+		return <SingleDateView {...this.state} />
+	}
 };
