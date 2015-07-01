@@ -25,18 +25,26 @@ export default class DatePickerSingleView extends React.Component {
 	}
 
 	_updateState(props) {
-		if (props['display-format']) {
+		if (props['data-display-format']) {
 			this.setState({
-				displayFormat: props['display-format']
+				displayFormat: props['data-display-format']
 			});
 		}
 
-		if (props['selected-date']) {
-			let date;
-			if (props['selected-date-format']) {
-				date = moment(props['selected-date'], props['selected-date-format']);
+		if (props['data-selected-date']) {
+			let date,
+				isUTC = props['data-selected-date'].indexOf('UTC') !== -1,
+				dateString = props['data-selected-date'];
+
+			if (props['data-selected-date-format']) {
+				date = moment(dateString, props['data-selected-date-format']);
 			} else {
-				date = moment(props['selected-date']);
+				date = moment(dateString);
+			}
+
+			if (isUTC) {
+				let offset = date.utcOffset();
+				date = date.add(offset, 'minutes');
 			}
 
 			let viewing = date.toISOString();
@@ -49,19 +57,19 @@ export default class DatePickerSingleView extends React.Component {
 			});
 		}
 
-		if (props['min-date']) {
+		if (props['data-min-date']) {
 			this.setState({
-				minDate: moment(props['min-date'])
+				minDate: moment(props['data-min-date'])
 			});
 		}
 
-		if (props['max-date']) {
+		if (props['data-max-date']) {
 			this.setState({
-				maxDate: moment(props['max-date'])
+				maxDate: moment(props['data-max-date'])
 			});
 		}
 
-		if (props['close-on-select']) {
+		if (props['data-close-on-select']) {
 			this.setState({ closeOnSelect: true });
 		}
 	}
@@ -89,9 +97,11 @@ export default class DatePickerSingleView extends React.Component {
 		if (!this.state.show) {
 			return (
 				<input
+					id={this.props.element.id + '-input'}
 					type="text"
 					className="input"
 					ref="datepicker-input"
+					data-iso={this.state.selectedDate.toISOString()}
 					value={this.state.selectedDate.format(this.state.displayFormat)}
 					onClick={this._onFocus}
 					onFocus={this._onFocus}
@@ -101,9 +111,11 @@ export default class DatePickerSingleView extends React.Component {
 			return (
 				<div>
 					<input
+						id={this.props.element.id + '-input'}
 						type="text"
 						className="input"
 						ref="datepicker-input"
+						data-iso={this.state.selectedDate.toISOString()}
 						value={this.state.selectedDate.format(this.state.displayFormat)}
 						onClick={this._onFocus}
 						onFocus={this._onFocus}

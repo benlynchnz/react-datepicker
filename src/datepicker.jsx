@@ -19,16 +19,16 @@ export default class DatePickerView extends React.Component {
 	}
 
 	_updateState(props) {
-		if (props['range'] === 'true') {
+		if (props['data-range'] === 'true') {
 			this.setState({ range: true });
 		}
 	}
 
 	render() {
 		if (this.state.range) {
-			return <DateRangeView {...this.state} />
+			return <DateRangeView {...this.state} element={this.props.element} />
 		}
 
-		return <SingleDateView {...this.state} />
+		return <SingleDateView {...this.state} element={this.props.element} />
 	}
 };

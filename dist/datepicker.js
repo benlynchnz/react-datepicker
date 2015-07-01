@@ -87,13 +87,23 @@ return /******/ (function(modules) { // webpackBootstrap
 		window.CustomEvent = _CustomEvent;
 	}
 
-	if (typeof document !== "undefined") {
-		var renderToElements = document.getElementsByTagName("react-datepicker");
+	// if (typeof document !== 'undefined') {
+	// 	var renderToElements = document.getElementsByClassName('react-datepicker');
+	//
+	// 	Array.prototype.forEach.call(renderToElements, (el) => {
+	// 	    React.render(<DatePicker element={el}/>, el);
+	// 	});
+	// }
+
+	var renderHandler = function renderHandler(e) {
+		var renderToElements = document.getElementsByClassName("react-datepicker");
 
 		Array.prototype.forEach.call(renderToElements, function (el) {
 			React.render(React.createElement(_datepickerJsx2["default"], { element: el }), el);
 		});
-	}
+	};
+
+	document.addEventListener("render", renderHandler);
 
 	exports["default"] = _datepickerJsx2["default"];
 	module.exports = exports["default"];
@@ -107,6 +117,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, '__esModule', {
 		value: true
 	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -149,7 +161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '_updateState',
 			value: function _updateState(props) {
-				if (props['range'] === 'true') {
+				if (props['data-range'] === 'true') {
 					this.setState({ range: true });
 				}
 			}
@@ -157,10 +169,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: 'render',
 			value: function render() {
 				if (this.state.range) {
-					return React.createElement(_componentsViewsDateRangeJsx2['default'], this.state);
+					return React.createElement(_componentsViewsDateRangeJsx2['default'], _extends({}, this.state, { element: this.props.element }));
 				}
 
-				return React.createElement(_componentsViewsSingleDateJsx2['default'], this.state);
+				return React.createElement(_componentsViewsSingleDateJsx2['default'], _extends({}, this.state, { element: this.props.element }));
 			}
 		}]);
 
@@ -454,18 +466,26 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '_updateState',
 			value: function _updateState(props) {
-				if (props['display-format']) {
+				if (props['data-display-format']) {
 					this.setState({
-						displayFormat: props['display-format']
+						displayFormat: props['data-display-format']
 					});
 				}
 
-				if (props['selected-date']) {
-					var date = undefined;
-					if (props['selected-date-format']) {
-						date = moment(props['selected-date'], props['selected-date-format']);
+				if (props['data-selected-date']) {
+					var date = undefined,
+					    isUTC = props['data-selected-date'].indexOf('UTC') !== -1,
+					    dateString = props['data-selected-date'];
+
+					if (props['data-selected-date-format']) {
+						date = moment(dateString, props['data-selected-date-format']);
 					} else {
-						date = moment(props['selected-date']);
+						date = moment(dateString);
+					}
+
+					if (isUTC) {
+						var offset = date.utcOffset();
+						date = date.add(offset, 'minutes');
 					}
 
 					var viewing = date.toISOString();
@@ -478,19 +498,19 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				}
 
-				if (props['min-date']) {
+				if (props['data-min-date']) {
 					this.setState({
-						minDate: moment(props['min-date'])
+						minDate: moment(props['data-min-date'])
 					});
 				}
 
-				if (props['max-date']) {
+				if (props['data-max-date']) {
 					this.setState({
-						maxDate: moment(props['max-date'])
+						maxDate: moment(props['data-max-date'])
 					});
 				}
 
-				if (props['close-on-select']) {
+				if (props['data-close-on-select']) {
 					this.setState({ closeOnSelect: true });
 				}
 			}
@@ -522,9 +542,11 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function render() {
 				if (!this.state.show) {
 					return React.createElement('input', {
+						id: this.props.element.id + '-input',
 						type: 'text',
 						className: 'input',
 						ref: 'datepicker-input',
+						'data-iso': this.state.selectedDate.toISOString(),
 						value: this.state.selectedDate.format(this.state.displayFormat),
 						onClick: this._onFocus,
 						onFocus: this._onFocus,
@@ -534,9 +556,11 @@ return /******/ (function(modules) { // webpackBootstrap
 						'div',
 						null,
 						React.createElement('input', {
+							id: this.props.element.id + '-input',
 							type: 'text',
 							className: 'input',
 							ref: 'datepicker-input',
+							'data-iso': this.state.selectedDate.toISOString(),
 							value: this.state.selectedDate.format(this.state.displayFormat),
 							onClick: this._onFocus,
 							onFocus: this._onFocus,
@@ -621,23 +645,23 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '_updateState',
 			value: function _updateState(props) {
-				if (props['display-format']) {
+				if (props['data-display-format']) {
 					this.setState({
-						displayFormat: props['display-format']
+						displayFormat: props['data-display-format']
 					});
 				}
 
-				if (props['default-range']) {
-					var range = props['default-range'];
+				if (props['data-default-range']) {
+					var range = props['data-default-range'];
 					this.setState({ selectedDateRange: _.findWhere(_store2['default'].getConvenienceDates(), { name: range }) });
 				}
 
-				if (props['selected-date']) {
+				if (props['data-selected-date']) {
 					var date = undefined;
-					if (props['selected-date-format']) {
-						date = moment(props['selected-date'], props['selected-date-format']);
+					if (props['data-selected-date-format']) {
+						date = moment(props['data-selected-date'], props['data-selected-date-format']);
 					} else {
-						date = moment(props['selected-date']);
+						date = moment(props['data-selected-date']);
 					}
 
 					var viewing = date.toISOString();
@@ -650,19 +674,19 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				}
 
-				if (props['min-date']) {
+				if (props['data-min-date']) {
 					this.setState({
-						minDate: moment(props['min-date'])
+						minDate: moment(props['data-min-date'])
 					});
 				}
 
-				if (props['max-date']) {
+				if (props['data-max-date']) {
 					this.setState({
-						maxDate: moment(props['max-date'])
+						maxDate: moment(props['data-max-date'])
 					});
 				}
 
-				if (props['close-on-select']) {
+				if (props['data-close-on-select']) {
 					this.setState({ closeOnSelect: true });
 				}
 

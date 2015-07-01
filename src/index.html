@@ -39,29 +39,32 @@
 
 		<div class="component">
 			<h1>Single Date</h1>
-			<react-datepicker
+			<div
+				class="react-datepicker"
 				id="myDatePicker"
-				selected-date="Wed Jun 24 07:00:00 NZST 2015"
-				selected-date-format="ddd MMM DD HH:mm:ss YYYY"
-				display-format="DD MMMM, YYYY"
-				min-date="2015-05-01T00:00:00.000Z">
-			</react-datepicker>
+				data-selected-date="Wed Jun 24 21:29:26 UTC 2015"
+				data-selected-date-format="ddd MMM DD HH:mm:ss YYYY"
+				data-display-format="DD MMMM, YYYY"
+				data-min-date="2015-05-01T00:00:00.000Z">
+			</div>
 		</div>
 
 		<div class="component">
 			<h1>Single Date with no defaults</h1>
-			<react-datepicker
+			<div
+				class="react-datepicker"
 				id="myDatePicker2">
-			</react-datepicker>
+			</div>
 		</div>
 
 		<div class="component">
 			<h1>Date range</h1>
-			<react-datepicker
+			<div
+				class="react-datepicker"
 				id="myDateRangePicker"
-				range="true"
-				default-range="This month">
-			</react-datepicker>
+				data-range="true"
+				data-default-range="This month">
+			</div>
 		</div>
 
 		<script src="datepicker.js"></script>

@@ -27,23 +27,23 @@ export default class DatePickerRangeView extends React.Component {
 	}
 
 	_updateState(props) {
-		if (props['display-format']) {
+		if (props['data-display-format']) {
 			this.setState({
-				displayFormat: props['display-format']
+				displayFormat: props['data-display-format']
 			});
 		}
 
-		if (props['default-range']) {
-			let range = props['default-range'];
+		if (props['data-default-range']) {
+			let range = props['data-default-range'];
 			this.setState({ selectedDateRange: _.findWhere(Store.getConvenienceDates(), { name: range }) });
 		}
 
-		if (props['selected-date']) {
+		if (props['data-selected-date']) {
 			let date;
-			if (props['selected-date-format']) {
-				date = moment(props['selected-date'], props['selected-date-format']);
+			if (props['data-selected-date-format']) {
+				date = moment(props['data-selected-date'], props['data-selected-date-format']);
 			} else {
-				date = moment(props['selected-date']);
+				date = moment(props['data-selected-date']);
 			}
 
 			let viewing = date.toISOString();
@@ -56,19 +56,19 @@ export default class DatePickerRangeView extends React.Component {
 			});
 		}
 
-		if (props['min-date']) {
+		if (props['data-min-date']) {
 			this.setState({
-				minDate: moment(props['min-date'])
+				minDate: moment(props['data-min-date'])
 			});
 		}
 
-		if (props['max-date']) {
+		if (props['data-max-date']) {
 			this.setState({
-				maxDate: moment(props['max-date'])
+				maxDate: moment(props['data-max-date'])
 			});
 		}
 
-		if (props['close-on-select']) {
+		if (props['data-close-on-select']) {
 			this.setState({ closeOnSelect: true });
 		}
 
