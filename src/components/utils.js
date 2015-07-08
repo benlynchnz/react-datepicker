@@ -138,6 +138,10 @@ let last_x_period = (amount, period) => {
 
 let convenienceDates = [
 	{
+		name: 'Today',
+		dates: last_x_days(0)
+	},
+    {
 		name: 'Last 7 days',
 		dates: last_x_days(7)
 	},

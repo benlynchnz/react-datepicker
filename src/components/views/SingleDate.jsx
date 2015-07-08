@@ -4,6 +4,7 @@ import Store from '../store';
 import utils from '../utils';
 import Constants from '../constants';
 import Calendar from './Calendar.jsx';
+import styles from "../../DatePickerStyle.css";
 
 export default class DatePickerSingleView extends React.Component {
 
@@ -96,20 +97,22 @@ export default class DatePickerSingleView extends React.Component {
 	render() {
 		if (!this.state.show) {
 			return (
-				<input
-					id={this.props.element.id + '-input'}
-					type="text"
-					className="input"
-					ref="datepicker-input"
-					data-iso={this.state.selectedDate.toISOString()}
-					value={this.state.selectedDate.format(this.state.displayFormat)}
-					onClick={this._onFocus}
-					onFocus={this._onFocus}
-					readOnly/>
+				<div className={styles["input-group"]}>
+					<input
+						id={this.props.element.id + '-input'}
+						type="text"
+						className="input"
+						ref="datepicker-input"
+						data-iso={this.state.selectedDate.toISOString()}
+						value={this.state.selectedDate.format(this.state.displayFormat)}
+						onClick={this._onFocus}
+						onFocus={this._onFocus}
+						readOnly/>
+				</div>
 			);
 		} else {
 			return (
-				<div>
+				<div className={styles["input-group"]}>
 					<input
 						id={this.props.element.id + '-input'}
 						type="text"

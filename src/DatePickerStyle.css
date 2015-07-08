@@ -255,3 +255,69 @@
 	float: left;
 	margin-right: 10px;
 }
+
+.date-range-wrapper {
+	height: 48px;
+	background-color: #fff;
+	max-width: 150px;
+	line-height: 48px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	padding-left: 15px;
+	padding-right: 15px;
+	color: rgba(0,0,0,0.87);
+	font-size: 13px;
+	cursor: pointer;
+}
+
+.menu-items {
+	display: none;
+	max-height: 300px;
+	overflow-x: scroll;
+}
+
+.date-range-wrapper:hover {
+	background-color: #fff;
+}
+
+.date-range-wrapper img {
+	float: left;
+	opacity: .56;
+	margin-top: 11px;
+	margin-right: 24px;
+}
+
+.date-range-wrapper:hover img {
+	opacity: 1;
+}
+
+ul.date-ranges {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: none;
+	position: fixed;
+	margin-top: -50px;
+	background-color: #fcfcfc;
+	border: 1px solid #eee;
+	box-shadow: 0 2px 5px hsla(0, 0%, 0%, 0.26);
+	z-index: 1000;
+}
+
+ul.date-ranges li {
+	line-height: 48px;
+	padding-left: 15px;
+	padding-right: 15px;
+	min-width: 150px;
+	font-size: 13px;
+	color: rgba(0,0,0,.87);
+	cursor: pointer;
+}
+
+ul.date-ranges li.selected {
+	font-weight: 500;
+}
+
+ul.date-ranges li:hover {
+	background-color: #eee;
+}

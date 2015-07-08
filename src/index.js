@@ -23,21 +23,22 @@ try {
 
 import DatePicker from './datepicker.jsx';
 
-// if (typeof document !== 'undefined') {
-// 	var renderToElements = document.getElementsByClassName('react-datepicker');
-//
-// 	Array.prototype.forEach.call(renderToElements, (el) => {
-// 	    React.render(<DatePicker element={el}/>, el);
-// 	});
-// }
+let renderHandler = () => {
+	let reactComp = document.getElementsByTagName('react-datepicker'),
+		classComp = document.getElementsByClassName('react-datepicker');
 
-let renderHandler = (e) => {
-	var renderToElements = document.getElementsByClassName('react-datepicker');
+	Array.prototype.forEach.call(reactComp, (el) => {
+	    React.render(<DatePicker element={el}/>, el);
+	});
 
-	Array.prototype.forEach.call(renderToElements, (el) => {
+	Array.prototype.forEach.call(classComp, (el) => {
 	    React.render(<DatePicker element={el}/>, el);
 	});
 };
+
+if (typeof document !== 'undefined') {
+	renderHandler();
+}
 
 document.addEventListener('render', renderHandler);
 

@@ -4,6 +4,9 @@ import Store from '../store';
 import utils from '../utils';
 import Constants from '../constants';
 import Calendar from './Calendar.jsx';
+import MenuItems from './DateRangesMenuItems.jsx';
+
+import styles from '../../DatePickerStyle.css';
 
 export default class DatePickerRangeView extends React.Component {
 
@@ -18,12 +21,26 @@ export default class DatePickerRangeView extends React.Component {
 		this._onFocus = this._onFocus.bind(this);
 		this._onUpdate = this._onUpdate.bind(this);
 		this._onOk = this._onOk.bind(this);
-		this._getConvenienceDatesAsHTML = this._getConvenienceDatesAsHTML.bind(this);
 		this._onDateChange = this._onDateChange.bind(this);
+		this._onRangeChange = this._onRangeChange.bind(this);
 	}
 
 	componentDidMount() {
+		this._onRangeChange();
 		return utils.componentDidMount(this);
+	}
+
+	_onRangeChange() {
+		let el = document.getElementById(this.props.element.id);
+
+        let handler = (e) => {
+            let action = e.detail.action;
+			if (action === Constants.DATE_RANGE_CHANGE) {
+				this._onDateChange(JSON.parse(e.detail.payload));
+			}
+        }
+
+        el.addEventListener('event', handler);
 	}
 
 	_updateState(props) {
@@ -34,8 +51,14 @@ export default class DatePickerRangeView extends React.Component {
 		}
 
 		if (props['data-default-range']) {
-			let range = props['data-default-range'];
-			this.setState({ selectedDateRange: _.findWhere(Store.getConvenienceDates(), { name: range }) });
+			let range = props['data-default-range'],
+				rangeValues = _.findWhere(Store.getConvenienceDates(), { name: range });
+
+			this.setState({ selectedDateRange: rangeValues });
+
+			_.delay(() => {
+				utils.dispatch(this, Constants.DATE_RANGE_CHANGE, JSON.stringify(rangeValues));
+			}, 0);
 		}
 
 		if (props['data-selected-date']) {
@@ -70,6 +93,10 @@ export default class DatePickerRangeView extends React.Component {
 
 		if (props['data-close-on-select']) {
 			this.setState({ closeOnSelect: true });
+		}
+
+		if (props['data-hide-inputs']) {
+			this.setState({ hideInputs: true });
 		}
 
 		this.setState({
@@ -116,61 +143,28 @@ export default class DatePickerRangeView extends React.Component {
 			});
 		}
 
-		this.refs['select'].getDOMNode().selectedIndex = _.findIndex(Store.getConvenienceDates(), { name: 'Custom' });
+		// this.refs['select'].getDOMNode().selectedIndex = _.findIndex(Store.getConvenienceDates(), { name: 'Custom' });
 	}
 
 	_onOk() {
 		this._onBlur();
 	}
 
-	_getConvenienceDatesAsHTML() {
-		let dates = Store.getConvenienceDates(),
-			names = [];
-
-		let itemDefault = (item) => {
-			if (item.name === this.state.selectedDateRange.name) {
-				return 'selected';
-			}
-		};
-
-		dates.forEach((item) => {
-			names.push('<option value="' + item.name + '"' + itemDefault(item) + '>' + item.name + '</option>');
-		});
-
-		return { __html: names.join('') };
-	}
-
-	_onDateChange(e) {
-		let value = e.target.options[e.target.selectedIndex].value,
-			ranges = Store.getConvenienceDates(),
-			selected = _.findWhere(ranges, { name: value });
-
-		this.setState({ selectedDateRange: selected });
-		utils.dispatch(this, Constants.DATE_RANGE_CHANGE, JSON.stringify(selected));
+	_onDateChange(range) {
+		this.setState({ selectedDateRange: range });
 	}
 
 	render() {
-		if (!this.state.show) {
-			return (
-				<div>
-					<select dangerouslySetInnerHTML={this._getConvenienceDatesAsHTML()} onChange={this._onDateChange} ref="select" />
-					<input type="text" className="input" ref="datepicker-input-from" data-range="from" value={this.state.selectedDateRange.dates.from.format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly/>
-					<input type="text" className="input" ref="datepicker-input-to" data-range="to" value={this.state.selectedDateRange.dates.to.format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly/>
-				</div>
-			);
-		} else {
-			return (
-				<div>
-					<select dangerouslySetInnerHTML={this._getConvenienceDatesAsHTML()} onChange={this._onDateChange} ref="select" />
-					<input type="text" className="input" ref="datepicker-input-from" value={this.state.selectedDateRange.dates.from.format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly/>
-					<input type="text" className="input" ref="datepicker-input-to" value={this.state.selectedDateRange.dates.to.format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly/>
-					<Calendar {...this.state}
-						onBlur={this._onBlur}
-						onOK={this._onOk}
-						onUpdate={this._onUpdate} />
-				</div>
-			);
-		}
+		let defaultRange = _.findWhere(Store.getConvenienceDates(), { name: this.state.selectedDateRange.name });
+
+		return (
+			<div>
+				<MenuItems element={this.props.element} default={defaultRange} ranges={Store.getConvenienceDates()} />
+				<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className="input" ref="datepicker-input-from" data-range="from" value={moment(this.state.selectedDateRange.dates.from).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly/>
+				<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className="input" ref="datepicker-input-to" data-range="to" value={moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly/>
+				{this.state.show ? (<Calendar {...this.state} onBlur={this._onBlur} onOK={this._onOk} onUpdate={this._onUpdate} />) : null}
+			</div>
+		);
 	}
 
 };
