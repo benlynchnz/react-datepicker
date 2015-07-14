@@ -1,5 +1,3 @@
-'use strict';
-
 import styles from '../../DatePickerStyle.css';
 import utils from '../utils';
 
@@ -31,9 +29,9 @@ export default class CalendarView extends React.Component {
 	componentWillMount() {
 		if (this.props.range) {
 			if (this.props.isFrom) {
-				this.setState({ selectedDate: this.props.selectedDateRange.dates.from });
+				this.setState({ selectedDate: moment(this.props.selectedDateRange.dates.from) });
 			} else {
-				this.setState({ selectedDate: this.props.selectedDateRange.dates.to });
+				this.setState({ selectedDate: moment(this.props.selectedDateRange.dates.to) });
 			}
 		}
 	}

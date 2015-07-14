@@ -1,12 +1,10 @@
-'use strict';
-
-import utils from './components/utils';
-import SingleDateView from './components/views/SingleDate.jsx';
-import DateRangeView from './components/views/DateRange.jsx';
+import utils from "./components/utils";
+import SingleDateView from "./components/views/SingleDate.jsx";
+import DateRangeView from "./components/views/DateRange.jsx";
 
 export default class DatePickerView extends React.Component {
 
-	displayName: 'datepicker-view'
+	displayName: "datepicker-view"
 
 	constructor(props) {
 		super(props);
@@ -19,16 +17,16 @@ export default class DatePickerView extends React.Component {
 	}
 
 	_updateState(props) {
-		if (props['data-range'] === 'true') {
+		if (props["data-range"] === "true") {
 			this.setState({ range: true });
 		}
 	}
 
 	render() {
 		if (this.state.range) {
-			return <DateRangeView {...this.state} element={this.props.element} />
+			return <DateRangeView {...this.state} element={this.props.element} />;
 		}
 
-		return <SingleDateView {...this.state} element={this.props.element} />
+		return <SingleDateView {...this.state} element={this.props.element} />;
 	}
-};
+}

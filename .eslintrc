@@ -1,0 +1,20 @@
+{
+    "parser": "babel-eslint",
+    "ecmaFeatures": {
+        "blockBindings": true,
+        "jsx": true
+    },
+    "rules": {
+        "strict": [2, "never"],
+        "no-underscore-dangle": 0,
+        "camelcase": 0,
+        "quotes": 0
+    },
+    "globals": {
+        "React": true,
+        "_": true,
+        "moment": true,
+        "CustomEvent": true,
+        "document": true
+    }
+}

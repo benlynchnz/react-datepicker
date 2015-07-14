@@ -256,11 +256,38 @@
 	margin-right: 10px;
 }
 
-.date-range-wrapper {
-	height: 48px;
+
+.date-range-list ul {
+	margin: 0;
+	padding: 0;
+}
+
+.date-range-list .date-range-list-item {
+	list-style: none;
+	float: left;
+	margin-right: 15px;
+}
+
+.date-range-list-item .input {
+	width: auto;
 	background-color: #fff;
-	max-width: 150px;
+	border: 1px solid #ddd;
+	min-width: 200px;
 	line-height: 48px;
+	height: auto;
+	padding-left: 15px;
+}
+
+.date-range-list-item .input:hover {
+	border-color: #ccc;
+}
+
+.date-range-wrapper {
+	height: 50px;
+	background-color: #fff;
+	max-width: 250px;
+	min-width: 200px;
+	line-height: 50px;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	padding-left: 15px;
@@ -268,6 +295,12 @@
 	color: rgba(0,0,0,0.87);
 	font-size: 13px;
 	cursor: pointer;
+	border: 1px solid #ddd;
+	font-weight: 500;
+}
+
+.date-range-wrapper:hover {
+	border-color: #ccc;
 }
 
 .menu-items {
@@ -281,34 +314,44 @@
 }
 
 .date-range-wrapper img {
-	float: left;
 	opacity: .56;
-	margin-top: 11px;
+	margin-top: 13px;
 	margin-right: 24px;
 }
 
-.date-range-wrapper:hover img {
+.date-range-wrapper:hover .icon-calendar {
 	opacity: 1;
+}
+
+.date-range-wrapper .icon-calendar {
+	float: left;
+}
+
+.date-range-wrapper .icon-caret {
+	float: right;
+	margin-right: 0;
+	margin-left: 24px;
 }
 
 ul.date-ranges {
 	margin: 0;
 	padding: 0;
+	margin-top: 2px;
 	list-style: none;
 	display: none;
-	position: fixed;
-	margin-top: -50px;
 	background-color: #fcfcfc;
 	border: 1px solid #eee;
 	box-shadow: 0 2px 5px hsla(0, 0%, 0%, 0.26);
 	z-index: 1000;
+	min-width: 200px;
+	max-width: 250px;
+	position: absolute;
 }
 
 ul.date-ranges li {
 	line-height: 48px;
 	padding-left: 15px;
 	padding-right: 15px;
-	min-width: 150px;
 	font-size: 13px;
 	color: rgba(0,0,0,.87);
 	cursor: pointer;

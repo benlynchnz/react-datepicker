@@ -1,14 +1,10 @@
-"use strict";
-
-import Store from '../store';
-import Constants from '../constants';
-import utils from '../utils';
-
-import styles from '../../DatePickerStyle.css';
+import Constants from "../constants";
+import utils from "../utils";
+import styles from "../../DatePickerStyle.css";
 
 export default class DateRangeMenu extends React.Component {
 
-    displayName: 'datepicker-range-menu'
+    displayName: "datepicker-range-menu"
 
     constructor(props) {
         super(props);
@@ -28,11 +24,22 @@ export default class DateRangeMenu extends React.Component {
     }
 
     _onBlur() {
-        let menu = this.refs["menu"].getDOMNode().style.display = "none";
+        this.refs.menu.getDOMNode().style.display = "none";
 	}
 
-    _onClick(e) {
-        this.refs["menu"].getDOMNode().style.display = "block";
+    _onClick() {
+        this.refs.menu.getDOMNode().style.display = "block";
+
+        let clickHandler = (e) => {
+            let hasFocus = utils.closest(e.target, styles["date-ranges"]);
+
+            if (!hasFocus) {
+                document.removeEventListener("click", clickHandler);
+                this._onBlur();
+            }
+        };
+
+        document.addEventListener("click", clickHandler);
     }
 
     _onRangeClick(e) {
@@ -59,7 +66,7 @@ export default class DateRangeMenu extends React.Component {
         if (this.state.isReady) {
             return (
                 <div ref="menu-wrapper">
-                    <div className={styles["date-range-wrapper"]} onClick={this._onClick}><img src='./icons/calendar-blank.png' />{this.state.default.name}</div>
+                    <div className={styles["date-range-wrapper"]} onClick={this._onClick}><img className={styles["icon-calendar"]} src="./icons/calendar-blank.png" />{this.state.default.name}<img className={styles["icon-caret"]} src="./icons/menu-down.png" /></div>
                     <ul className={styles["date-ranges"]} ref="menu">
                         {this.props.ranges.map((item, i) => {
                             return (
@@ -80,4 +87,4 @@ export default class DateRangeMenu extends React.Component {
         }
     }
 
-};
+}

@@ -1,5 +1,3 @@
-'use strict';
-
 let utils = {};
 
 let closest = (elem, selector) => {
@@ -14,7 +12,7 @@ let closest = (elem, selector) => {
         }
     }
     return false;
-}
+};
 
 utils.closest = closest;
 
@@ -115,75 +113,75 @@ let keyMap = (e) => {
 		ACTION_ADD: ACTION_ADD,
 		ACTION_SUBTRACT: ACTION_SUBTRACT,
 		VALUE: VALUE
-	}
-}
+	};
+};
 
 utils.keyMap = keyMap;
 
-let END_OF_TODAY = moment().endOf('day');
+let END_OF_TODAY = moment().endOf("day");
 
 let last_x_days = (days) => {
 	return {
-		from: moment().subtract(days, 'days').startOf('day'),
+		from: moment().subtract(days, "days").startOf("day"),
 		to: END_OF_TODAY
 	};
-}
+};
 
 let last_x_period = (amount, period) => {
 	return {
 		from: moment().subtract(amount, period).startOf(period),
 		to: moment().subtract(amount, period).endOf(period)
 	};
-}
+};
 
 let convenienceDates = [
 	{
-		name: 'Today',
+		name: "Today",
 		dates: last_x_days(0)
 	},
     {
-		name: 'Last 7 days',
+		name: "Last 7 days",
 		dates: last_x_days(7)
 	},
 	{
-		name: 'Last 30 days',
+		name: "Last 30 days",
 		dates: last_x_days(30),
 		default: true
 	},
 	{
-		name: 'This week',
+		name: "This week",
 		dates: last_x_period(0, 'isoweek')
 	},
 	{
-		name: 'Last week',
+		name: "Last week",
 		dates: last_x_period(1, 'week')
 	},
 	{
-		name: 'This month',
+		name: "This month",
 		dates: last_x_period(0, 'month')
 	},
 	{
-		name: 'Last month',
+		name: "Last month",
 		dates: last_x_period(1, 'month')
 	},
 	{
-		name: 'This quarter',
+		name: "This quarter",
 		dates: last_x_period(0, 'quarter')
 	},
 	{
-		name: 'Last quarter',
+		name: "Last quarter",
 		dates: last_x_period(1, 'quarter')
 	},
 	{
-		name: 'This year',
+		name: "This year",
 		dates: last_x_period(0, 'year')
 	},
 	{
-		name: 'Last year',
+		name: "Last year",
 		dates: last_x_period(1, 'year')
 	},
 	{
-		name: 'Custom',
+		name: "Custom",
 		dates: { from: null, to: null }
 	}
 ];
@@ -199,7 +197,7 @@ let componentDidMount = (ctx) => {
 	Object.keys(parentNode.attributes).forEach(function(key) {
 		let namedNode;
 
-		if (key !== 'length') {
+		if (key !== "length") {
 			hasNextProps = true;
 			namedNode = parentNode.attributes[key];
 			nextProps[namedNode.name] = namedNode.value;
@@ -207,7 +205,7 @@ let componentDidMount = (ctx) => {
 	});
 
 	if (hasNextProps) {
-	       ctx._updateState(nextProps);
+        ctx._updateState(nextProps);
 	}
 
 	ctx.setState({ element: ctx.props.element });
@@ -216,12 +214,12 @@ let componentDidMount = (ctx) => {
 utils.componentDidMount = componentDidMount;
 
 let dispatch = (ctx, action, payload) => {
-    let event = new CustomEvent('event', {
-        'detail': {action, payload}
+    let event = new CustomEvent("event", {
+        "detail": {action, payload}
     });
 
     ctx.props.element.dispatchEvent(event);
-}
+};
 
 utils.dispatch = dispatch;
 
