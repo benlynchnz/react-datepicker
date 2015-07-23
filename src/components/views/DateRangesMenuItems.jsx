@@ -66,7 +66,17 @@ export default class DateRangeMenu extends React.Component {
         if (this.state.isReady) {
             return (
                 <div ref="menu-wrapper">
-                    <div className={styles["date-range-wrapper"]} onClick={this._onClick}><img className={styles["icon-calendar"]} src="./icons/calendar-blank.png" />{this.state.default.name}<img className={styles["icon-caret"]} src="./icons/menu-down.png" /></div>
+                    <div className={styles["date-range-wrapper"]} onClick={this._onClick}>
+                        <div className={styles["date-range-wrapper-icon-calendar"]}>
+                            <i className="material-icons">today</i>
+                        </div>
+                        <div className={styles["date-range-wrapper-text"]}>
+                            {this.state.default.name}
+                        </div>
+                        <div className={styles["date-range-wrapper-icon-caret"]}>
+                            <i className="material-icons">arrow_drop_down</i>
+                        </div>
+                    </div>
                     <ul className={styles["date-ranges"]} ref="menu">
                         {this.props.ranges.map((item, i) => {
                             return (

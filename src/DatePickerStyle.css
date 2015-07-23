@@ -299,6 +299,25 @@
 	font-weight: 500;
 }
 
+.date-range-wrapper-icon-calendar {
+	float: left;
+	padding-top: 7px;
+	margin-right: 10px;
+	color: rgba(0,0,0,0.56);
+}
+
+.date-range-wrapper-text {
+	float: left;
+	text-align: left;
+}
+
+.date-range-wrapper-icon-caret {
+	float: right;
+	padding-top: 7px;
+	margin-left: 10px;
+	color: rgba(0,0,0,0.56);
+}
+
 .date-range-wrapper:hover {
 	border-color: #ccc;
 }
@@ -311,26 +330,6 @@
 
 .date-range-wrapper:hover {
 	background-color: #fff;
-}
-
-.date-range-wrapper img {
-	opacity: .56;
-	margin-top: 13px;
-	margin-right: 24px;
-}
-
-.date-range-wrapper:hover .icon-calendar {
-	opacity: 1;
-}
-
-.date-range-wrapper .icon-calendar {
-	float: left;
-}
-
-.date-range-wrapper .icon-caret {
-	float: right;
-	margin-right: 0;
-	margin-left: 24px;
 }
 
 ul.date-ranges {
@@ -354,6 +353,7 @@ ul.date-ranges li {
 	padding-right: 15px;
 	font-size: 13px;
 	color: rgba(0,0,0,.87);
+	text-align: left;
 	cursor: pointer;
 }
 
