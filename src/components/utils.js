@@ -134,10 +134,21 @@ let last_x_period = (amount, period) => {
 	};
 };
 
+let last_week = () => {
+    return {
+        from: moment().startOf('isoWeek').subtract(1, 'week'),
+        to: moment().startOf('isoWeek')
+    };
+};
+
 let convenienceDates = [
 	{
 		name: "Today",
 		dates: last_x_days(0)
+	},
+    {
+		name: "Yesterday",
+		dates: last_x_days(1)
 	},
     {
 		name: "Last 7 days",
@@ -150,11 +161,11 @@ let convenienceDates = [
 	},
 	{
 		name: "This week",
-		dates: last_x_period(0, 'isoweek')
+		dates: last_x_period(0, 'isoWeek')
 	},
 	{
 		name: "Last week",
-		dates: last_x_period(1, 'week')
+		dates: last_week()
 	},
 	{
 		name: "This month",

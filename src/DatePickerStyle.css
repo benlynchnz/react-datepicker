@@ -266,6 +266,11 @@
 	list-style: none;
 	float: left;
 	margin-right: 15px;
+	margin-bottom: 5px;
+}
+
+.date-range-layout-vertical {
+	float: none !important;
 }
 
 .date-range-list-item .input {
@@ -283,7 +288,7 @@
 }
 
 .date-range-wrapper {
-	height: 50px;
+	height: 48px;
 	background-color: #fff;
 	max-width: 250px;
 	min-width: 200px;
@@ -301,9 +306,7 @@
 
 .date-range-wrapper-icon-calendar {
 	float: left;
-	padding-top: 7px;
 	margin-right: 10px;
-	color: rgba(0,0,0,0.56);
 }
 
 .date-range-wrapper-text {
@@ -313,9 +316,29 @@
 
 .date-range-wrapper-icon-caret {
 	float: right;
-	padding-top: 7px;
 	margin-left: 10px;
+}
+
+.date-range-wrapper i {
+	line-height: 48px;
 	color: rgba(0,0,0,0.56);
+}
+
+.date-range-slim .date-range-wrapper {
+	line-height: 30px;
+	height: 30px;
+	width: 169px;
+	min-width: 169px;
+	max-width: 169px;
+}
+
+.date-range-slim .date-range-wrapper i {
+	line-height: 30px;
+}
+
+.date-range-slim .input {
+	line-height: 30px !important;
+	width: 200px;
 }
 
 .date-range-wrapper:hover {

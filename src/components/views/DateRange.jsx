@@ -106,6 +106,10 @@ export default class DatePickerRangeView extends React.Component {
 			this.setState({ hideInputs: true });
 		}
 
+		if (props["data-layout-vertical"]) {
+			this.setState({ layoutVertical: true });
+		}
+
 		this.setState({
 			fromDate: this.state.selectedDateRange.dates.from,
 			toDate: this.state.selectedDateRange.dates.to
@@ -178,19 +182,39 @@ export default class DatePickerRangeView extends React.Component {
 			options = ranges;
 		}
 
+		let layoutStyle = () => {
+			let classes = styles["date-range-list-item"];
+
+			if (this.state.layoutVertical) {
+				classes += " " + styles["date-range-layout-vertical"];
+			}
+
+			console.log("classes",classes);
+
+			return classes;
+		};
+
+		let layoutWrapper = () => {
+			let classes = styles["date-range-list"];
+
+			classes += " " + styles["date-range-slim"];
+
+			return classes;
+		};
+
 		let defaultRange = _.findWhere(options, { name: this.state.selectedDateRange.name });
 
 		if (this.state.ready) {
 			return (
-				<div className={styles["date-range-list"]}>
+				<div className={layoutWrapper()}>
 					<ul>
-						<li className={styles["date-range-list-item"]}>
+						<li className={layoutStyle()}>
 							<MenuItems element={this.props.element} default={defaultRange} ranges={options} />
 						</li>
-						<li className={styles["date-range-list-item"]}>
+						<li className={layoutStyle()}>
 							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-from" data-range="from" value={moment(this.state.selectedDateRange.dates.from).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} />
 						</li>
-						<li className={styles["date-range-list-item"]}>
+						<li className={layoutStyle()}>
 							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-to" data-range="to" value={moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} />
 						</li>
 					</ul>

@@ -262,6 +262,11 @@
 	list-style: none;
 	float: left;
 	margin-right: 15px;
+	margin-bottom: 5px;
+}
+
+.DatePickerStyle__date-range-layout-vertical___8jcq1 {
+	float: none !important;
 }
 
 .DatePickerStyle__date-range-list-item___3FlfZ .DatePickerStyle__input___3oQ6t {
@@ -279,7 +284,7 @@
 }
 
 .DatePickerStyle__date-range-wrapper___2_ZpW {
-	height: 50px;
+	height: 48px;
 	background-color: #fff;
 	max-width: 250px;
 	min-width: 200px;
@@ -297,9 +302,7 @@
 
 .DatePickerStyle__date-range-wrapper-icon-calendar___Fkaq2 {
 	float: left;
-	padding-top: 7px;
 	margin-right: 10px;
-	color: rgba(0,0,0,0.56);
 }
 
 .DatePickerStyle__date-range-wrapper-text___2IM2g {
@@ -309,9 +312,29 @@
 
 .DatePickerStyle__date-range-wrapper-icon-caret___3Hosk {
 	float: right;
-	padding-top: 7px;
 	margin-left: 10px;
+}
+
+.DatePickerStyle__date-range-wrapper___2_ZpW i {
+	line-height: 48px;
 	color: rgba(0,0,0,0.56);
+}
+
+.DatePickerStyle__date-range-slim___2lYZl .DatePickerStyle__date-range-wrapper___2_ZpW {
+	line-height: 30px;
+	height: 30px;
+	width: 169px;
+	min-width: 169px;
+	max-width: 169px;
+}
+
+.DatePickerStyle__date-range-slim___2lYZl .DatePickerStyle__date-range-wrapper___2_ZpW i {
+	line-height: 30px;
+}
+
+.DatePickerStyle__date-range-slim___2lYZl .DatePickerStyle__input___3oQ6t {
+	line-height: 30px !important;
+	width: 200px;
 }
 
 .DatePickerStyle__date-range-wrapper___2_ZpW:hover {

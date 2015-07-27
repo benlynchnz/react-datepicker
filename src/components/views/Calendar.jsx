@@ -261,6 +261,10 @@ export default class CalendarView extends React.Component {
 			selectedDate: newDate,
 			moveToDate: newDate
 		});
+
+		if (this.state.closeOnSelect) {
+			this._onOkClick();
+		}
 	}
 
 	_onMonthClick(e) {

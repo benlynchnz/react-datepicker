@@ -328,9 +328,19 @@ return /******/ (function(modules) { // webpackBootstrap
 		};
 	};
 
+	var last_week = function last_week() {
+		return {
+			from: moment().startOf("isoWeek").subtract(1, "week"),
+			to: moment().startOf("isoWeek")
+		};
+	};
+
 	var convenienceDates = [{
 		name: "Today",
 		dates: last_x_days(0)
+	}, {
+		name: "Yesterday",
+		dates: last_x_days(1)
 	}, {
 		name: "Last 7 days",
 		dates: last_x_days(7)
@@ -340,10 +350,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		"default": true
 	}, {
 		name: "This week",
-		dates: last_x_period(0, "isoweek")
+		dates: last_x_period(0, "isoWeek")
 	}, {
 		name: "Last week",
-		dates: last_x_period(1, "week")
+		dates: last_week()
 	}, {
 		name: "This month",
 		dates: last_x_period(0, "month")
@@ -750,6 +760,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					this.setState({ hideInputs: true });
 				}
 
+				if (props["data-layout-vertical"]) {
+					this.setState({ layoutVertical: true });
+				}
+
 				this.setState({
 					fromDate: this.state.selectedDateRange.dates.from,
 					toDate: this.state.selectedDateRange.dates.to
@@ -814,6 +828,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "render",
 			value: function render() {
+				var _this3 = this;
+
 				var ranges = _store2["default"].getConvenienceDates(),
 				    options = [];
 
@@ -828,28 +844,48 @@ return /******/ (function(modules) { // webpackBootstrap
 					options = ranges;
 				}
 
+				var layoutStyle = function layoutStyle() {
+					var classes = _DatePickerStyleCss2["default"]["date-range-list-item"];
+
+					if (_this3.state.layoutVertical) {
+						classes += " " + _DatePickerStyleCss2["default"]["date-range-layout-vertical"];
+					}
+
+					console.log("classes", classes);
+
+					return classes;
+				};
+
+				var layoutWrapper = function layoutWrapper() {
+					var classes = _DatePickerStyleCss2["default"]["date-range-list"];
+
+					classes += " " + _DatePickerStyleCss2["default"]["date-range-slim"];
+
+					return classes;
+				};
+
 				var defaultRange = _.findWhere(options, { name: this.state.selectedDateRange.name });
 
 				if (this.state.ready) {
 					return React.createElement(
 						"div",
-						{ className: _DatePickerStyleCss2["default"]["date-range-list"] },
+						{ className: layoutWrapper() },
 						React.createElement(
 							"ul",
 							null,
 							React.createElement(
 								"li",
-								{ className: _DatePickerStyleCss2["default"]["date-range-list-item"] },
+								{ className: layoutStyle() },
 								React.createElement(_DateRangesMenuItemsJsx2["default"], { element: this.props.element, "default": defaultRange, ranges: options })
 							),
 							React.createElement(
 								"li",
-								{ className: _DatePickerStyleCss2["default"]["date-range-list-item"] },
+								{ className: layoutStyle() },
 								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-from", "data-range": "from", value: moment(this.state.selectedDateRange.dates.from).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus })
 							),
 							React.createElement(
 								"li",
-								{ className: _DatePickerStyleCss2["default"]["date-range-list-item"] },
+								{ className: layoutStyle() },
 								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-to", "data-range": "to", value: moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus })
 							)
 						),
@@ -1287,6 +1323,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					selectedDate: newDate,
 					moveToDate: newDate
 				});
+
+				if (this.state.closeOnSelect) {
+					this._onOkClick();
+				}
 			}
 		}, {
 			key: '_onMonthClick',
@@ -1768,7 +1808,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"overlay":"DatePickerStyle__overlay___2LzVe","modal":"DatePickerStyle__modal___1ErLw","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","wrapper":"DatePickerStyle__wrapper___3Emxc","input":"DatePickerStyle__input___3oQ6t","hidden-input":"DatePickerStyle__hidden-input___2-B40","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","move-to":"DatePickerStyle__move-to___jDGLn","today":"DatePickerStyle__today___C9UIO","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl","power-keys":"DatePickerStyle__power-keys___10dk6","power-keys-item":"DatePickerStyle__power-keys-item___1frz9","date-range-list":"DatePickerStyle__date-range-list___2c-Cd","date-range-list-item":"DatePickerStyle__date-range-list-item___3FlfZ","date-range-wrapper":"DatePickerStyle__date-range-wrapper___2_ZpW","date-range-wrapper-icon-calendar":"DatePickerStyle__date-range-wrapper-icon-calendar___Fkaq2","date-range-wrapper-text":"DatePickerStyle__date-range-wrapper-text___2IM2g","date-range-wrapper-icon-caret":"DatePickerStyle__date-range-wrapper-icon-caret___3Hosk","menu-items":"DatePickerStyle__menu-items___3VrmY","date-ranges":"DatePickerStyle__date-ranges___1gSZQ"};
+	module.exports = {"overlay":"DatePickerStyle__overlay___2LzVe","modal":"DatePickerStyle__modal___1ErLw","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","wrapper":"DatePickerStyle__wrapper___3Emxc","input":"DatePickerStyle__input___3oQ6t","hidden-input":"DatePickerStyle__hidden-input___2-B40","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","move-to":"DatePickerStyle__move-to___jDGLn","today":"DatePickerStyle__today___C9UIO","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl","power-keys":"DatePickerStyle__power-keys___10dk6","power-keys-item":"DatePickerStyle__power-keys-item___1frz9","date-range-list":"DatePickerStyle__date-range-list___2c-Cd","date-range-list-item":"DatePickerStyle__date-range-list-item___3FlfZ","date-range-layout-vertical":"DatePickerStyle__date-range-layout-vertical___8jcq1","date-range-wrapper":"DatePickerStyle__date-range-wrapper___2_ZpW","date-range-wrapper-icon-calendar":"DatePickerStyle__date-range-wrapper-icon-calendar___Fkaq2","date-range-wrapper-text":"DatePickerStyle__date-range-wrapper-text___2IM2g","date-range-wrapper-icon-caret":"DatePickerStyle__date-range-wrapper-icon-caret___3Hosk","date-range-slim":"DatePickerStyle__date-range-slim___2lYZl","menu-items":"DatePickerStyle__menu-items___3VrmY","date-ranges":"DatePickerStyle__date-ranges___1gSZQ"};
 
 /***/ },
 /* 10 */
