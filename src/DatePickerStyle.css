@@ -345,6 +345,28 @@
 	border-color: #ccc;
 }
 
+.submit-btn {
+	background-color: #2E88C5;
+	height: 48px;
+	line-height: 48px;
+	color: #fff;
+	outline: none;
+	border: none;
+	width: 200px;
+	font-weight: 600;
+	text-align: center;
+	cursor: pointer;
+}
+
+.submit-btn:hover {
+	background-color: #3498DB;
+}
+
+.date-range-slim .submit-btn {
+	height: 30px;
+	line-height: 30px;
+}
+
 .menu-items {
 	display: none;
 	max-height: 300px;

@@ -67,6 +67,7 @@
 				data-convenience-dates="Yesterday,Last 30 days,This week,Last week,This month,Last month,Custom"
 				data-close-on-select="true"
 				data-layout-vertical="true"
+				data-submit-btn="true"
 				data-default-range="Yesterday">
 			</div>
 		</div>
@@ -82,7 +83,6 @@
 				console.log('ACTION:: ' + e.detail.action);
 				console.log('PAYLOAD:: ' + e.detail.payload);
 				var test = moment(JSON.parse(e.detail.payload).date).format('ddd DD MMM');
-				console.log(test);
 			}
 
 			datePicker.addEventListener('event', datePickerHandler);

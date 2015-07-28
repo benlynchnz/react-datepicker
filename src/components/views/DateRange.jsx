@@ -13,6 +13,10 @@ export default class DatePickerRangeView extends React.Component {
 		super(props);
 		this.state = Store.getState();
 
+		if (props.defaultRange) {
+			this.state.selectedDateRange = props.defaultRange;
+		}
+
 		this._updateState = this._updateState.bind(this);
 		this._onBlur = this._onBlur.bind(this);
 		this._onFocus = this._onFocus.bind(this);
@@ -20,6 +24,7 @@ export default class DatePickerRangeView extends React.Component {
 		this._onOk = this._onOk.bind(this);
 		this._onDateChange = this._onDateChange.bind(this);
 		this._onRangeChange = this._onRangeChange.bind(this);
+		this._onSubmitBtnClick = this._onSubmitBtnClick.bind(this);
 	}
 
 	componentDidMount() {
@@ -55,17 +60,6 @@ export default class DatePickerRangeView extends React.Component {
 					convenienceDateOptions: opts
 				});
 			}
-		}
-
-		if (props["data-default-range"]) {
-			let range = props["data-default-range"],
-				rangeValues = _.findWhere(Store.getConvenienceDates(), { name: range });
-
-			this.setState({ selectedDateRange: rangeValues });
-
-			_.delay(() => {
-				utils.dispatch(this, Constants.DATE_RANGE_CHANGE, JSON.stringify(rangeValues));
-			}, 0);
 		}
 
 		if (props["data-selected-date"]) {
@@ -110,6 +104,10 @@ export default class DatePickerRangeView extends React.Component {
 			this.setState({ layoutVertical: true });
 		}
 
+		if (props["data-submit-btn"]) {
+			this.setState({ hasSubmitBtn: true });
+		}
+
 		this.setState({
 			fromDate: this.state.selectedDateRange.dates.from,
 			toDate: this.state.selectedDateRange.dates.to
@@ -120,7 +118,6 @@ export default class DatePickerRangeView extends React.Component {
 
 	_onBlur() {
 		this.setState({ show: false });
-		utils.dispatch(this, Constants.BLUR, JSON.stringify(this.state.selectedDateRange));
 	}
 
 	_onFocus(e) {
@@ -156,7 +153,8 @@ export default class DatePickerRangeView extends React.Component {
 			});
 		}
 
-		// this.refs['select'].getDOMNode().selectedIndex = _.findIndex(Store.getConvenienceDates(), { name: 'Custom' });
+		this.setState({ selectedDateRange: customRange });
+		utils.dispatch(this, Constants.DATE_RANGE_CHANGE, JSON.stringify(customRange));
 	}
 
 	_onOk() {
@@ -165,6 +163,10 @@ export default class DatePickerRangeView extends React.Component {
 
 	_onDateChange(range) {
 		this.setState({ selectedDateRange: range });
+	}
+
+	_onSubmitBtnClick() {
+		utils.dispatch(this, Constants.SUBMIT_CLICK, JSON.stringify(this.state.selectedDateRange));
 	}
 
 	render() {
@@ -189,27 +191,25 @@ export default class DatePickerRangeView extends React.Component {
 				classes += " " + styles["date-range-layout-vertical"];
 			}
 
-			console.log("classes",classes);
-
 			return classes;
 		};
 
 		let layoutWrapper = () => {
 			let classes = styles["date-range-list"];
 
-			classes += " " + styles["date-range-slim"];
+			if (this.state.layoutVertical) {
+				classes += " " + styles["date-range-slim"];
+			}
 
 			return classes;
 		};
-
-		let defaultRange = _.findWhere(options, { name: this.state.selectedDateRange.name });
 
 		if (this.state.ready) {
 			return (
 				<div className={layoutWrapper()}>
 					<ul>
 						<li className={layoutStyle()}>
-							<MenuItems element={this.props.element} default={defaultRange} ranges={options} />
+							<MenuItems element={this.props.element} ranges={options} selected={this.state.selectedDateRange} />
 						</li>
 						<li className={layoutStyle()}>
 							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-from" data-range="from" value={moment(this.state.selectedDateRange.dates.from).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} />
@@ -217,8 +217,15 @@ export default class DatePickerRangeView extends React.Component {
 						<li className={layoutStyle()}>
 							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-to" data-range="to" value={moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} />
 						</li>
+						{this.state.hasSubmitBtn ? (
+							<li className={layoutStyle()}>
+								<button className={styles["submit-btn"]} onClick={this._onSubmitBtnClick}>Submit</button>
+							</li>
+						) : null}
 					</ul>
-					{this.state.show ? (<Calendar {...this.state} onBlur={this._onBlur} onOK={this._onOk} onUpdate={this._onUpdate} />) : null}
+					{this.state.show ? (
+						<Calendar {...this.state} onBlur={this._onBlur} onOK={this._onOk} onUpdate={this._onUpdate} />
+					) : null}
 				</div>
 			);
 		} else {

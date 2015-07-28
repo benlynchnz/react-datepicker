@@ -131,15 +131,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _componentsUtils = __webpack_require__(2);
+	var _componentsStore = __webpack_require__(2);
+
+	var _componentsStore2 = _interopRequireDefault(_componentsStore);
+
+	var _componentsConstants = __webpack_require__(3);
+
+	var _componentsConstants2 = _interopRequireDefault(_componentsConstants);
+
+	var _componentsUtils = __webpack_require__(4);
 
 	var _componentsUtils2 = _interopRequireDefault(_componentsUtils);
 
-	var _componentsViewsSingleDateJsx = __webpack_require__(3);
+	var _componentsViewsSingleDateJsx = __webpack_require__(5);
 
 	var _componentsViewsSingleDateJsx2 = _interopRequireDefault(_componentsViewsSingleDateJsx);
 
-	var _componentsViewsDateRangeJsx = __webpack_require__(4);
+	var _componentsViewsDateRangeJsx = __webpack_require__(6);
 
 	var _componentsViewsDateRangeJsx2 = _interopRequireDefault(_componentsViewsDateRangeJsx);
 
@@ -155,6 +163,17 @@ return /******/ (function(modules) { // webpackBootstrap
 		_inherits(DatePickerView, _React$Component);
 
 		_createClass(DatePickerView, [{
+			key: "componentWillMount",
+			value: function componentWillMount() {
+				var _this = this;
+
+				_.delay(function () {
+					_componentsUtils2["default"].dispatch(_this, _componentsConstants2["default"].INIT, JSON.stringify({
+						utcOffset: moment().utcOffset()
+					}));
+				}, 0);
+			}
+		}, {
 			key: "componentDidMount",
 			value: function componentDidMount() {
 				return _componentsUtils2["default"].componentDidMount(this);
@@ -162,15 +181,32 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "_updateState",
 			value: function _updateState(props) {
+				var _this2 = this;
+
 				if (props["data-range"] === "true") {
 					this.setState({ range: true });
+				}
+
+				if (props["data-default-range"]) {
+					(function () {
+						var range = props["data-default-range"],
+						    rangeValues = _.findWhere(_componentsStore2["default"].getConvenienceDates(), { name: range });
+
+						_this2.setState({
+							defaultRange: rangeValues
+						});
+
+						_.delay(function () {
+							_componentsUtils2["default"].dispatch(_this2, _componentsConstants2["default"].DATE_RANGE_DEFAULT, JSON.stringify(rangeValues));
+						}, 0);
+					})();
 				}
 			}
 		}, {
 			key: "render",
 			value: function render() {
 				if (this.state.range) {
-					return React.createElement(_componentsViewsDateRangeJsx2["default"], _extends({}, this.state, { element: this.props.element }));
+					return React.createElement(_componentsViewsDateRangeJsx2["default"], _extends({}, this.state, { element: this.props.element, "default": this.state.defaultRange }));
 				}
 
 				return React.createElement(_componentsViewsSingleDateJsx2["default"], _extends({}, this.state, { element: this.props.element }));
@@ -185,6 +221,130 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _events = __webpack_require__(9);
+
+	var _utils = __webpack_require__(4);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _state = {
+		selectedDate: moment().endOf("day"),
+		fromDate: moment().endOf("day"),
+		toDate: moment().endOf("day"),
+		selectedDateRange: _.findWhere(_utils2["default"].convenienceDates, { "default": true }),
+		convenienceDateOptions: [],
+		moveToDate: moment().endOf("day"),
+		today: moment().endOf("day"),
+		viewingDay: moment().endOf("day"),
+		viewingMonth: moment().endOf("month"),
+		viewingYear: moment().endOf("year"),
+		minDate: moment().subtract(999, "years"),
+		maxDate: moment().add(999, "years"),
+		displayFormat: "DD MMM YYYY",
+		closeOnSelect: false,
+		show: false,
+		powerKeys: {
+			active: false,
+			direction: null,
+			keys: [],
+			value: 0,
+			duration: "Days",
+			style: {
+				display: "none"
+			}
+		}
+	};
+
+	var CHANGE = "CHANGE";
+
+	var Store = (function (_EventEmitter) {
+		function Store() {
+			_classCallCheck(this, Store);
+
+			if (_EventEmitter != null) {
+				_EventEmitter.apply(this, arguments);
+			}
+		}
+
+		_inherits(Store, _EventEmitter);
+
+		_createClass(Store, [{
+			key: "getState",
+			value: function getState() {
+				return _state;
+			}
+		}, {
+			key: "getConvenienceDates",
+			value: function getConvenienceDates() {
+				return _utils2["default"].convenienceDates;
+			}
+		}, {
+			key: "emitChange",
+			value: function emitChange() {
+				this.emit(CHANGE);
+			}
+		}, {
+			key: "addChangeListener",
+			value: function addChangeListener(cb) {
+				this.on(CHANGE, cb);
+			}
+		}, {
+			key: "removeChangeListener",
+			value: function removeChangeListener(cb) {
+				this.removeListener(CHANGE, cb);
+			}
+		}]);
+
+		return Store;
+	})(_events.EventEmitter);
+
+	var _Store = new Store();
+
+	exports["default"] = _Store;
+	module.exports = exports["default"];
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var constants = {
+		FOCUS: "FOCUS",
+		BLUR: "BLUR",
+		OK: "OK",
+		DATE_SELECTED: "DATE_SELECTED",
+		DATE_RANGE_CHANGE: "DATE_RANGE_CHANGE",
+		DATE_RANGE_DEFAULT: "DATE_RANGE_DEFAULT",
+		CALENDAR_HIDE: "CALENDAR_HIDE",
+		SUBMIT_CLICK: "SUBMIT_CLICK",
+		INIT: "INIT"
+	};
+
+	exports["default"] = constants;
+	module.exports = exports["default"];
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -317,14 +477,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	var last_x_days = function last_x_days(days) {
 		return {
 			from: moment().subtract(days, "days").startOf("day"),
-			to: END_OF_TODAY
+			to: moment()
+		};
+	};
+
+	var yesterday = function yesterday() {
+		return {
+			from: moment().subtract(1, "days").startOf("day"),
+			to: moment().subtract(1, "days").add(1, "days").startOf("day")
 		};
 	};
 
 	var last_x_period = function last_x_period(amount, period) {
+		var from = moment().subtract(amount, period).startOf(period);
+		var to = moment(from.toISOString()).add(amount, period).endOf(period);
 		return {
-			from: moment().subtract(amount, period).startOf(period),
-			to: moment().subtract(amount, period).endOf(period)
+			from: from,
+			to: to
 		};
 	};
 
@@ -340,7 +509,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		dates: last_x_days(0)
 	}, {
 		name: "Yesterday",
-		dates: last_x_days(1)
+		dates: yesterday()
 	}, {
 		name: "Last 7 days",
 		dates: last_x_days(7)
@@ -374,7 +543,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		dates: last_x_period(1, "year")
 	}, {
 		name: "Custom",
-		dates: { from: null, to: null }
+		dates: last_x_days(0)
 	}];
 
 	utils.convenienceDates = convenienceDates;
@@ -418,7 +587,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 3 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -439,15 +608,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _store = __webpack_require__(5);
+	var _store = __webpack_require__(2);
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _utils = __webpack_require__(2);
+	var _utils = __webpack_require__(4);
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _constants = __webpack_require__(6);
+	var _constants = __webpack_require__(3);
 
 	var _constants2 = _interopRequireDefault(_constants);
 
@@ -455,7 +624,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _CalendarJsx2 = _interopRequireDefault(_CalendarJsx);
 
-	var _DatePickerStyleCss = __webpack_require__(9);
+	var _DatePickerStyleCss = __webpack_require__(10);
 
 	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
 
@@ -603,7 +772,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 4 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -624,15 +793,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _store = __webpack_require__(5);
+	var _store = __webpack_require__(2);
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _utils = __webpack_require__(2);
+	var _utils = __webpack_require__(4);
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _constants = __webpack_require__(6);
+	var _constants = __webpack_require__(3);
 
 	var _constants2 = _interopRequireDefault(_constants);
 
@@ -644,7 +813,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _DateRangesMenuItemsJsx2 = _interopRequireDefault(_DateRangesMenuItemsJsx);
 
-	var _DatePickerStyleCss = __webpack_require__(9);
+	var _DatePickerStyleCss = __webpack_require__(10);
 
 	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
 
@@ -655,6 +824,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			_get(Object.getPrototypeOf(DatePickerRangeView.prototype), "constructor", this).call(this, props);
 			this.state = _store2["default"].getState();
 
+			if (props.defaultRange) {
+				this.state.selectedDateRange = props.defaultRange;
+			}
+
 			this._updateState = this._updateState.bind(this);
 			this._onBlur = this._onBlur.bind(this);
 			this._onFocus = this._onFocus.bind(this);
@@ -662,6 +835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			this._onOk = this._onOk.bind(this);
 			this._onDateChange = this._onDateChange.bind(this);
 			this._onRangeChange = this._onRangeChange.bind(this);
+			this._onSubmitBtnClick = this._onSubmitBtnClick.bind(this);
 		}
 
 		_inherits(DatePickerRangeView, _React$Component);
@@ -692,8 +866,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "_updateState",
 			value: function _updateState(props) {
-				var _this2 = this;
-
 				if (props["data-display-format"]) {
 					this.setState({
 						displayFormat: props["data-display-format"]
@@ -707,19 +879,6 @@ return /******/ (function(modules) { // webpackBootstrap
 							convenienceDateOptions: opts
 						});
 					}
-				}
-
-				if (props["data-default-range"]) {
-					(function () {
-						var range = props["data-default-range"],
-						    rangeValues = _.findWhere(_store2["default"].getConvenienceDates(), { name: range });
-
-						_this2.setState({ selectedDateRange: rangeValues });
-
-						_.delay(function () {
-							_utils2["default"].dispatch(_this2, _constants2["default"].DATE_RANGE_CHANGE, JSON.stringify(rangeValues));
-						}, 0);
-					})();
 				}
 
 				if (props["data-selected-date"]) {
@@ -764,6 +923,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					this.setState({ layoutVertical: true });
 				}
 
+				if (props["data-submit-btn"]) {
+					this.setState({ hasSubmitBtn: true });
+				}
+
 				this.setState({
 					fromDate: this.state.selectedDateRange.dates.from,
 					toDate: this.state.selectedDateRange.dates.to
@@ -775,7 +938,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: "_onBlur",
 			value: function _onBlur() {
 				this.setState({ show: false });
-				_utils2["default"].dispatch(this, _constants2["default"].BLUR, JSON.stringify(this.state.selectedDateRange));
 			}
 		}, {
 			key: "_onFocus",
@@ -813,7 +975,8 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				}
 
-				// this.refs['select'].getDOMNode().selectedIndex = _.findIndex(Store.getConvenienceDates(), { name: 'Custom' });
+				this.setState({ selectedDateRange: customRange });
+				_utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, JSON.stringify(customRange));
 			}
 		}, {
 			key: "_onOk",
@@ -826,9 +989,14 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.setState({ selectedDateRange: range });
 			}
 		}, {
+			key: "_onSubmitBtnClick",
+			value: function _onSubmitBtnClick() {
+				_utils2["default"].dispatch(this, _constants2["default"].SUBMIT_CLICK, JSON.stringify(this.state.selectedDateRange));
+			}
+		}, {
 			key: "render",
 			value: function render() {
-				var _this3 = this;
+				var _this2 = this;
 
 				var ranges = _store2["default"].getConvenienceDates(),
 				    options = [];
@@ -847,11 +1015,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				var layoutStyle = function layoutStyle() {
 					var classes = _DatePickerStyleCss2["default"]["date-range-list-item"];
 
-					if (_this3.state.layoutVertical) {
+					if (_this2.state.layoutVertical) {
 						classes += " " + _DatePickerStyleCss2["default"]["date-range-layout-vertical"];
 					}
-
-					console.log("classes", classes);
 
 					return classes;
 				};
@@ -859,12 +1025,12 @@ return /******/ (function(modules) { // webpackBootstrap
 				var layoutWrapper = function layoutWrapper() {
 					var classes = _DatePickerStyleCss2["default"]["date-range-list"];
 
-					classes += " " + _DatePickerStyleCss2["default"]["date-range-slim"];
+					if (_this2.state.layoutVertical) {
+						classes += " " + _DatePickerStyleCss2["default"]["date-range-slim"];
+					}
 
 					return classes;
 				};
-
-				var defaultRange = _.findWhere(options, { name: this.state.selectedDateRange.name });
 
 				if (this.state.ready) {
 					return React.createElement(
@@ -876,7 +1042,7 @@ return /******/ (function(modules) { // webpackBootstrap
 							React.createElement(
 								"li",
 								{ className: layoutStyle() },
-								React.createElement(_DateRangesMenuItemsJsx2["default"], { element: this.props.element, "default": defaultRange, ranges: options })
+								React.createElement(_DateRangesMenuItemsJsx2["default"], { element: this.props.element, ranges: options, selected: this.state.selectedDateRange })
 							),
 							React.createElement(
 								"li",
@@ -887,7 +1053,16 @@ return /******/ (function(modules) { // webpackBootstrap
 								"li",
 								{ className: layoutStyle() },
 								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-to", "data-range": "to", value: moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus })
-							)
+							),
+							this.state.hasSubmitBtn ? React.createElement(
+								"li",
+								{ className: layoutStyle() },
+								React.createElement(
+									"button",
+									{ className: _DatePickerStyleCss2["default"]["submit-btn"], onClick: this._onSubmitBtnClick },
+									"Submit"
+								)
+							) : null
 						),
 						this.state.show ? React.createElement(_CalendarJsx2["default"], _extends({}, this.state, { onBlur: this._onBlur, onOK: this._onOk, onUpdate: this._onUpdate })) : null
 					);
@@ -901,127 +1076,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(React.Component);
 
 	exports["default"] = DatePickerRangeView;
-	module.exports = exports["default"];
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-	var _events = __webpack_require__(10);
-
-	var _utils = __webpack_require__(2);
-
-	var _utils2 = _interopRequireDefault(_utils);
-
-	var _state = {
-		selectedDate: moment().endOf("day"),
-		fromDate: moment().endOf("day"),
-		toDate: moment().endOf("day"),
-		selectedDateRange: _.findWhere(_utils2["default"].convenienceDates, { "default": true }),
-		convenienceDateOptions: [],
-		moveToDate: moment().endOf("day"),
-		today: moment().endOf("day"),
-		viewingDay: moment().endOf("day"),
-		viewingMonth: moment().endOf("month"),
-		viewingYear: moment().endOf("year"),
-		minDate: moment().subtract(999, "years"),
-		maxDate: moment().add(999, "years"),
-		displayFormat: "DD MMM YYYY",
-		closeOnSelect: false,
-		show: false,
-		powerKeys: {
-			active: false,
-			direction: null,
-			keys: [],
-			value: 0,
-			duration: "Days",
-			style: {
-				display: "none"
-			}
-		}
-	};
-
-	var CHANGE = "CHANGE";
-
-	var Store = (function (_EventEmitter) {
-		function Store() {
-			_classCallCheck(this, Store);
-
-			if (_EventEmitter != null) {
-				_EventEmitter.apply(this, arguments);
-			}
-		}
-
-		_inherits(Store, _EventEmitter);
-
-		_createClass(Store, [{
-			key: "getState",
-			value: function getState() {
-				return _state;
-			}
-		}, {
-			key: "getConvenienceDates",
-			value: function getConvenienceDates() {
-				return _utils2["default"].convenienceDates;
-			}
-		}, {
-			key: "emitChange",
-			value: function emitChange() {
-				this.emit(CHANGE);
-			}
-		}, {
-			key: "addChangeListener",
-			value: function addChangeListener(cb) {
-				this.on(CHANGE, cb);
-			}
-		}, {
-			key: "removeChangeListener",
-			value: function removeChangeListener(cb) {
-				this.removeListener(CHANGE, cb);
-			}
-		}]);
-
-		return Store;
-	})(_events.EventEmitter);
-
-	var _Store = new Store();
-
-	exports["default"] = _Store;
-	module.exports = exports["default"];
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	var constants = {
-		FOCUS: "FOCUS",
-		BLUR: "BLUR",
-		OK: "OK",
-		DATE_SELECTED: "DATE_SELECTED",
-		DATE_RANGE_CHANGE: "DATE_RANGE_CHANGE",
-		CALENDAR_HIDE: "CALENDAR_HIDE"
-	};
-
-	exports["default"] = constants;
 	module.exports = exports["default"];
 
 /***/ },
@@ -1044,11 +1098,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _DatePickerStyleCss = __webpack_require__(9);
+	var _DatePickerStyleCss = __webpack_require__(10);
 
 	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
 
-	var _utils = __webpack_require__(2);
+	var _utils = __webpack_require__(4);
 
 	var _utils2 = _interopRequireDefault(_utils);
 
@@ -1660,15 +1714,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _constants = __webpack_require__(6);
+	var _constants = __webpack_require__(3);
 
 	var _constants2 = _interopRequireDefault(_constants);
 
-	var _utils = __webpack_require__(2);
+	var _utils = __webpack_require__(4);
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _DatePickerStyleCss = __webpack_require__(9);
+	var _DatePickerStyleCss = __webpack_require__(10);
 
 	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
 
@@ -1691,7 +1745,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        key: "componentDidMount",
 	        value: function componentDidMount() {
 	            this.setState({
-	                "default": this.props["default"],
 	                isReady: true
 	            });
 	        }
@@ -1724,11 +1777,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var range = e.target.getAttribute("data-name"),
 	                selected = _.findWhere(this.props.ranges, { name: range });
 
-	            this.setState({
-	                "default": selected,
-	                selectedDateRange: selected
-	            });
-
 	            _utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, JSON.stringify(selected));
 
 	            this._onBlur();
@@ -1739,7 +1787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var _this2 = this;
 
 	            var isSelected = function isSelected(item) {
-	                if (item.name === _this2.state["default"].name) {
+	                if (item.name === _this2.props.selected.name) {
 	                    return _DatePickerStyleCss2["default"].selected;
 	                }
 	            };
@@ -1763,7 +1811,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        React.createElement(
 	                            "div",
 	                            { className: _DatePickerStyleCss2["default"]["date-range-wrapper-text"] },
-	                            this.state["default"].name
+	                            this.props.selected.name
 	                        ),
 	                        React.createElement(
 	                            "div",
@@ -1805,13 +1853,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// removed by extract-text-webpack-plugin
-	module.exports = {"overlay":"DatePickerStyle__overlay___2LzVe","modal":"DatePickerStyle__modal___1ErLw","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","wrapper":"DatePickerStyle__wrapper___3Emxc","input":"DatePickerStyle__input___3oQ6t","hidden-input":"DatePickerStyle__hidden-input___2-B40","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","move-to":"DatePickerStyle__move-to___jDGLn","today":"DatePickerStyle__today___C9UIO","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl","power-keys":"DatePickerStyle__power-keys___10dk6","power-keys-item":"DatePickerStyle__power-keys-item___1frz9","date-range-list":"DatePickerStyle__date-range-list___2c-Cd","date-range-list-item":"DatePickerStyle__date-range-list-item___3FlfZ","date-range-layout-vertical":"DatePickerStyle__date-range-layout-vertical___8jcq1","date-range-wrapper":"DatePickerStyle__date-range-wrapper___2_ZpW","date-range-wrapper-icon-calendar":"DatePickerStyle__date-range-wrapper-icon-calendar___Fkaq2","date-range-wrapper-text":"DatePickerStyle__date-range-wrapper-text___2IM2g","date-range-wrapper-icon-caret":"DatePickerStyle__date-range-wrapper-icon-caret___3Hosk","date-range-slim":"DatePickerStyle__date-range-slim___2lYZl","menu-items":"DatePickerStyle__menu-items___3VrmY","date-ranges":"DatePickerStyle__date-ranges___1gSZQ"};
-
-/***/ },
-/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -2116,6 +2157,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return arg === void 0;
 	}
 
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"overlay":"DatePickerStyle__overlay___2LzVe","modal":"DatePickerStyle__modal___1ErLw","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","wrapper":"DatePickerStyle__wrapper___3Emxc","input":"DatePickerStyle__input___3oQ6t","hidden-input":"DatePickerStyle__hidden-input___2-B40","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","move-to":"DatePickerStyle__move-to___jDGLn","today":"DatePickerStyle__today___C9UIO","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl","power-keys":"DatePickerStyle__power-keys___10dk6","power-keys-item":"DatePickerStyle__power-keys-item___1frz9","date-range-list":"DatePickerStyle__date-range-list___2c-Cd","date-range-list-item":"DatePickerStyle__date-range-list-item___3FlfZ","date-range-layout-vertical":"DatePickerStyle__date-range-layout-vertical___8jcq1","date-range-wrapper":"DatePickerStyle__date-range-wrapper___2_ZpW","date-range-wrapper-icon-calendar":"DatePickerStyle__date-range-wrapper-icon-calendar___Fkaq2","date-range-wrapper-text":"DatePickerStyle__date-range-wrapper-text___2IM2g","date-range-wrapper-icon-caret":"DatePickerStyle__date-range-wrapper-icon-caret___3Hosk","date-range-slim":"DatePickerStyle__date-range-slim___2lYZl","submit-btn":"DatePickerStyle__submit-btn___1oWxa","menu-items":"DatePickerStyle__menu-items___3VrmY","date-ranges":"DatePickerStyle__date-ranges___1gSZQ"};
 
 /***/ }
 /******/ ])

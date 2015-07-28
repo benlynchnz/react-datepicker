@@ -123,14 +123,23 @@ let END_OF_TODAY = moment().endOf("day");
 let last_x_days = (days) => {
 	return {
 		from: moment().subtract(days, "days").startOf("day"),
-		to: END_OF_TODAY
+		to: moment()
+	};
+};
+
+let yesterday = () => {
+    return {
+		from: moment().subtract(1, "days").startOf("day"),
+		to: moment().subtract(1, "days").add(1, "days").startOf("day")
 	};
 };
 
 let last_x_period = (amount, period) => {
+    const from = moment().subtract(amount, period).startOf(period);
+    const to = moment(from.toISOString()).add(amount, period).endOf(period);
 	return {
-		from: moment().subtract(amount, period).startOf(period),
-		to: moment().subtract(amount, period).endOf(period)
+		from: from,
+		to: to
 	};
 };
 
@@ -148,7 +157,7 @@ let convenienceDates = [
 	},
     {
 		name: "Yesterday",
-		dates: last_x_days(1)
+		dates: yesterday()
 	},
     {
 		name: "Last 7 days",
@@ -193,7 +202,7 @@ let convenienceDates = [
 	},
 	{
 		name: "Custom",
-		dates: { from: null, to: null }
+		dates: last_x_days(0)
 	}
 ];
 

@@ -18,7 +18,6 @@ export default class DateRangeMenu extends React.Component {
 
     componentDidMount() {
         this.setState({
-            default: this.props.default,
             isReady: true
         });
     }
@@ -46,11 +45,6 @@ export default class DateRangeMenu extends React.Component {
         let range = e.target.getAttribute("data-name"),
             selected = _.findWhere(this.props.ranges, { name: range });
 
-        this.setState({
-            default: selected,
-            selectedDateRange: selected
-        });
-
 		utils.dispatch(this, Constants.DATE_RANGE_CHANGE, JSON.stringify(selected));
 
         this._onBlur();
@@ -58,7 +52,7 @@ export default class DateRangeMenu extends React.Component {
 
     render() {
         let isSelected = (item) => {
-            if (item.name === this.state.default.name) {
+            if (item.name === this.props.selected.name) {
                 return styles.selected;
             }
         };
@@ -71,7 +65,7 @@ export default class DateRangeMenu extends React.Component {
                             <i className="material-icons">today</i>
                         </div>
                         <div className={styles["date-range-wrapper-text"]}>
-                            {this.state.default.name}
+                            {this.props.selected.name}
                         </div>
                         <div className={styles["date-range-wrapper-icon-caret"]}>
                             <i className="material-icons">arrow_drop_down</i>
