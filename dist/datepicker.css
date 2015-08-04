@@ -208,7 +208,7 @@
 }
 
 .DatePickerStyle__btn___3cSbl {
-	margin-right: 30px;
+	margin-left: 30px;
 	background-color: transparent;
 	border: 0;
 	font-family: 'Roboto';
@@ -275,7 +275,7 @@
 	border: 1px solid #ddd;
 	min-width: 200px;
 	line-height: 48px;
-	height: auto;
+	height: 50px;
 	padding-left: 15px;
 }
 

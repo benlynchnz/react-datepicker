@@ -73,6 +73,15 @@ export default class DatePickerSingleView extends React.Component {
 		if (props['data-close-on-select']) {
 			this.setState({ closeOnSelect: true });
 		}
+
+		if (props["data-first-day-of-week"]) {
+			let day = Number(props["data-first-day-of-week"]);
+
+			this.setState({
+				firstDayOfWeek: day,
+				daysOfWeek: day === 0 ? ["S","M","T","W","T","F","S"] : ["M","T","W","T","F","S","S"]
+			});
+		}
 	}
 
 	_onBlur() {

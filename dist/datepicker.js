@@ -167,9 +167,25 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function componentWillMount() {
 				var _this = this;
 
+				var attributes = this.props.element.attributes;
+
+				Object.keys(attributes).forEach(function (key) {
+					var namedNode = undefined;
+
+					if (key !== "length") {
+						namedNode = attributes[key];
+						if (namedNode.name === "data-org-timezone") {
+							_this.setState({ org_zone: namedNode.value });
+							_componentsStore2["default"].setTimezone(namedNode.value);
+						}
+					}
+				});
+
 				_.delay(function () {
 					_componentsUtils2["default"].dispatch(_this, _componentsConstants2["default"].INIT, JSON.stringify({
-						utcOffset: moment().utcOffset()
+						utc_offset: moment().utcOffset(),
+						device_zone: jstz.determine().name(),
+						organization_zone: _this.state.org_zone
 					}));
 				}, 0);
 			}
@@ -231,23 +247,96 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 	var _events = __webpack_require__(9);
 
-	var _utils = __webpack_require__(4);
+	var last_x_days = function last_x_days(days) {
+		return {
+			from: moment().subtract(days, "days").startOf("day"),
+			to: moment()
+		};
+	};
 
-	var _utils2 = _interopRequireDefault(_utils);
+	var yesterday = function yesterday() {
+		return {
+			from: moment().subtract(1, "days").startOf("day"),
+			to: moment().subtract(1, "days").add(1, "days").startOf("day")
+		};
+	};
+
+	var last_x_period = function last_x_period(amount, period) {
+		var from = moment().subtract(amount, period).startOf(period);
+		var to = moment(from.toISOString()).endOf(period);
+		return {
+			from: from,
+			to: to
+		};
+	};
+
+	var last_week = function last_week() {
+		return {
+			from: moment().startOf("isoWeek").subtract(1, "week"),
+			to: moment().startOf("isoWeek")
+		};
+	};
+
+	var this_week = function this_week() {
+		return {
+			from: moment().startOf("isoWeek"),
+			to: moment().add(6, "days").startOf("day")
+		};
+	};
+
+	var convenienceDates = [{
+		name: "Today",
+		dates: last_x_days(0)
+	}, {
+		name: "Yesterday",
+		dates: yesterday()
+	}, {
+		name: "Last 7 days",
+		dates: last_x_days(7)
+	}, {
+		name: "Last 30 days",
+		dates: last_x_days(30),
+		"default": true
+	}, {
+		name: "This week",
+		dates: this_week() //last_x_period(0, 'isoWeek')
+	}, {
+		name: "Last week",
+		dates: last_week()
+	}, {
+		name: "This month",
+		dates: last_x_period(0, "month")
+	}, {
+		name: "Last month",
+		dates: last_x_period(1, "month")
+	}, {
+		name: "This quarter",
+		dates: last_x_period(0, "quarter")
+	}, {
+		name: "Last quarter",
+		dates: last_x_period(1, "quarter")
+	}, {
+		name: "This year",
+		dates: last_x_period(0, "year")
+	}, {
+		name: "Last year",
+		dates: last_x_period(1, "year")
+	}, {
+		name: "Custom",
+		dates: last_x_days(0)
+	}];
 
 	var _state = {
 		selectedDate: moment().endOf("day"),
 		fromDate: moment().endOf("day"),
 		toDate: moment().endOf("day"),
-		selectedDateRange: _.findWhere(_utils2["default"].convenienceDates, { "default": true }),
+		selectedDateRange: _.findWhere(convenienceDates, { "default": true }),
 		convenienceDateOptions: [],
 		moveToDate: moment().endOf("day"),
 		today: moment().endOf("day"),
@@ -258,7 +347,13 @@ return /******/ (function(modules) { // webpackBootstrap
 		maxDate: moment().add(999, "years"),
 		displayFormat: "DD MMM YYYY",
 		closeOnSelect: false,
+		daysOfWeek: ["M", "T", "W", "T", "F", "S", "S"],
+		firstDayOfWeek: 1,
 		show: false,
+		zone: {
+			org: null,
+			device: jstz.determine().name()
+		},
 		powerKeys: {
 			active: false,
 			direction: null,
@@ -292,7 +387,12 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "getConvenienceDates",
 			value: function getConvenienceDates() {
-				return _utils2["default"].convenienceDates;
+				return convenienceDates;
+			}
+		}, {
+			key: "setTimezone",
+			value: function setTimezone(zone) {
+				moment.tz.setDefault(zone);
 			}
 		}, {
 			key: "emitChange",
@@ -472,82 +572,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	utils.keyMap = keyMap;
 
-	var END_OF_TODAY = moment().endOf("day");
-
-	var last_x_days = function last_x_days(days) {
-		return {
-			from: moment().subtract(days, "days").startOf("day"),
-			to: moment()
-		};
-	};
-
-	var yesterday = function yesterday() {
-		return {
-			from: moment().subtract(1, "days").startOf("day"),
-			to: moment().subtract(1, "days").add(1, "days").startOf("day")
-		};
-	};
-
-	var last_x_period = function last_x_period(amount, period) {
-		var from = moment().subtract(amount, period).startOf(period);
-		var to = moment(from.toISOString()).add(amount, period).endOf(period);
-		return {
-			from: from,
-			to: to
-		};
-	};
-
-	var last_week = function last_week() {
-		return {
-			from: moment().startOf("isoWeek").subtract(1, "week"),
-			to: moment().startOf("isoWeek")
-		};
-	};
-
-	var convenienceDates = [{
-		name: "Today",
-		dates: last_x_days(0)
-	}, {
-		name: "Yesterday",
-		dates: yesterday()
-	}, {
-		name: "Last 7 days",
-		dates: last_x_days(7)
-	}, {
-		name: "Last 30 days",
-		dates: last_x_days(30),
-		"default": true
-	}, {
-		name: "This week",
-		dates: last_x_period(0, "isoWeek")
-	}, {
-		name: "Last week",
-		dates: last_week()
-	}, {
-		name: "This month",
-		dates: last_x_period(0, "month")
-	}, {
-		name: "Last month",
-		dates: last_x_period(1, "month")
-	}, {
-		name: "This quarter",
-		dates: last_x_period(0, "quarter")
-	}, {
-		name: "Last quarter",
-		dates: last_x_period(1, "quarter")
-	}, {
-		name: "This year",
-		dates: last_x_period(0, "year")
-	}, {
-		name: "Last year",
-		dates: last_x_period(1, "year")
-	}, {
-		name: "Custom",
-		dates: last_x_days(0)
-	}];
-
-	utils.convenienceDates = convenienceDates;
-
 	var componentDidMount = function componentDidMount(ctx) {
 		var rootNode = React.findDOMNode(ctx),
 		    hasNextProps = false,
@@ -699,6 +723,15 @@ return /******/ (function(modules) { // webpackBootstrap
 				if (props['data-close-on-select']) {
 					this.setState({ closeOnSelect: true });
 				}
+
+				if (props['data-first-day-of-week']) {
+					var day = Number(props['data-first-day-of-week']);
+
+					this.setState({
+						firstDayOfWeek: day,
+						daysOfWeek: day === 0 ? ['S', 'M', 'T', 'W', 'T', 'F', 'S'] : ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+					});
+				}
 			}
 		}, {
 			key: '_onBlur',
@@ -828,6 +861,10 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.state.selectedDateRange = props.defaultRange;
 			}
 
+			if (props.org_zone) {
+				this.state.zone.org = props.org_zone;
+			}
+
 			this._updateState = this._updateState.bind(this);
 			this._onBlur = this._onBlur.bind(this);
 			this._onFocus = this._onFocus.bind(this);
@@ -841,11 +878,22 @@ return /******/ (function(modules) { // webpackBootstrap
 		_inherits(DatePickerRangeView, _React$Component);
 
 		_createClass(DatePickerRangeView, [{
+			key: "componentWillMount",
+			value: function componentWillMount() {
+				_store2["default"].addChangeListener(this._onChange.bind(this));
+			}
+		}, {
 			key: "componentDidMount",
 			value: function componentDidMount() {
 				this._onRangeChange();
 				this.setState({ ready: false });
 				return _utils2["default"].componentDidMount(this);
+			}
+		}, {
+			key: "_onChange",
+			value: function _onChange() {
+				debugger;
+				this.setState({ reload: true });
 			}
 		}, {
 			key: "_onRangeChange",
@@ -925,6 +973,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				if (props["data-submit-btn"]) {
 					this.setState({ hasSubmitBtn: true });
+				}
+
+				if (props["data-first-day-of-week"]) {
+					var day = Number(props["data-first-day-of-week"]);
+
+					this.setState({
+						firstDayOfWeek: day,
+						daysOfWeek: day === 0 ? ["S", "M", "T", "W", "T", "F", "S"] : ["M", "T", "W", "T", "F", "S", "S"]
+					});
 				}
 
 				this.setState({
@@ -1139,7 +1196,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					if (this.props.isFrom) {
 						this.setState({ selectedDate: moment(this.props.selectedDateRange.dates.from) });
 					} else {
-						this.setState({ selectedDate: moment(this.props.selectedDateRange.dates.to) });
+						this.setState({
+							selectedDate: moment(this.props.selectedDateRange.dates.to),
+							minDate: this.state.fromDate
+						});
 					}
 				}
 			}
@@ -1176,8 +1236,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					}
 				};
 
-				var waitForKeys = false,
-				    moveTo = this.state.selectedDate.toISOString();
+				var waitForKeys = false;
 
 				var keyUpHandler = function keyUpHandler(e) {
 
@@ -1186,7 +1245,6 @@ return /******/ (function(modules) { // webpackBootstrap
 					    direction = _this.state.powerKeys.direction,
 					    moveTo = _this.state.selectedDate.toISOString(),
 					    keys = _this.state.powerKeys.keys,
-					    key = keyMap.KEY,
 					    value = undefined;
 
 					if (waitForKeys) {
@@ -1378,6 +1436,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					moveToDate: newDate
 				});
 
+				if (this.state.range && this.state.isFrom) {
+					this.setState({ toDate: newDate });
+				}
+
 				if (this.state.closeOnSelect) {
 					this._onOkClick();
 				}
@@ -1474,12 +1536,12 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function _getDaysInMonth() {
 				var days = [];
 
-				for (var x = 0; x < this._getFirstDayOfMonth(); x++) {
+				for (var x = this.state.firstDayOfWeek; x < this._getFirstDayOfMonth(); x++) {
 					days.push('');
 				}
 
-				for (var x = 0; x < this.state.viewingMonth.daysInMonth(); x++) {
-					days.push(this.state.viewingMonth.startOf('month').add(x, 'days').format('DD'));
+				for (var y = 0; y < this.state.viewingMonth.daysInMonth(); y++) {
+					days.push(this.state.viewingMonth.startOf('month').add(y, 'days').format('DD'));
 				}
 
 				return _.chunk(days, 7);
@@ -1502,15 +1564,15 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '_getCellDateClass',
 			value: function _getCellDateClass(cell) {
-				if (cell && this.state.selectedDate.format('YYYY/MM/DD') == this._getCellDate(cell)) {
+				if (cell && this.state.selectedDate.format('YYYY/MM/DD') === this._getCellDate(cell)) {
 					return _DatePickerStyleCss2['default'].selected;
 				}
 
-				if (cell && this.state.moveToDate && this.state.moveToDate.format('YYYY/MM/DD') == this._getCellDate(cell)) {
+				if (cell && this.state.moveToDate && this.state.moveToDate.format('YYYY/MM/DD') === this._getCellDate(cell)) {
 					return _DatePickerStyleCss2['default']['move-to'];
 				}
 
-				if (cell && this.state.today.format('YYYY/MM/DD') == this._getCellDate(cell)) {
+				if (cell && this.state.today.format('YYYY/MM/DD') === this._getCellDate(cell)) {
 					return _DatePickerStyleCss2['default'].today;
 				}
 			}
@@ -1565,41 +1627,13 @@ return /******/ (function(modules) { // webpackBootstrap
 									React.createElement(
 										'tr',
 										null,
-										React.createElement(
-											'th',
-											null,
-											'S'
-										),
-										React.createElement(
-											'th',
-											null,
-											'M'
-										),
-										React.createElement(
-											'th',
-											null,
-											'T'
-										),
-										React.createElement(
-											'th',
-											null,
-											'W'
-										),
-										React.createElement(
-											'th',
-											null,
-											'T'
-										),
-										React.createElement(
-											'th',
-											null,
-											'F'
-										),
-										React.createElement(
-											'th',
-											null,
-											'S'
-										)
+										this.state.daysOfWeek.map(function (day, j) {
+											return React.createElement(
+												'th',
+												{ key: j },
+												day
+											);
+										})
 									)
 								),
 								React.createElement(
@@ -1650,7 +1684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 										{ className: _DatePickerStyleCss2['default'].btn, onClick: this._onBlur },
 										'Cancel'
 									),
-									React.createElement(
+									this.state.closeOnSelect ? null : React.createElement(
 										'button',
 										{ className: _DatePickerStyleCss2['default'].btn, onClick: this._onOkClick },
 										'OK'
@@ -1691,7 +1725,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(React.Component);
 
 	exports['default'] = CalendarView;
-	;
 	module.exports = exports['default'];
 
 /***/ },

@@ -15,6 +15,7 @@
         "_": true,
         "moment": true,
         "CustomEvent": true,
-        "document": true
+        "document": true,
+        "jstz": true
     }
 }

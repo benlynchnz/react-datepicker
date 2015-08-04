@@ -31,7 +31,10 @@
 			}
 		</style>
 
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
+
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.4.0/moment-timezone-with-data.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
 
@@ -39,7 +42,7 @@
 
 	<body>
 
-		<div class="component">
+		<!-- <div class="component">
 			<h1>Single Date</h1>
 			<react-datepicker
 				id="myDatePicker"
@@ -48,7 +51,7 @@
 				data-display-format="DD MMMM, YYYY"
 				data-min-date="2015-05-01T00:00:00.000Z">
 			</react-datepicker>
-		</div>
+		</div> -->
 
 		<div class="component">
 			<h1>Single Date with no defaults</h1>
@@ -66,8 +69,9 @@
 				data-range="true"
 				data-convenience-dates="Yesterday,Last 30 days,This week,Last week,This month,Last month,Custom"
 				data-close-on-select="true"
-				data-layout-vertical="true"
 				data-submit-btn="true"
+				data-first-day-of-week="0"
+				data-org-timezone="Pacific/Auckland"
 				data-default-range="Yesterday">
 			</div>
 		</div>
@@ -77,15 +81,21 @@
 		<script>
 			'use strict';
 
-			let datePicker = document.getElementById('myDatePicker');
+			// moment.tz.setDefault("Pacific/Auckland");
+
+			var tz = jstz.determine(); // Determines the time zone of the browser client
+
+			console.log(tz.name());
+
+			// let datePicker = document.getElementById('myDatePicker');
 
 			let datePickerHandler = function(e) {
 				console.log('ACTION:: ' + e.detail.action);
 				console.log('PAYLOAD:: ' + e.detail.payload);
 				var test = moment(JSON.parse(e.detail.payload).date).format('ddd DD MMM');
 			}
+			// datePicker.addEventListener('event', datePickerHandler);
 
-			datePicker.addEventListener('event', datePickerHandler);
 
 
 			let dateRangePicker = document.getElementById('myDateRangePicker');

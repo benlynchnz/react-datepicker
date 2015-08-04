@@ -6,8 +6,6 @@ import DateRangeView from "./components/views/DateRange.jsx";
 
 export default class DatePickerView extends React.Component {
 
-	displayName: "datepicker-view"
-
 	constructor(props) {
 		super(props);
 		this.state = { range: false };
@@ -15,9 +13,25 @@ export default class DatePickerView extends React.Component {
 	}
 
 	componentWillMount() {
+		let attributes = this.props.element.attributes;
+
+		Object.keys(attributes).forEach((key) => {
+			let namedNode;
+
+			if (key !== "length") {
+				namedNode = attributes[key];
+				if (namedNode.name === "data-org-timezone") {
+					this.setState({ org_zone: namedNode.value });
+					Store.setTimezone(namedNode.value);
+				}
+			}
+		});
+
 		_.delay(() => {
 			utils.dispatch(this, Constants.INIT, JSON.stringify({
-				utcOffset: moment().utcOffset()
+				utc_offset: moment().utcOffset(),
+				device_zone: jstz.determine().name(),
+				organization_zone: this.state.org_zone
 			}));
 		}, 0);
 	}

@@ -31,7 +31,10 @@ export default class CalendarView extends React.Component {
 			if (this.props.isFrom) {
 				this.setState({ selectedDate: moment(this.props.selectedDateRange.dates.from) });
 			} else {
-				this.setState({ selectedDate: moment(this.props.selectedDateRange.dates.to) });
+				this.setState({
+					selectedDate: moment(this.props.selectedDateRange.dates.to),
+					minDate: this.state.fromDate
+				});
 			}
 		}
 	}
@@ -62,10 +65,9 @@ export default class CalendarView extends React.Component {
 			} else {
 				input.focus();
 			}
-		}
+		};
 
-		let waitForKeys = false,
-			moveTo = this.state.selectedDate.toISOString();
+		let waitForKeys = false;
 
 		let keyUpHandler = (e) => {
 
@@ -74,7 +76,6 @@ export default class CalendarView extends React.Component {
 				direction = this.state.powerKeys.direction,
 				moveTo = this.state.selectedDate.toISOString(),
 				keys = this.state.powerKeys.keys,
-				key = keyMap.KEY,
 				value;
 
 			if (waitForKeys) {
@@ -192,7 +193,7 @@ export default class CalendarView extends React.Component {
 							style: { display: 'block' }
 						}
 					});
-				}
+				};
 
 				if (keyMap.ACTION_ADD || keyMap.ACTION_SUBTRACT) {
 					initPowerKeys(keyMap.ACTION_SUBTRACT);
@@ -218,7 +219,7 @@ export default class CalendarView extends React.Component {
 					return;
 				}
 			}
-		}
+		};
 
 		input.addEventListener('keydown', keyUpHandler);
 		document.addEventListener('click', clickHandler);
@@ -262,6 +263,10 @@ export default class CalendarView extends React.Component {
 			moveToDate: newDate
 		});
 
+		if (this.state.range && this.state.isFrom) {
+			this.setState({ toDate: newDate});
+		}
+
 		if (this.state.closeOnSelect) {
 			this._onOkClick();
 		}
@@ -277,9 +282,9 @@ export default class CalendarView extends React.Component {
 		}
 
 		if (moveBack) {
-			update = this.state.viewingMonth.subtract(1, 'month')
+			update = this.state.viewingMonth.subtract(1, 'month');
 		} else {
-			update = this.state.viewingMonth.add(1, 'month')
+			update = this.state.viewingMonth.add(1, 'month');
 		}
 
 		this.setState({ viewingMonth: update });
@@ -295,9 +300,9 @@ export default class CalendarView extends React.Component {
 		}
 
 		if (moveBack) {
-			update = this.state.viewingYear.subtract(1, 'year')
+			update = this.state.viewingYear.subtract(1, 'year');
 		} else {
-			update = this.state.viewingYear.add(1, 'year')
+			update = this.state.viewingYear.add(1, 'year');
 		}
 
 		this.setState({ viewingYear: update });
@@ -351,12 +356,12 @@ export default class CalendarView extends React.Component {
 	_getDaysInMonth() {
 		let days = [];
 
-		for (var x = 0; x < this._getFirstDayOfMonth(); x++) {
-		   days.push('');
+		for (var x = this.state.firstDayOfWeek; x < this._getFirstDayOfMonth(); x++) {
+			days.push('');
 		}
 
-		for (var x = 0; x < this.state.viewingMonth.daysInMonth(); x++) {
-			days.push(this.state.viewingMonth.startOf('month').add(x, 'days').format('DD'));
+		for (var y = 0; y < this.state.viewingMonth.daysInMonth(); y++) {
+			days.push(this.state.viewingMonth.startOf('month').add(y, 'days').format('DD'));
 		}
 
 		return _.chunk(days, 7);
@@ -375,15 +380,15 @@ export default class CalendarView extends React.Component {
 	}
 
 	_getCellDateClass(cell) {
-		if (cell && (this.state.selectedDate.format('YYYY/MM/DD') == this._getCellDate(cell))) {
+		if (cell && (this.state.selectedDate.format('YYYY/MM/DD') === this._getCellDate(cell))) {
 			return styles.selected;
 		}
 
-		if (cell && this.state.moveToDate && (this.state.moveToDate.format('YYYY/MM/DD') == this._getCellDate(cell))) {
+		if (cell && this.state.moveToDate && (this.state.moveToDate.format('YYYY/MM/DD') === this._getCellDate(cell))) {
 			return styles['move-to'];
 		}
 
-		if (cell && this.state.today.format('YYYY/MM/DD') == this._getCellDate(cell)) {
+		if (cell && this.state.today.format('YYYY/MM/DD') === this._getCellDate(cell)) {
 			return styles.today;
 		}
 	}
@@ -410,13 +415,11 @@ export default class CalendarView extends React.Component {
 						<table className={styles.table}>
 							<thead>
 								<tr>
-									<th>S</th>
-									<th>M</th>
-									<th>T</th>
-									<th>W</th>
-									<th>T</th>
-									<th>F</th>
-									<th>S</th>
+									{this.state.daysOfWeek.map((day, j) => {
+										return (
+											<th key={j}>{day}</th>
+										);
+									})}
 								</tr>
 							</thead>
 							<tbody>
@@ -450,7 +453,7 @@ export default class CalendarView extends React.Component {
 						<div className={styles.footer}>
 							<div className={styles.buttons}>
 								<button className={styles.btn} onClick={this._onBlur}>Cancel</button>
-								<button className={styles.btn} onClick={this._onOkClick}>OK</button>
+								{this.state.closeOnSelect ? null : (<button className={styles.btn} onClick={this._onOkClick}>OK</button>)}
 							</div>
 						</div>
 						<div className={styles['power-keys']} style={this.state.powerKeys.style}>
@@ -473,4 +476,4 @@ export default class CalendarView extends React.Component {
 		);
 	}
 
-};
+}

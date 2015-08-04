@@ -118,103 +118,13 @@ let keyMap = (e) => {
 
 utils.keyMap = keyMap;
 
-let END_OF_TODAY = moment().endOf("day");
-
-let last_x_days = (days) => {
-	return {
-		from: moment().subtract(days, "days").startOf("day"),
-		to: moment()
-	};
-};
-
-let yesterday = () => {
-    return {
-		from: moment().subtract(1, "days").startOf("day"),
-		to: moment().subtract(1, "days").add(1, "days").startOf("day")
-	};
-};
-
-let last_x_period = (amount, period) => {
-    const from = moment().subtract(amount, period).startOf(period);
-    const to = moment(from.toISOString()).add(amount, period).endOf(period);
-	return {
-		from: from,
-		to: to
-	};
-};
-
-let last_week = () => {
-    return {
-        from: moment().startOf('isoWeek').subtract(1, 'week'),
-        to: moment().startOf('isoWeek')
-    };
-};
-
-let convenienceDates = [
-	{
-		name: "Today",
-		dates: last_x_days(0)
-	},
-    {
-		name: "Yesterday",
-		dates: yesterday()
-	},
-    {
-		name: "Last 7 days",
-		dates: last_x_days(7)
-	},
-	{
-		name: "Last 30 days",
-		dates: last_x_days(30),
-		default: true
-	},
-	{
-		name: "This week",
-		dates: last_x_period(0, 'isoWeek')
-	},
-	{
-		name: "Last week",
-		dates: last_week()
-	},
-	{
-		name: "This month",
-		dates: last_x_period(0, 'month')
-	},
-	{
-		name: "Last month",
-		dates: last_x_period(1, 'month')
-	},
-	{
-		name: "This quarter",
-		dates: last_x_period(0, 'quarter')
-	},
-	{
-		name: "Last quarter",
-		dates: last_x_period(1, 'quarter')
-	},
-	{
-		name: "This year",
-		dates: last_x_period(0, 'year')
-	},
-	{
-		name: "Last year",
-		dates: last_x_period(1, 'year')
-	},
-	{
-		name: "Custom",
-		dates: last_x_days(0)
-	}
-];
-
-utils.convenienceDates = convenienceDates;
-
 let componentDidMount = (ctx) => {
     let rootNode = React.findDOMNode(ctx),
 		hasNextProps = false,
 		nextProps = {},
 		parentNode = rootNode.parentNode;
 
-	Object.keys(parentNode.attributes).forEach(function(key) {
+	Object.keys(parentNode.attributes).forEach((key) => {
 		let namedNode;
 
 		if (key !== "length") {

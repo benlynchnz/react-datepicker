@@ -17,6 +17,10 @@ export default class DatePickerRangeView extends React.Component {
 			this.state.selectedDateRange = props.defaultRange;
 		}
 
+		if (props.org_zone) {
+			this.state.zone.org = props.org_zone;
+		}
+
 		this._updateState = this._updateState.bind(this);
 		this._onBlur = this._onBlur.bind(this);
 		this._onFocus = this._onFocus.bind(this);
@@ -27,10 +31,19 @@ export default class DatePickerRangeView extends React.Component {
 		this._onSubmitBtnClick = this._onSubmitBtnClick.bind(this);
 	}
 
+	componentWillMount() {
+		Store.addChangeListener(this._onChange.bind(this));
+	}
+
 	componentDidMount() {
 		this._onRangeChange();
 		this.setState({ ready: false });
 		return utils.componentDidMount(this);
+	}
+
+	_onChange() {
+		debugger;
+		this.setState({ reload: true });
 	}
 
 	_onRangeChange() {
@@ -106,6 +119,15 @@ export default class DatePickerRangeView extends React.Component {
 
 		if (props["data-submit-btn"]) {
 			this.setState({ hasSubmitBtn: true });
+		}
+
+		if (props["data-first-day-of-week"]) {
+			let day = Number(props["data-first-day-of-week"]);
+
+			this.setState({
+				firstDayOfWeek: day,
+				daysOfWeek: day === 0 ? ["S","M","T","W","T","F","S"] : ["M","T","W","T","F","S","S"]
+			});
 		}
 
 		this.setState({
