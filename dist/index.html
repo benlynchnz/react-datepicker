@@ -35,6 +35,17 @@
 
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.4.0/moment-timezone-with-data.min.js"></script>
+
+		<script>
+			if (sessionStorage.getItem("timezone")) {
+				var tz = sessionStorage.getItem("timezone");
+				moment.tz.setDefault(tz);
+			} else {
+				sessionStorage.setItem("timezone", "Pacific/Auckland");
+			}
+		</script>
+
+
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
 
@@ -53,13 +64,13 @@
 			</react-datepicker>
 		</div> -->
 
-		<div class="component">
+		<!-- <div class="component">
 			<h1>Single Date with no defaults</h1>
 			<div
 				class="react-datepicker"
 				id="myDatePicker2">
 			</div>
-		</div>
+		</div> -->
 
 		<div class="component">
 			<h1>Date range</h1>
@@ -67,11 +78,10 @@
 				class="react-datepicker"
 				id="myDateRangePicker"
 				data-range="true"
-				data-convenience-dates="Yesterday,Last 30 days,This week,Last week,This month,Last month,Custom"
+				data-convenience-dates="Today,Yesterday,Last 30 days,This week,Last week,This month,Last month,Custom"
 				data-close-on-select="true"
 				data-submit-btn="true"
-				data-first-day-of-week="0"
-				data-org-timezone="Pacific/Auckland"
+				data-first-day-of-week="1"
 				data-default-range="Yesterday">
 			</div>
 		</div>
@@ -81,11 +91,9 @@
 		<script>
 			'use strict';
 
-			// moment.tz.setDefault("Pacific/Auckland");
+			// var tz = jstz.determine(); // Determines the time zone of the browser client
 
-			var tz = jstz.determine(); // Determines the time zone of the browser client
-
-			console.log(tz.name());
+			// console.log(tz.name());
 
 			// let datePicker = document.getElementById('myDatePicker');
 

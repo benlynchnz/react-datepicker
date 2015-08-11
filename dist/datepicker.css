@@ -263,6 +263,31 @@
 	float: left;
 	margin-right: 15px;
 	margin-bottom: 5px;
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.DatePickerStyle__date-range-list-item-btn___2Oyag {
+	padding: 12px;
+	border: 1px solid #ddd;
+	cursor: pointer;
+}
+
+.DatePickerStyle__date-range-list-item-btn___2Oyag i {
+	color: rgba(0,0,0,0.56);
+}
+
+.DatePickerStyle__date-range-list-item-btn___2Oyag:hover {
+	background-color: #fff;
+	border-color: #ccc;
+}
+
+.DatePickerStyle__date-range-list-item-btn___2Oyag:hover i {
+	color: rgba(0,0,0,0.87);
 }
 
 .DatePickerStyle__date-range-layout-vertical___8jcq1 {

@@ -1,9 +1,16 @@
 import {EventEmitter} from "events";
 
+let today = () => {
+	return {
+		from: moment().startOf("day"),
+		to: moment().add(1, "day").startOf("day")
+	};
+};
+
 let last_x_days = (days) => {
 	return {
 		from: moment().subtract(days, "days").startOf("day"),
-		to: moment()
+		to: moment().subtract(days, "days").startOf("day").add(days, "days")
 	};
 };
 
@@ -16,7 +23,7 @@ let yesterday = () => {
 
 let last_x_period = (amount, period) => {
     const from = moment().subtract(amount, period).startOf(period);
-    const to = moment(from.toISOString()).endOf(period);
+    const to = moment(from.toISOString()).endOf(period).add(1, "ms");
 	return {
 		from: from,
 		to: to
@@ -31,65 +38,79 @@ let last_week = () => {
 };
 
 let this_week = () => {
+	const from = moment().startOf("isoWeek");
     return {
-        from: moment().startOf('isoWeek'),
-        to: moment().add(6, "days").startOf("day")
+        from: from,
+        to: moment(from.toISOString()).add(7, "days").startOf("day")
     };
 };
 
 let convenienceDates = [
 	{
 		name: "Today",
-		dates: last_x_days(0)
+		period: "days",
+		dates: today()
 	},
     {
 		name: "Yesterday",
+		period: "days",
 		dates: yesterday()
 	},
     {
 		name: "Last 7 days",
+		period: "days",
 		dates: last_x_days(7)
 	},
 	{
 		name: "Last 30 days",
+		period: "days",
 		dates: last_x_days(30),
 		default: true
 	},
 	{
 		name: "This week",
-		dates: this_week()//last_x_period(0, 'isoWeek')
+		period: "weeks",
+		dates: this_week()
 	},
 	{
 		name: "Last week",
+		period: "weeks",
 		dates: last_week()
 	},
 	{
 		name: "This month",
+		period: "months",
 		dates: last_x_period(0, 'month')
 	},
 	{
 		name: "Last month",
+		period: "months",
 		dates: last_x_period(1, 'month')
 	},
 	{
 		name: "This quarter",
+		period: "quarter",
 		dates: last_x_period(0, 'quarter')
 	},
 	{
 		name: "Last quarter",
+		period: "quarter",
 		dates: last_x_period(1, 'quarter')
 	},
 	{
 		name: "This year",
+		period: "years",
 		dates: last_x_period(0, 'year')
 	},
 	{
 		name: "Last year",
+		period: "years",
 		dates: last_x_period(1, 'year')
 	},
 	{
 		name: "Custom",
-		dates: last_x_days(0)
+		period: "days",
+		dates: today()
 	}
 ];
 
@@ -139,8 +160,32 @@ class Store extends EventEmitter {
 		return convenienceDates;
 	}
 
-	setTimezone(zone) {
-		moment.tz.setDefault(zone);
+	buildOutput(range) {
+		let from = moment(range.dates.from),
+			to = moment(range.dates.to);
+
+		let payload = {
+			dates: {
+				from: from.toISOString(),
+				to: to.toISOString()
+			},
+			name: range.name,
+			period: range.period,
+			diff_in_days: to.diff(from, "days")
+		};
+
+		return JSON.stringify(payload);
+	}
+
+	getDifference(range) {
+		let from = moment(range.dates.from),
+			to = moment(range.dates.to);
+
+		return to.diff(from, range.period);
+	}
+
+	getTimezone() {
+		return _state.zone.org;
 	}
 
 	emitChange() {

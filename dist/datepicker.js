@@ -163,33 +163,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		_inherits(DatePickerView, _React$Component);
 
 		_createClass(DatePickerView, [{
-			key: "componentWillMount",
-			value: function componentWillMount() {
-				var _this = this;
-
-				var attributes = this.props.element.attributes;
-
-				Object.keys(attributes).forEach(function (key) {
-					var namedNode = undefined;
-
-					if (key !== "length") {
-						namedNode = attributes[key];
-						if (namedNode.name === "data-org-timezone") {
-							_this.setState({ org_zone: namedNode.value });
-							_componentsStore2["default"].setTimezone(namedNode.value);
-						}
-					}
-				});
-
-				_.delay(function () {
-					_componentsUtils2["default"].dispatch(_this, _componentsConstants2["default"].INIT, JSON.stringify({
-						utc_offset: moment().utcOffset(),
-						device_zone: jstz.determine().name(),
-						organization_zone: _this.state.org_zone
-					}));
-				}, 0);
-			}
-		}, {
 			key: "componentDidMount",
 			value: function componentDidMount() {
 				return _componentsUtils2["default"].componentDidMount(this);
@@ -197,7 +170,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "_updateState",
 			value: function _updateState(props) {
-				var _this2 = this;
+				var _this = this;
 
 				if (props["data-range"] === "true") {
 					this.setState({ range: true });
@@ -208,12 +181,12 @@ return /******/ (function(modules) { // webpackBootstrap
 						var range = props["data-default-range"],
 						    rangeValues = _.findWhere(_componentsStore2["default"].getConvenienceDates(), { name: range });
 
-						_this2.setState({
+						_this.setState({
 							defaultRange: rangeValues
 						});
 
 						_.delay(function () {
-							_componentsUtils2["default"].dispatch(_this2, _componentsConstants2["default"].DATE_RANGE_DEFAULT, JSON.stringify(rangeValues));
+							_componentsUtils2["default"].dispatch(_this, _componentsConstants2["default"].DATE_RANGE_DEFAULT, _componentsStore2["default"].buildOutput(rangeValues));
 						}, 0);
 					})();
 				}
@@ -253,10 +226,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events = __webpack_require__(9);
 
+	var today = function today() {
+		return {
+			from: moment().startOf("day"),
+			to: moment().add(1, "day").startOf("day")
+		};
+	};
+
 	var last_x_days = function last_x_days(days) {
 		return {
 			from: moment().subtract(days, "days").startOf("day"),
-			to: moment()
+			to: moment().subtract(days, "days").startOf("day").add(days, "days")
 		};
 	};
 
@@ -269,7 +249,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var last_x_period = function last_x_period(amount, period) {
 		var from = moment().subtract(amount, period).startOf(period);
-		var to = moment(from.toISOString()).endOf(period);
+		var to = moment(from.toISOString()).endOf(period).add(1, "ms");
 		return {
 			from: from,
 			to: to
@@ -284,52 +264,66 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var this_week = function this_week() {
+		var from = moment().startOf("isoWeek");
 		return {
-			from: moment().startOf("isoWeek"),
-			to: moment().add(6, "days").startOf("day")
+			from: from,
+			to: moment(from.toISOString()).add(7, "days").startOf("day")
 		};
 	};
 
 	var convenienceDates = [{
 		name: "Today",
-		dates: last_x_days(0)
+		period: "days",
+		dates: today()
 	}, {
 		name: "Yesterday",
+		period: "days",
 		dates: yesterday()
 	}, {
 		name: "Last 7 days",
+		period: "days",
 		dates: last_x_days(7)
 	}, {
 		name: "Last 30 days",
+		period: "days",
 		dates: last_x_days(30),
 		"default": true
 	}, {
 		name: "This week",
-		dates: this_week() //last_x_period(0, 'isoWeek')
+		period: "weeks",
+		dates: this_week()
 	}, {
 		name: "Last week",
+		period: "weeks",
 		dates: last_week()
 	}, {
 		name: "This month",
+		period: "months",
 		dates: last_x_period(0, "month")
 	}, {
 		name: "Last month",
+		period: "months",
 		dates: last_x_period(1, "month")
 	}, {
 		name: "This quarter",
+		period: "quarter",
 		dates: last_x_period(0, "quarter")
 	}, {
 		name: "Last quarter",
+		period: "quarter",
 		dates: last_x_period(1, "quarter")
 	}, {
 		name: "This year",
+		period: "years",
 		dates: last_x_period(0, "year")
 	}, {
 		name: "Last year",
+		period: "years",
 		dates: last_x_period(1, "year")
 	}, {
 		name: "Custom",
-		dates: last_x_days(0)
+		period: "days",
+		dates: today()
 	}];
 
 	var _state = {
@@ -390,9 +384,35 @@ return /******/ (function(modules) { // webpackBootstrap
 				return convenienceDates;
 			}
 		}, {
-			key: "setTimezone",
-			value: function setTimezone(zone) {
-				moment.tz.setDefault(zone);
+			key: "buildOutput",
+			value: function buildOutput(range) {
+				var from = moment(range.dates.from),
+				    to = moment(range.dates.to);
+
+				var payload = {
+					dates: {
+						from: from.toISOString(),
+						to: to.toISOString()
+					},
+					name: range.name,
+					period: range.period,
+					diff_in_days: to.diff(from, "days")
+				};
+
+				return JSON.stringify(payload);
+			}
+		}, {
+			key: "getDifference",
+			value: function getDifference(range) {
+				var from = moment(range.dates.from),
+				    to = moment(range.dates.to);
+
+				return to.diff(from, range.period);
+			}
+		}, {
+			key: "getTimezone",
+			value: function getTimezone() {
+				return _state.zone.org;
 			}
 		}, {
 			key: "emitChange",
@@ -437,7 +457,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		DATE_RANGE_DEFAULT: "DATE_RANGE_DEFAULT",
 		CALENDAR_HIDE: "CALENDAR_HIDE",
 		SUBMIT_CLICK: "SUBMIT_CLICK",
-		INIT: "INIT"
+		INIT: "INIT",
+		ARROW_CLICK: "ARROW_CLICK"
 	};
 
 	exports["default"] = constants;
@@ -873,6 +894,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			this._onDateChange = this._onDateChange.bind(this);
 			this._onRangeChange = this._onRangeChange.bind(this);
 			this._onSubmitBtnClick = this._onSubmitBtnClick.bind(this);
+			this._onArrowClick = this._onArrowClick.bind(this);
 		}
 
 		_inherits(DatePickerRangeView, _React$Component);
@@ -892,7 +914,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "_onChange",
 			value: function _onChange() {
-				debugger;
 				this.setState({ reload: true });
 			}
 		}, {
@@ -1007,8 +1028,6 @@ return /******/ (function(modules) { // webpackBootstrap
 					range: true,
 					show: true
 				});
-
-				_utils2["default"].dispatch(this, _constants2["default"].FOCUS);
 			}
 		}, {
 			key: "_onUpdate",
@@ -1033,7 +1052,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 
 				this.setState({ selectedDateRange: customRange });
-				_utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, JSON.stringify(customRange));
+				_utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, _store2["default"].buildOutput(customRange));
 			}
 		}, {
 			key: "_onOk",
@@ -1048,7 +1067,37 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "_onSubmitBtnClick",
 			value: function _onSubmitBtnClick() {
-				_utils2["default"].dispatch(this, _constants2["default"].SUBMIT_CLICK, JSON.stringify(this.state.selectedDateRange));
+				_utils2["default"].dispatch(this, _constants2["default"].SUBMIT_CLICK, _store2["default"].buildOutput(this.state.selectedDateRange));
+			}
+		}, {
+			key: "_onArrowClick",
+			value: function _onArrowClick(e) {
+				var direction = e.currentTarget.getAttribute("data-direction"),
+				    diff = 1,
+				    period = this.state.selectedDateRange.period,
+				    from = moment(this.state.selectedDateRange.dates.from).toISOString(),
+				    to = moment(this.state.selectedDateRange.dates.to).toISOString();
+
+				if (direction === "forward") {
+					diff = diff * -1;
+				}
+
+				var newRange = {
+					name: "Custom",
+					period: period,
+					dates: {
+						from: moment(from).subtract(diff, period),
+						to: moment(to).subtract(diff, period)
+					}
+				};
+
+				this.setState({
+					fromDate: moment(from).subtract(diff, period),
+					toDate: moment(to).subtract(diff, period),
+					selectedDateRange: newRange
+				});
+
+				_utils2["default"].dispatch(this, _constants2["default"].ARROW_CLICK, _store2["default"].buildOutput(newRange));
 			}
 		}, {
 			key: "render",
@@ -1068,6 +1117,18 @@ return /******/ (function(modules) { // webpackBootstrap
 				} else {
 					options = ranges;
 				}
+
+				var btnLayoutStyle = function btnLayoutStyle() {
+					var classes = _DatePickerStyleCss2["default"]["date-range-list-item"];
+
+					classes += " " + _DatePickerStyleCss2["default"]["date-range-list-item-btn"];
+
+					if (_this2.state.layoutVertical) {
+						classes += " " + _DatePickerStyleCss2["default"]["date-range-layout-vertical"];
+					}
+
+					return classes;
+				};
 
 				var layoutStyle = function layoutStyle() {
 					var classes = _DatePickerStyleCss2["default"]["date-range-list-item"];
@@ -1104,12 +1165,30 @@ return /******/ (function(modules) { // webpackBootstrap
 							React.createElement(
 								"li",
 								{ className: layoutStyle() },
-								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-from", "data-range": "from", value: moment(this.state.selectedDateRange.dates.from).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus })
+								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-from", "data-range": "from", value: moment(this.state.selectedDateRange.dates.from).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus, readOnly: true })
 							),
 							React.createElement(
 								"li",
 								{ className: layoutStyle() },
-								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-to", "data-range": "to", value: moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus })
+								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-to", "data-range": "to", value: moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus, readOnly: true })
+							),
+							React.createElement(
+								"li",
+								{ className: btnLayoutStyle(), "data-direction": "back", onClick: this._onArrowClick },
+								React.createElement(
+									"i",
+									{ className: "material-icons" },
+									"keyboard_arrow_left"
+								)
+							),
+							React.createElement(
+								"li",
+								{ className: btnLayoutStyle(), "data-direction": "forward", onClick: this._onArrowClick },
+								React.createElement(
+									"i",
+									{ className: "material-icons" },
+									"keyboard_arrow_right"
+								)
 							),
 							this.state.hasSubmitBtn ? React.createElement(
 								"li",
@@ -1751,6 +1830,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _constants2 = _interopRequireDefault(_constants);
 
+	var _store = __webpack_require__(2);
+
+	var _store2 = _interopRequireDefault(_store);
+
 	var _utils = __webpack_require__(4);
 
 	var _utils2 = _interopRequireDefault(_utils);
@@ -1810,7 +1893,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var range = e.target.getAttribute("data-name"),
 	                selected = _.findWhere(this.props.ranges, { name: range });
 
-	            _utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, JSON.stringify(selected));
+	            _utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, _store2["default"].buildOutput(selected));
 
 	            this._onBlur();
 	        }
@@ -2196,7 +2279,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	// removed by extract-text-webpack-plugin
-	module.exports = {"overlay":"DatePickerStyle__overlay___2LzVe","modal":"DatePickerStyle__modal___1ErLw","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","wrapper":"DatePickerStyle__wrapper___3Emxc","input":"DatePickerStyle__input___3oQ6t","hidden-input":"DatePickerStyle__hidden-input___2-B40","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","move-to":"DatePickerStyle__move-to___jDGLn","today":"DatePickerStyle__today___C9UIO","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl","power-keys":"DatePickerStyle__power-keys___10dk6","power-keys-item":"DatePickerStyle__power-keys-item___1frz9","date-range-list":"DatePickerStyle__date-range-list___2c-Cd","date-range-list-item":"DatePickerStyle__date-range-list-item___3FlfZ","date-range-layout-vertical":"DatePickerStyle__date-range-layout-vertical___8jcq1","date-range-wrapper":"DatePickerStyle__date-range-wrapper___2_ZpW","date-range-wrapper-icon-calendar":"DatePickerStyle__date-range-wrapper-icon-calendar___Fkaq2","date-range-wrapper-text":"DatePickerStyle__date-range-wrapper-text___2IM2g","date-range-wrapper-icon-caret":"DatePickerStyle__date-range-wrapper-icon-caret___3Hosk","date-range-slim":"DatePickerStyle__date-range-slim___2lYZl","submit-btn":"DatePickerStyle__submit-btn___1oWxa","menu-items":"DatePickerStyle__menu-items___3VrmY","date-ranges":"DatePickerStyle__date-ranges___1gSZQ"};
+	module.exports = {"overlay":"DatePickerStyle__overlay___2LzVe","modal":"DatePickerStyle__modal___1ErLw","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","wrapper":"DatePickerStyle__wrapper___3Emxc","input":"DatePickerStyle__input___3oQ6t","hidden-input":"DatePickerStyle__hidden-input___2-B40","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","move-to":"DatePickerStyle__move-to___jDGLn","today":"DatePickerStyle__today___C9UIO","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl","power-keys":"DatePickerStyle__power-keys___10dk6","power-keys-item":"DatePickerStyle__power-keys-item___1frz9","date-range-list":"DatePickerStyle__date-range-list___2c-Cd","date-range-list-item":"DatePickerStyle__date-range-list-item___3FlfZ","date-range-list-item-btn":"DatePickerStyle__date-range-list-item-btn___2Oyag","date-range-layout-vertical":"DatePickerStyle__date-range-layout-vertical___8jcq1","date-range-wrapper":"DatePickerStyle__date-range-wrapper___2_ZpW","date-range-wrapper-icon-calendar":"DatePickerStyle__date-range-wrapper-icon-calendar___Fkaq2","date-range-wrapper-text":"DatePickerStyle__date-range-wrapper-text___2IM2g","date-range-wrapper-icon-caret":"DatePickerStyle__date-range-wrapper-icon-caret___3Hosk","date-range-slim":"DatePickerStyle__date-range-slim___2lYZl","submit-btn":"DatePickerStyle__submit-btn___1oWxa","menu-items":"DatePickerStyle__menu-items___3VrmY","date-ranges":"DatePickerStyle__date-ranges___1gSZQ"};
 
 /***/ }
 /******/ ])

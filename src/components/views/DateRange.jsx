@@ -7,8 +7,6 @@ import styles from "../../DatePickerStyle.css";
 
 export default class DatePickerRangeView extends React.Component {
 
-	displayName: "datepicker-range"
-
 	constructor(props) {
 		super(props);
 		this.state = Store.getState();
@@ -29,6 +27,7 @@ export default class DatePickerRangeView extends React.Component {
 		this._onDateChange = this._onDateChange.bind(this);
 		this._onRangeChange = this._onRangeChange.bind(this);
 		this._onSubmitBtnClick = this._onSubmitBtnClick.bind(this);
+		this._onArrowClick = this._onArrowClick.bind(this);
 	}
 
 	componentWillMount() {
@@ -42,7 +41,6 @@ export default class DatePickerRangeView extends React.Component {
 	}
 
 	_onChange() {
-		debugger;
 		this.setState({ reload: true });
 	}
 
@@ -151,8 +149,6 @@ export default class DatePickerRangeView extends React.Component {
 			range: true,
 			show: true
 		});
-
-		utils.dispatch(this, Constants.FOCUS);
 	}
 
 	_onUpdate(date) {
@@ -176,7 +172,7 @@ export default class DatePickerRangeView extends React.Component {
 		}
 
 		this.setState({ selectedDateRange: customRange });
-		utils.dispatch(this, Constants.DATE_RANGE_CHANGE, JSON.stringify(customRange));
+		utils.dispatch(this, Constants.DATE_RANGE_CHANGE, Store.buildOutput(customRange));
 	}
 
 	_onOk() {
@@ -188,7 +184,36 @@ export default class DatePickerRangeView extends React.Component {
 	}
 
 	_onSubmitBtnClick() {
-		utils.dispatch(this, Constants.SUBMIT_CLICK, JSON.stringify(this.state.selectedDateRange));
+		utils.dispatch(this, Constants.SUBMIT_CLICK, Store.buildOutput(this.state.selectedDateRange));
+	}
+
+	_onArrowClick(e) {
+		let direction = e.currentTarget.getAttribute("data-direction"),
+ 			diff = 1,
+			period = this.state.selectedDateRange.period,
+			from = moment(this.state.selectedDateRange.dates.from).toISOString(),
+			to = moment(this.state.selectedDateRange.dates.to).toISOString();
+
+		if (direction === "forward") {
+			diff = diff * -1;
+		}
+
+		let newRange = {
+			name: "Custom",
+			period: period,
+			dates: {
+				from: moment(from).subtract(diff, period),
+				to: moment(to).subtract(diff, period)
+			}
+		};
+
+		this.setState({
+			fromDate: moment(from).subtract(diff, period),
+			toDate: moment(to).subtract(diff, period),
+			selectedDateRange: newRange
+		});
+
+		utils.dispatch(this, Constants.ARROW_CLICK, Store.buildOutput(newRange));
 	}
 
 	render() {
@@ -205,6 +230,18 @@ export default class DatePickerRangeView extends React.Component {
 		} else {
 			options = ranges;
 		}
+
+		let btnLayoutStyle = () => {
+			let classes = styles["date-range-list-item"];
+
+			classes += " " + styles["date-range-list-item-btn"];
+
+			if (this.state.layoutVertical) {
+				classes += " " + styles["date-range-layout-vertical"];
+			}
+
+			return classes;
+		};
 
 		let layoutStyle = () => {
 			let classes = styles["date-range-list-item"];
@@ -234,11 +271,19 @@ export default class DatePickerRangeView extends React.Component {
 							<MenuItems element={this.props.element} ranges={options} selected={this.state.selectedDateRange} />
 						</li>
 						<li className={layoutStyle()}>
-							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-from" data-range="from" value={moment(this.state.selectedDateRange.dates.from).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} />
+							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-from" data-range="from" value={moment(this.state.selectedDateRange.dates.from).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
 						</li>
 						<li className={layoutStyle()}>
-							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-to" data-range="to" value={moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} />
+							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-to" data-range="to" value={moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
 						</li>
+
+						<li className={btnLayoutStyle()} data-direction="back" onClick={this._onArrowClick}>
+							<i className="material-icons">keyboard_arrow_left</i>
+						</li>
+						<li className={btnLayoutStyle()} data-direction="forward" onClick={this._onArrowClick}>
+							<i className="material-icons">keyboard_arrow_right</i>
+						</li>
+
 						{this.state.hasSubmitBtn ? (
 							<li className={layoutStyle()}>
 								<button className={styles["submit-btn"]} onClick={this._onSubmitBtnClick}>Submit</button>

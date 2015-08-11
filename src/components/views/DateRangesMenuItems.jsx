@@ -1,4 +1,5 @@
 import Constants from "../constants";
+import Store from "../store";
 import utils from "../utils";
 import styles from "../../DatePickerStyle.css";
 
@@ -45,7 +46,7 @@ export default class DateRangeMenu extends React.Component {
         let range = e.target.getAttribute("data-name"),
             selected = _.findWhere(this.props.ranges, { name: range });
 
-		utils.dispatch(this, Constants.DATE_RANGE_CHANGE, JSON.stringify(selected));
+		utils.dispatch(this, Constants.DATE_RANGE_CHANGE, Store.buildOutput(selected));
 
         this._onBlur();
     }

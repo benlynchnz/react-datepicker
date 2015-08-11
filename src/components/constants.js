@@ -7,7 +7,8 @@ const constants = {
 	DATE_RANGE_DEFAULT: "DATE_RANGE_DEFAULT",
 	CALENDAR_HIDE: "CALENDAR_HIDE",
 	SUBMIT_CLICK: "SUBMIT_CLICK",
-	INIT: "INIT"
+	INIT: "INIT",
+	ARROW_CLICK: "ARROW_CLICK"
 };
 
 export default constants;

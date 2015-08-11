@@ -12,30 +12,6 @@ export default class DatePickerView extends React.Component {
 		this._updateState = this._updateState.bind(this);
 	}
 
-	componentWillMount() {
-		let attributes = this.props.element.attributes;
-
-		Object.keys(attributes).forEach((key) => {
-			let namedNode;
-
-			if (key !== "length") {
-				namedNode = attributes[key];
-				if (namedNode.name === "data-org-timezone") {
-					this.setState({ org_zone: namedNode.value });
-					Store.setTimezone(namedNode.value);
-				}
-			}
-		});
-
-		_.delay(() => {
-			utils.dispatch(this, Constants.INIT, JSON.stringify({
-				utc_offset: moment().utcOffset(),
-				device_zone: jstz.determine().name(),
-				organization_zone: this.state.org_zone
-			}));
-		}, 0);
-	}
-
 	componentDidMount() {
 		return utils.componentDidMount(this);
 	}
@@ -54,7 +30,7 @@ export default class DatePickerView extends React.Component {
 			});
 
 			_.delay(() => {
-				utils.dispatch(this, Constants.DATE_RANGE_DEFAULT, JSON.stringify(rangeValues));
+				utils.dispatch(this, Constants.DATE_RANGE_DEFAULT, Store.buildOutput(rangeValues));
 			}, 0);
 		}
 	}
