@@ -131,11 +131,9 @@ let _state = {
 	closeOnSelect: false,
 	daysOfWeek: ["M", "T", "W", "T", "F", "S", "S"],
 	firstDayOfWeek: 1,
+	moveDates: false,
+	showRanges: true,
 	show: false,
-	zone: {
-		org: null,
-		device: jstz.determine().name()
-	},
 	powerKeys: {
 		active: false,
 		direction: null,

@@ -343,11 +343,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		closeOnSelect: false,
 		daysOfWeek: ["M", "T", "W", "T", "F", "S", "S"],
 		firstDayOfWeek: 1,
+		moveDates: false,
+		showRanges: true,
 		show: false,
-		zone: {
-			org: null,
-			device: jstz.determine().name()
-		},
 		powerKeys: {
 			active: false,
 			direction: null,
@@ -996,6 +994,14 @@ return /******/ (function(modules) { // webpackBootstrap
 					this.setState({ hasSubmitBtn: true });
 				}
 
+				if (props["data-move-dates"]) {
+					this.setState({ moveDates: true });
+				}
+
+				if (props["data-hide-ranges"]) {
+					this.setState({ showRanges: false });
+				}
+
 				if (props["data-first-day-of-week"]) {
 					var day = Number(props["data-first-day-of-week"]);
 
@@ -1157,11 +1163,11 @@ return /******/ (function(modules) { // webpackBootstrap
 						React.createElement(
 							"ul",
 							null,
-							React.createElement(
+							this.state.showRanges ? React.createElement(
 								"li",
 								{ className: layoutStyle() },
 								React.createElement(_DateRangesMenuItemsJsx2["default"], { element: this.props.element, ranges: options, selected: this.state.selectedDateRange })
-							),
+							) : null,
 							React.createElement(
 								"li",
 								{ className: layoutStyle() },
@@ -1172,24 +1178,28 @@ return /******/ (function(modules) { // webpackBootstrap
 								{ className: layoutStyle() },
 								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-to", "data-range": "to", value: moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus, readOnly: true })
 							),
-							React.createElement(
-								"li",
-								{ className: btnLayoutStyle(), "data-direction": "back", onClick: this._onArrowClick },
+							this.state.moveDates ? React.createElement(
+								"div",
+								null,
 								React.createElement(
-									"i",
-									{ className: "material-icons" },
-									"keyboard_arrow_left"
-								)
-							),
-							React.createElement(
-								"li",
-								{ className: btnLayoutStyle(), "data-direction": "forward", onClick: this._onArrowClick },
+									"li",
+									{ className: btnLayoutStyle(), "data-direction": "back", onClick: this._onArrowClick },
+									React.createElement(
+										"i",
+										{ className: "material-icons" },
+										"keyboard_arrow_left"
+									)
+								),
 								React.createElement(
-									"i",
-									{ className: "material-icons" },
-									"keyboard_arrow_right"
+									"li",
+									{ className: btnLayoutStyle(), "data-direction": "forward", onClick: this._onArrowClick },
+									React.createElement(
+										"i",
+										{ className: "material-icons" },
+										"keyboard_arrow_right"
+									)
 								)
-							),
+							) : null,
 							this.state.hasSubmitBtn ? React.createElement(
 								"li",
 								{ className: layoutStyle() },
@@ -1915,15 +1925,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    React.createElement(
 	                        "div",
 	                        { className: _DatePickerStyleCss2["default"]["date-range-wrapper"], onClick: this._onClick },
-	                        React.createElement(
-	                            "div",
-	                            { className: _DatePickerStyleCss2["default"]["date-range-wrapper-icon-calendar"] },
-	                            React.createElement(
-	                                "i",
-	                                { className: "material-icons" },
-	                                "today"
-	                            )
-	                        ),
 	                        React.createElement(
 	                            "div",
 	                            { className: _DatePickerStyleCss2["default"]["date-range-wrapper-text"] },

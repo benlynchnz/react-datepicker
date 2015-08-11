@@ -170,7 +170,7 @@
 	vertical-align: top;
 	color: #ddd;
 	width: auto;
-	font-size: 15px;
+	font-size: 14px;
 }
 
 .table tr > td a {
@@ -276,17 +276,18 @@
 }
 
 .date-range-list-item-btn {
-	padding: 12px;
+	height: 48px;
 	border: 1px solid #ddd;
 	cursor: pointer;
+	background-color: #fff;
 }
 
 .date-range-list-item-btn i {
 	color: rgba(0,0,0,0.56);
+	padding: 12px 10px;
 }
 
 .date-range-list-item-btn:hover {
-	background-color: #fff;
 	border-color: #ccc;
 }
 
@@ -317,10 +318,10 @@
 	background-color: #fff;
 	max-width: 250px;
 	min-width: 200px;
-	line-height: 50px;
+	line-height: 48px;
 	text-overflow: ellipsis;
 	overflow: hidden;
-	padding-left: 15px;
+	padding-left: 17px;
 	padding-right: 15px;
 	color: rgba(0,0,0,0.87);
 	font-size: 13px;
@@ -363,7 +364,18 @@
 
 .date-range-slim .input {
 	line-height: 30px !important;
+	height: 30px;
 	width: 200px;
+}
+
+.date-range-slim .date-range-list-item-btn {
+	height: 30px;
+	float: left !important;
+	margin-right: 5px;
+}
+
+.date-range-slim .date-range-list-item-btn i {
+	padding: 3px 5px;
 }
 
 .date-range-wrapper:hover {
@@ -371,7 +383,7 @@
 }
 
 .submit-btn {
-	background-color: #2E88C5;
+	background-color: #3498DB;
 	height: 48px;
 	line-height: 48px;
 	color: #fff;
@@ -384,11 +396,12 @@
 }
 
 .submit-btn:hover {
-	background-color: #3498DB;
+	background-color: #2E88C5;
 }
 
 .date-range-slim .submit-btn {
-	height: 30px;
+	height: 31px;
+	width: 117px;
 	line-height: 30px;
 }
 

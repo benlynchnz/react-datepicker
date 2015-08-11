@@ -166,7 +166,7 @@
 	vertical-align: top;
 	color: #ddd;
 	width: auto;
-	font-size: 15px;
+	font-size: 14px;
 }
 
 .DatePickerStyle__table___4qAHf tr > td a {
@@ -272,17 +272,18 @@
 }
 
 .DatePickerStyle__date-range-list-item-btn___2Oyag {
-	padding: 12px;
+	height: 48px;
 	border: 1px solid #ddd;
 	cursor: pointer;
+	background-color: #fff;
 }
 
 .DatePickerStyle__date-range-list-item-btn___2Oyag i {
 	color: rgba(0,0,0,0.56);
+	padding: 12px 10px;
 }
 
 .DatePickerStyle__date-range-list-item-btn___2Oyag:hover {
-	background-color: #fff;
 	border-color: #ccc;
 }
 
@@ -313,10 +314,10 @@
 	background-color: #fff;
 	max-width: 250px;
 	min-width: 200px;
-	line-height: 50px;
+	line-height: 48px;
 	text-overflow: ellipsis;
 	overflow: hidden;
-	padding-left: 15px;
+	padding-left: 17px;
 	padding-right: 15px;
 	color: rgba(0,0,0,0.87);
 	font-size: 13px;
@@ -359,7 +360,18 @@
 
 .DatePickerStyle__date-range-slim___2lYZl .DatePickerStyle__input___3oQ6t {
 	line-height: 30px !important;
+	height: 30px;
 	width: 200px;
+}
+
+.DatePickerStyle__date-range-slim___2lYZl .DatePickerStyle__date-range-list-item-btn___2Oyag {
+	height: 30px;
+	float: left !important;
+	margin-right: 5px;
+}
+
+.DatePickerStyle__date-range-slim___2lYZl .DatePickerStyle__date-range-list-item-btn___2Oyag i {
+	padding: 3px 5px;
 }
 
 .DatePickerStyle__date-range-wrapper___2_ZpW:hover {
@@ -367,7 +379,7 @@
 }
 
 .DatePickerStyle__submit-btn___1oWxa {
-	background-color: #2E88C5;
+	background-color: #3498DB;
 	height: 48px;
 	line-height: 48px;
 	color: #fff;
@@ -380,11 +392,12 @@
 }
 
 .DatePickerStyle__submit-btn___1oWxa:hover {
-	background-color: #3498DB;
+	background-color: #2E88C5;
 }
 
 .DatePickerStyle__date-range-slim___2lYZl .DatePickerStyle__submit-btn___1oWxa {
-	height: 30px;
+	height: 31px;
+	width: 117px;
 	line-height: 30px;
 }
 

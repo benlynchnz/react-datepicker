@@ -119,12 +119,20 @@ export default class DatePickerRangeView extends React.Component {
 			this.setState({ hasSubmitBtn: true });
 		}
 
+		if (props["data-move-dates"]) {
+			this.setState({ moveDates: true });
+		}
+
+		if (props["data-hide-ranges"]) {
+			this.setState({ showRanges: false });
+		}
+
 		if (props["data-first-day-of-week"]) {
 			let day = Number(props["data-first-day-of-week"]);
 
 			this.setState({
 				firstDayOfWeek: day,
-				daysOfWeek: day === 0 ? ["S","M","T","W","T","F","S"] : ["M","T","W","T","F","S","S"]
+				daysOfWeek: day === 0 ? ["S", "M", "T", "W", "T", "F", "S"] : ["M", "T", "W", "T", "F", "S", "S"]
 			});
 		}
 
@@ -189,7 +197,7 @@ export default class DatePickerRangeView extends React.Component {
 
 	_onArrowClick(e) {
 		let direction = e.currentTarget.getAttribute("data-direction"),
- 			diff = 1,
+			diff = 1,
 			period = this.state.selectedDateRange.period,
 			from = moment(this.state.selectedDateRange.dates.from).toISOString(),
 			to = moment(this.state.selectedDateRange.dates.to).toISOString();
@@ -267,9 +275,13 @@ export default class DatePickerRangeView extends React.Component {
 			return (
 				<div className={layoutWrapper()}>
 					<ul>
-						<li className={layoutStyle()}>
-							<MenuItems element={this.props.element} ranges={options} selected={this.state.selectedDateRange} />
-						</li>
+
+						{this.state.showRanges ? (
+							<li className={layoutStyle()}>
+								<MenuItems element={this.props.element} ranges={options} selected={this.state.selectedDateRange} />
+							</li>
+						) : null }
+
 						<li className={layoutStyle()}>
 							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-from" data-range="from" value={moment(this.state.selectedDateRange.dates.from).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
 						</li>
@@ -277,12 +289,17 @@ export default class DatePickerRangeView extends React.Component {
 							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-to" data-range="to" value={moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
 						</li>
 
-						<li className={btnLayoutStyle()} data-direction="back" onClick={this._onArrowClick}>
-							<i className="material-icons">keyboard_arrow_left</i>
-						</li>
-						<li className={btnLayoutStyle()} data-direction="forward" onClick={this._onArrowClick}>
-							<i className="material-icons">keyboard_arrow_right</i>
-						</li>
+						{this.state.moveDates ? (
+							<div>
+								<li className={btnLayoutStyle()} data-direction="back" onClick={this._onArrowClick}>
+									<i className="material-icons">keyboard_arrow_left</i>
+								</li>
+
+								<li className={btnLayoutStyle()} data-direction="forward" onClick={this._onArrowClick}>
+									<i className="material-icons">keyboard_arrow_right</i>
+								</li>
+							</div>
+						) : null }
 
 						{this.state.hasSubmitBtn ? (
 							<li className={layoutStyle()}>

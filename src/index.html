@@ -64,13 +64,13 @@
 			</react-datepicker>
 		</div> -->
 
-		<!-- <div class="component">
+		<div class="component">
 			<h1>Single Date with no defaults</h1>
 			<div
 				class="react-datepicker"
 				id="myDatePicker2">
 			</div>
-		</div> -->
+		</div>
 
 		<div class="component">
 			<h1>Date range</h1>
@@ -80,9 +80,13 @@
 				data-range="true"
 				data-convenience-dates="Today,Yesterday,Last 30 days,This week,Last week,This month,Last month,Custom"
 				data-close-on-select="true"
-				data-submit-btn="true"
 				data-first-day-of-week="1"
-				data-default-range="Yesterday">
+				date-range-slim="true"
+				data-move-dates="true"
+				data-layout-vertical="true"
+				data-hide-inputs="true"
+				data-hide-ranges="true"
+				data-default-range="This week">
 			</div>
 		</div>
 
@@ -95,14 +99,13 @@
 
 			// console.log(tz.name());
 
-			// let datePicker = document.getElementById('myDatePicker');
+			let datePicker = document.getElementById('myDatePicker2');
 
 			let datePickerHandler = function(e) {
 				console.log('ACTION:: ' + e.detail.action);
 				console.log('PAYLOAD:: ' + e.detail.payload);
-				var test = moment(JSON.parse(e.detail.payload).date).format('ddd DD MMM');
 			}
-			// datePicker.addEventListener('event', datePickerHandler);
+			datePicker.addEventListener('event', datePickerHandler);
 
 
 
