@@ -2179,18 +2179,6 @@ return /******/ (function(modules) { // webpackBootstrap
 				this._createOverlay();
 				this._attachEvents();
 
-				var point = this.state.selectedTime.format("h");
-
-				point = Number(point);
-
-				console.log("mount", point);
-
-				var degree = point * 30;
-
-				var tick = this.refs.tick.getDOMNode();
-
-				tick.style.webkitTransform = "rotate(" + degree + "deg)";
-
 				analytics.track("timepicker:show");
 			}
 		}, {
@@ -2247,11 +2235,13 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: "_onHoursClick",
 			value: function _onHoursClick() {
 				this.setState({ viewingHours: true, viewingMinutes: false });
+				analytics.track("timepicker:click:hours");
 			}
 		}, {
 			key: "_onMinutesClick",
 			value: function _onMinutesClick() {
 				this.setState({ viewingHours: false, viewingMinutes: true });
+				analytics.track("timepicker:click:minutes");
 			}
 		}, {
 			key: "_onAMPMClick",
@@ -2262,12 +2252,13 @@ return /******/ (function(modules) { // webpackBootstrap
 				if (period !== currentPeriod) {
 					this.setState({ currentTime: this.state.selectedTime.subtract(12, "hours") });
 				}
+
+				analytics.track("timepicker:click:ampm", { period: period });
 			}
 		}, {
 			key: "_onPointClick",
 			value: function _onPointClick(e) {
 				var point = e.currentTarget.getAttribute("data-point"),
-				    degree = e.currentTarget.getAttribute("data-degree"),
 				    period = this.state.viewingHours ? "HH" : "mm";
 
 				var isPM = this.state.selectedTime.format("a") === "pm" ? true : false;
@@ -2283,27 +2274,17 @@ return /******/ (function(modules) { // webpackBootstrap
 					point = Number(point) - 12;
 				}
 
-				var tick = this.refs.tick.getDOMNode();
-
-				// tick.style.webkitTransform = "rotate(0deg)";
-
-				tick.style.webkitTransform = "rotate(" + degree + "deg)";
-
-				console.log(point);
-
 				if (period === "HH") {
 					this.setState({
-						viewingHours: this.state.viewingHours,
-						viewingMinutes: this.state.viewingMinutes,
+						viewingHours: !this.state.viewingHours,
+						viewingMinutes: !this.state.viewingMinutes,
 						selectedTime: this.state.selectedTime.hours(point)
 					});
 				} else {
-					this.setState({
-						viewingHours: this.state.viewingHours,
-						viewingMinutes: this.state.viewingMinutes,
-						selectedTime: this.state.selectedTime.minutes(point)
-					});
+					this.setState({ selectedTime: this.state.selectedTime.minutes(point) });
 				}
+
+				analytics.track("timepicker:click:point", { period: period, point: point });
 			}
 		}, {
 			key: "render",
@@ -2341,7 +2322,6 @@ return /******/ (function(modules) { // webpackBootstrap
 								key: i,
 								onClick: _this2._onPointClick,
 								"data-point": item,
-								"data-degree": i * 30,
 								className: buildStyles(item) },
 							item
 						);
@@ -2356,28 +2336,6 @@ return /******/ (function(modules) { // webpackBootstrap
 					}
 
 					return classes;
-				};
-
-				var degree = 0;
-
-				if (this.state.viewingMinutes) {
-					var point = this.state.selectedTime.format("mm");
-					point = Number(point) / 5;
-
-					console.log("p", point);
-
-					degree = point * 30;
-				} else {
-					var point = this.state.selectedTime.format("h");
-					point = Number(point);
-
-					console.log("p", point);
-
-					degree = point * 30;
-				}
-
-				var tickDegree = {
-					WebkitTransform: "rotate(" + degree + "deg)"
 				};
 
 				return React.createElement(
@@ -2435,9 +2393,7 @@ return /******/ (function(modules) { // webpackBootstrap
 									"div",
 									{ className: _ClockCss2["default"]["clock-face"] },
 									buildClockPoints(this.state.viewingHours ? "h" : "m"),
-									React.createElement("div", { ref: "tick", className: _ClockCss2["default"].tick, style: tickDegree }),
-									React.createElement("div", { className: _ClockCss2["default"].center }),
-									React.createElement("div", { className: _ClockCss2["default"].vert })
+									React.createElement("div", { className: _ClockCss2["default"].center })
 								)
 							),
 							React.createElement(

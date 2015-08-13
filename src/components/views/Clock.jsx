@@ -26,18 +26,6 @@ export default class ClockView extends React.Component {
 		this._createOverlay();
 		this._attachEvents();
 
-		let point = this.state.selectedTime.format("h");
-
-		point = Number(point);
-
-		console.log("mount", point);
-
-		let degree = point * 30;
-
-		let tick = this.refs.tick.getDOMNode();
-
-		tick.style.webkitTransform = "rotate(" + degree + "deg)";
-
 		analytics.track("timepicker:show");
 	}
 
@@ -85,10 +73,12 @@ export default class ClockView extends React.Component {
 
 	_onHoursClick() {
 		this.setState({ viewingHours: true, viewingMinutes: false });
+		analytics.track("timepicker:click:hours");
 	}
 
 	_onMinutesClick() {
 		this.setState({ viewingHours: false, viewingMinutes: true });
+		analytics.track("timepicker:click:minutes");
 	}
 
 	_onAMPMClick(e) {
@@ -98,11 +88,12 @@ export default class ClockView extends React.Component {
 		if (period !== currentPeriod) {
 			this.setState({ currentTime: this.state.selectedTime.subtract(12, "hours")});
 		}
+
+		analytics.track("timepicker:click:ampm", { period: period });
 	}
 
 	_onPointClick(e) {
 		let point = e.currentTarget.getAttribute("data-point"),
-			degree = e.currentTarget.getAttribute("data-degree"),
 			period = this.state.viewingHours ? "HH" : "mm";
 
 		let isPM = this.state.selectedTime.format("a") === "pm" ? true : false;
@@ -118,27 +109,17 @@ export default class ClockView extends React.Component {
 			point = Number(point) - 12;
 		}
 
-		let tick = this.refs.tick.getDOMNode();
-
-		// tick.style.webkitTransform = "rotate(0deg)";
-
-		tick.style.webkitTransform = "rotate(" + degree + "deg)";
-
-		console.log(point);
-
 		if (period === "HH") {
 			this.setState({
-				viewingHours: this.state.viewingHours,
-				viewingMinutes: this.state.viewingMinutes,
+				viewingHours: !this.state.viewingHours,
+				viewingMinutes: !this.state.viewingMinutes,
 				selectedTime: this.state.selectedTime.hours(point)
 			});
 		} else {
-			this.setState({
-				viewingHours: this.state.viewingHours,
-				viewingMinutes: this.state.viewingMinutes,
-				selectedTime: this.state.selectedTime.minutes(point)
-			});
+			this.setState({ selectedTime: this.state.selectedTime.minutes(point) });
 		}
+
+		analytics.track("timepicker:click:point", { period: period, point: point });
 	}
 
 	render() {
@@ -172,7 +153,6 @@ export default class ClockView extends React.Component {
 						key={i}
 						onClick={this._onPointClick}
 						data-point={item}
-						data-degree={i * 30}
 						className={buildStyles(item)}>{item}
 					</div>
 				);
@@ -189,36 +169,6 @@ export default class ClockView extends React.Component {
 
 			return classes;
 		};
-
-		let degree = 0;
-
-		if (this.state.viewingMinutes) {
-			let point = this.state.selectedTime.format("mm");
-			point = Number(point) / 5;
-
-			console.log("p", point);
-
-			degree = point * 30;
-
-
-		} else {
-			let point = this.state.selectedTime.format("h");
-			point = Number(point);
-
-			console.log("p", point);
-
-			degree = point * 30;
-		}
-
-
-
-		let tickDegree = {
-			WebkitTransform: "rotate(" + degree + "deg)"
-		};
-
-
-
-
 
 		return (
 			<div ref="wrapper">
@@ -242,9 +192,7 @@ export default class ClockView extends React.Component {
 						<div className={clock.wrapper}>
 							<div className={clock["clock-face"]}>
 								{buildClockPoints(this.state.viewingHours ? "h" : "m")}
-								<div ref="tick" className={clock.tick} style={tickDegree}></div>
 								<div className={clock.center}></div>
-							<div className={clock.vert}></div>
 							</div>
 						</div>
 
