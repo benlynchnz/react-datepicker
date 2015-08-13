@@ -183,15 +183,15 @@
 
 .tick {
     height: 106px;
-    width: 2px;
+    width: 1px;
     position: absolute;
     left: 50%;
     /*margin-left: -2px;*/
     /*margin-top: 2px;*/
     top: 41px;
     background-color: #3498DB;
-    transform-origin: 2px 100%;
-    -webkit-transform-origin: 2px 100%;
+    transform-origin: 1px 100%;
+    -webkit-transform-origin: 1px 100%;
     z-index: 0;
     /*transform: rotate(attr(data-degree)deg);*/
 }
@@ -207,7 +207,7 @@
 .vert {
     position: absolute;
     left: 50%;
-    height: 100%;
+    height: 50%;
     width: 1px;
     background: rgba(0,0,0,0.10);
 }

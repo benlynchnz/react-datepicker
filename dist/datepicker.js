@@ -878,7 +878,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _CalendarJsx2 = _interopRequireDefault(_CalendarJsx);
 
-	var _DateRangesMenuItemsJsx = __webpack_require__(10);
+	var _DateRangesMenuItemsJsx = __webpack_require__(9);
 
 	var _DateRangesMenuItemsJsx2 = _interopRequireDefault(_DateRangesMenuItemsJsx);
 
@@ -1275,7 +1275,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _constants2 = _interopRequireDefault(_constants);
 
-	var _ClockJsx = __webpack_require__(9);
+	var _ClockJsx = __webpack_require__(10);
 
 	var _ClockJsx2 = _interopRequireDefault(_ClockJsx);
 
@@ -1975,6 +1975,158 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _constants = __webpack_require__(3);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	var _store = __webpack_require__(2);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _utils = __webpack_require__(4);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _DatePickerStyleCss = __webpack_require__(12);
+
+	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
+
+	var DateRangeMenu = (function (_React$Component) {
+	    function DateRangeMenu(props) {
+	        _classCallCheck(this, DateRangeMenu);
+
+	        _get(Object.getPrototypeOf(DateRangeMenu.prototype), "constructor", this).call(this, props);
+
+	        this.state = {};
+
+	        this._onClick = this._onClick.bind(this);
+	        this._onRangeClick = this._onRangeClick.bind(this);
+	        this._onBlur = this._onBlur.bind(this);
+	    }
+
+	    _inherits(DateRangeMenu, _React$Component);
+
+	    _createClass(DateRangeMenu, [{
+	        key: "componentDidMount",
+	        value: function componentDidMount() {
+	            this.setState({
+	                isReady: true
+	            });
+	        }
+	    }, {
+	        key: "_onBlur",
+	        value: function _onBlur() {
+	            this.refs.menu.getDOMNode().style.display = "none";
+	        }
+	    }, {
+	        key: "_onClick",
+	        value: function _onClick() {
+	            var _this = this;
+
+	            this.refs.menu.getDOMNode().style.display = "block";
+
+	            var clickHandler = function clickHandler(e) {
+	                var hasFocus = _utils2["default"].closest(e.target, _DatePickerStyleCss2["default"]["date-ranges"]);
+
+	                if (!hasFocus) {
+	                    document.removeEventListener("click", clickHandler);
+	                    _this._onBlur();
+	                }
+	            };
+
+	            document.addEventListener("click", clickHandler);
+	        }
+	    }, {
+	        key: "_onRangeClick",
+	        value: function _onRangeClick(e) {
+	            var range = e.target.getAttribute("data-name"),
+	                selected = _.findWhere(this.props.ranges, { name: range });
+
+	            _utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, _store2["default"].buildOutput(selected));
+
+	            this._onBlur();
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+
+	            var isSelected = function isSelected(item) {
+	                if (item.name === _this2.props.selected.name) {
+	                    return _DatePickerStyleCss2["default"].selected;
+	                }
+	            };
+
+	            if (this.state.isReady) {
+	                return React.createElement(
+	                    "div",
+	                    { ref: "menu-wrapper" },
+	                    React.createElement(
+	                        "div",
+	                        { className: _DatePickerStyleCss2["default"]["date-range-wrapper"], onClick: this._onClick },
+	                        React.createElement(
+	                            "div",
+	                            { className: _DatePickerStyleCss2["default"]["date-range-wrapper-text"] },
+	                            this.props.selected.name
+	                        ),
+	                        React.createElement(
+	                            "div",
+	                            { className: _DatePickerStyleCss2["default"]["date-range-wrapper-icon-caret"] },
+	                            React.createElement(
+	                                "i",
+	                                { className: "material-icons" },
+	                                "arrow_drop_down"
+	                            )
+	                        )
+	                    ),
+	                    React.createElement(
+	                        "ul",
+	                        { className: _DatePickerStyleCss2["default"]["date-ranges"], ref: "menu" },
+	                        this.props.ranges.map(function (item, i) {
+	                            return React.createElement(
+	                                "li",
+	                                {
+	                                    className: isSelected(item),
+	                                    key: i,
+	                                    "data-name": item.name,
+	                                    onClick: _this2._onRangeClick },
+	                                item.name
+	                            );
+	                        })
+	                    )
+	                );
+	            } else {
+	                return React.createElement("div", null);
+	            }
+	        }
+	    }]);
+
+	    return DateRangeMenu;
+	})(React.Component);
+
+	exports["default"] = DateRangeMenu;
+	module.exports = exports["default"];
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 
@@ -2316,158 +2468,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(React.Component);
 
 	exports["default"] = ClockView;
-	module.exports = exports["default"];
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-	var _constants = __webpack_require__(3);
-
-	var _constants2 = _interopRequireDefault(_constants);
-
-	var _store = __webpack_require__(2);
-
-	var _store2 = _interopRequireDefault(_store);
-
-	var _utils = __webpack_require__(4);
-
-	var _utils2 = _interopRequireDefault(_utils);
-
-	var _DatePickerStyleCss = __webpack_require__(12);
-
-	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
-
-	var DateRangeMenu = (function (_React$Component) {
-	    function DateRangeMenu(props) {
-	        _classCallCheck(this, DateRangeMenu);
-
-	        _get(Object.getPrototypeOf(DateRangeMenu.prototype), "constructor", this).call(this, props);
-
-	        this.state = {};
-
-	        this._onClick = this._onClick.bind(this);
-	        this._onRangeClick = this._onRangeClick.bind(this);
-	        this._onBlur = this._onBlur.bind(this);
-	    }
-
-	    _inherits(DateRangeMenu, _React$Component);
-
-	    _createClass(DateRangeMenu, [{
-	        key: "componentDidMount",
-	        value: function componentDidMount() {
-	            this.setState({
-	                isReady: true
-	            });
-	        }
-	    }, {
-	        key: "_onBlur",
-	        value: function _onBlur() {
-	            this.refs.menu.getDOMNode().style.display = "none";
-	        }
-	    }, {
-	        key: "_onClick",
-	        value: function _onClick() {
-	            var _this = this;
-
-	            this.refs.menu.getDOMNode().style.display = "block";
-
-	            var clickHandler = function clickHandler(e) {
-	                var hasFocus = _utils2["default"].closest(e.target, _DatePickerStyleCss2["default"]["date-ranges"]);
-
-	                if (!hasFocus) {
-	                    document.removeEventListener("click", clickHandler);
-	                    _this._onBlur();
-	                }
-	            };
-
-	            document.addEventListener("click", clickHandler);
-	        }
-	    }, {
-	        key: "_onRangeClick",
-	        value: function _onRangeClick(e) {
-	            var range = e.target.getAttribute("data-name"),
-	                selected = _.findWhere(this.props.ranges, { name: range });
-
-	            _utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, _store2["default"].buildOutput(selected));
-
-	            this._onBlur();
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            var _this2 = this;
-
-	            var isSelected = function isSelected(item) {
-	                if (item.name === _this2.props.selected.name) {
-	                    return _DatePickerStyleCss2["default"].selected;
-	                }
-	            };
-
-	            if (this.state.isReady) {
-	                return React.createElement(
-	                    "div",
-	                    { ref: "menu-wrapper" },
-	                    React.createElement(
-	                        "div",
-	                        { className: _DatePickerStyleCss2["default"]["date-range-wrapper"], onClick: this._onClick },
-	                        React.createElement(
-	                            "div",
-	                            { className: _DatePickerStyleCss2["default"]["date-range-wrapper-text"] },
-	                            this.props.selected.name
-	                        ),
-	                        React.createElement(
-	                            "div",
-	                            { className: _DatePickerStyleCss2["default"]["date-range-wrapper-icon-caret"] },
-	                            React.createElement(
-	                                "i",
-	                                { className: "material-icons" },
-	                                "arrow_drop_down"
-	                            )
-	                        )
-	                    ),
-	                    React.createElement(
-	                        "ul",
-	                        { className: _DatePickerStyleCss2["default"]["date-ranges"], ref: "menu" },
-	                        this.props.ranges.map(function (item, i) {
-	                            return React.createElement(
-	                                "li",
-	                                {
-	                                    className: isSelected(item),
-	                                    key: i,
-	                                    "data-name": item.name,
-	                                    onClick: _this2._onRangeClick },
-	                                item.name
-	                            );
-	                        })
-	                    )
-	                );
-	            } else {
-	                return React.createElement("div", null);
-	            }
-	        }
-	    }]);
-
-	    return DateRangeMenu;
-	})(React.Component);
-
-	exports["default"] = DateRangeMenu;
 	module.exports = exports["default"];
 
 /***/ },
