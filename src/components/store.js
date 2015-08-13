@@ -114,8 +114,13 @@ let convenienceDates = [
 	}
 ];
 
+let round5 = (x) => {
+	return Math.ceil(x / 5) * 5;
+};
+
 let _state = {
 	selectedDate: moment().endOf("day"),
+	selectedTime: moment().minutes(round5(moment().format("mm"))),
 	fromDate: moment().endOf("day"),
 	toDate: moment().endOf("day"),
 	selectedDateRange: _.findWhere(convenienceDates, { default: true }),

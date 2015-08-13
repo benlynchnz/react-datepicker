@@ -3,12 +3,13 @@ import Constants from "./components/constants";
 import utils from "./components/utils";
 import SingleDateView from "./components/views/SingleDate.jsx";
 import DateRangeView from "./components/views/DateRange.jsx";
+import TimePickerView from "./components/views/TimePicker.jsx";
 
 export default class DatePickerView extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { range: false };
+		this.state = { range: false, timepicker: false };
 		this._updateState = this._updateState.bind(this);
 	}
 
@@ -19,6 +20,10 @@ export default class DatePickerView extends React.Component {
 	_updateState(props) {
 		if (props["data-range"] === "true") {
 			this.setState({ range: true });
+		}
+
+		if (props["data-time"] === "true") {
+			this.setState({ timepicker: true });
 		}
 
 		if (props["data-default-range"]) {
@@ -38,6 +43,10 @@ export default class DatePickerView extends React.Component {
 	render() {
 		if (this.state.range) {
 			return <DateRangeView {...this.state} element={this.props.element} default={this.state.defaultRange} />;
+		}
+
+		if (this.state.timepicker) {
+			return <TimePickerView {...this.state} element={this.props.element} />;
 		}
 
 		return <SingleDateView {...this.state} element={this.props.element} />;
