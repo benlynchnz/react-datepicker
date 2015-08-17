@@ -1,5 +1,6 @@
 import styles from '../../DatePickerStyle.css';
 import utils from '../utils';
+import Constants from "../constants";
 
 export default class CalendarView extends React.Component {
 
@@ -50,6 +51,8 @@ export default class CalendarView extends React.Component {
 
 		this._createOverlay();
 		this._attachEvents();
+
+		utils.dispatch(this, Constants.SHOW, JSON.stringify({ time: this.state.selectedDate }));
 	}
 
 	_attachEvents() {
@@ -246,8 +249,8 @@ export default class CalendarView extends React.Component {
 		this._removeOverlay();
 	}
 
-	_onOkClick() {
-		this.props.onOK();
+	_onOkClick(date) {
+		this.props.onOK(date);
 		this._removeOverlay();
 	}
 
@@ -268,7 +271,7 @@ export default class CalendarView extends React.Component {
 		}
 
 		if (this.state.closeOnSelect) {
-			this._onOkClick();
+			this._onOkClick(newDate.endOf("day"));
 		}
 	}
 

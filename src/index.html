@@ -31,19 +31,8 @@
 			}
 		</style>
 
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
-
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.4.0/moment-timezone-with-data.min.js"></script>
-
-		<script>
-			if (sessionStorage.getItem("timezone")) {
-				var tz = sessionStorage.getItem("timezone");
-				moment.tz.setDefault(tz);
-			} else {
-				sessionStorage.setItem("timezone", "Pacific/Auckland");
-			}
-		</script>
 
 
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons.js"></script>
@@ -100,6 +89,15 @@
 		<script src="datepicker.js"></script>
 
 		<script>
+			var getQueryString = function ( field, url ) {
+			    var href = url ? url : window.location.href;
+			    var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+			    var string = reg.exec(href);
+			    return string ? string[1] : null;
+			};
+		</script>
+
+		<script>
 			'use strict';
 
 			// var tz = jstz.determine(); // Determines the time zone of the browser client
@@ -132,6 +130,20 @@
 		  analytics.load("ifCNAKsmkjBixpXBPozU5Ygeik60XDq5");
 		  analytics.page()
 		  }}();
+		</script>
+
+		<script>
+			var email = getQueryString("email");
+
+			analytics.ready(function(){
+				var user = analytics.user();
+				var id = user.id();
+				if (!id) {
+					analytics.identify(email, {
+						email: email
+					});
+				}
+			});
 		</script>
 
 	</body>

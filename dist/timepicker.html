@@ -20,7 +20,9 @@
 				font-weight: 400;
 			}
 			.component {
-				margin-bottom: 50px;
+				margin: 0 auto;
+				width: 600px;
+				margin-top: 10%;
 			}
 
 			input {
@@ -29,6 +31,28 @@
 				line-height: 48px;
 				padding-left: 10px;
 			}
+
+			ul {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			li {
+				float: left;
+				margin-right: 10px;
+			}
+
+			li:last-child input {
+				width: 200px;
+			}
+
+			.text {
+				font-size: 20px;
+				text-align: left;
+				margin-bottom: 50px;
+			}
+
 		</style>
 
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
@@ -42,49 +66,31 @@
 
 	<body>
 
-		<!-- <div class="component">
-			<h1>Single Date</h1>
-			<react-datepicker
-				id="myDatePicker"
-				data-selected-date="Wed Jun 24 21:29:26 UTC 2015"
-				data-selected-date-format="ddd MMM DD HH:mm:ss YYYY"
-				data-display-format="DD MMMM, YYYY"
-				data-min-date="2015-05-01T00:00:00.000Z">
-			</react-datepicker>
-		</div> -->
-
 		<div class="component">
-			<h1>Single Date with no defaults</h1>
-			<div
-				class="react-datepicker"
-				id="myDatePicker2">
+
+			<div class="text">
+				Select this datetime: <b>10 July 2015, 5:45 am</b>
 			</div>
+
+			<ul>
+				<li>
+					<react-datepicker
+						class="react-datepicker"
+						data-close-on-select="true"
+						id="myDatePicker">
+					</react-datepicker>
+				<li>
+
+				<li>
+					<react-datepicker
+						data-time="true"
+						id="myTimePicker">
+					</react-datepicker>
+				</li>
+			</ul>
+
 		</div>
 
-		<div class="component">
-			<h1>Time Picker</h1>
-			<div
-				class="react-datepicker"
-				data-time="true"
-				id="myDatePicker3">
-			</div>
-		</div>
-
-		<div class="component">
-			<h1>Date range</h1>
-			<div
-				class="react-datepicker"
-				id="myDateRangePicker"
-				data-range="true"
-				data-convenience-dates="Today,Yesterday,Last 30 days,This week,Last week,This month,Last month,Custom"
-				data-close-on-select="true"
-				data-first-day-of-week="1"
-				data-move-dates="true"
-				data-move-dates="true"
-				data-submit-btn="true"
-				data-default-range="This week">
-			</div>
-		</div>
 
 		<script src="datepicker.js"></script>
 
@@ -98,30 +104,86 @@
 		</script>
 
 		<script>
-			'use strict';
+			var datePicker = document.getElementById('myDatePicker'),
+				timePicker = document.getElementById('myTimePicker'),
+				count = 0,
+				clicks = 1,
+				hasShown = false,
+				success = false;
 
-			// var tz = jstz.determine(); // Determines the time zone of the browser client
+			var clickHandler = function() {
+				clicks++;
+			};
 
-			// console.log(tz.name());
+			var correct_date = false,
+				correct_time = false;
 
-			let datePicker = document.getElementById('myDatePicker2');
-
-			let datePickerHandler = function(e) {
+			var datePickerHandler = function(e) {
 				console.log('ACTION:: ' + e.detail.action);
 				console.log('PAYLOAD:: ' + e.detail.payload);
+
+				if (e.detail.action === "SHOW" && !hasShown) {
+					hasShown = moment();
+					document.addEventListener('click', clickHandler);
+				}
+
+				var json = JSON.parse(e.detail.payload);
+				console.log(json);
+
+				if (e.detail.action === "BLUR" && json) {
+
+					if (json.time) {
+						var hours = moment(json.time).format("HH"),
+							minutes = moment(json.time).format("mm");
+
+						console.log(hours, minutes);
+
+						if (hours === "05" && minutes === "45") {
+							correct_time = true;
+						} else {
+							correct_time = false;
+							count++;
+						}
+					}
+
+					if (json.date) {
+						var date = moment(json.date).format("YYYY-MM-DD");
+
+						console.log(date);
+
+						if (date === "2015-07-10") {
+							correct_date = true;
+						} else {
+							correct_date = false;
+							count++;
+						}
+					}
+
+					if (correct_time && correct_date && !success) {
+						console.log("success");
+						success = true;
+						var ts = moment(),
+							diff = ts.diff(hasShown, "seconds");
+
+						document.removeEventListener("click", clickHandler);
+
+						console.log(diff);
+						console.log("clicks", clicks);
+
+						analytics.track("timepicker:success", {
+							clicks: clicks,
+							fails: count,
+							seconds: diff,
+							user: analytics.user().id()
+						});
+					} else {
+						console.log("fail", count);
+					}
+				}
 			}
+
 			datePicker.addEventListener('event', datePickerHandler);
-
-
-
-			let dateRangePicker = document.getElementById('myDateRangePicker');
-
-			let dateRangePickerHandler = function(e) {
-				console.log('ACTION:: ' + e.detail.action);
-				console.log('PAYLOAD:: ' + e.detail.payload);
-			}
-
-			dateRangePicker.addEventListener('event', dateRangePickerHandler);
+			timePicker.addEventListener('event', datePickerHandler);
 
 		</script>
 

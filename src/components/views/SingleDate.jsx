@@ -84,9 +84,9 @@ export default class DatePickerSingleView extends React.Component {
 		}
 	}
 
-	_onBlur() {
+	_onBlur(date) {
 		this.setState({ show: false });
-		utils.dispatch(this, Constants.BLUR, JSON.stringify({ date: this.state.selectedDate }));
+		utils.dispatch(this, Constants.BLUR, JSON.stringify({ date: date }));
 	}
 
 	_onFocus() {
@@ -99,8 +99,8 @@ export default class DatePickerSingleView extends React.Component {
 		utils.dispatch(this, Constants.DATE_SELECTED, JSON.stringify({ date: date }));
 	}
 
-	_onOk() {
-		this._onBlur();
+	_onOk(date) {
+		this._onBlur(date);
 	}
 
 	render() {

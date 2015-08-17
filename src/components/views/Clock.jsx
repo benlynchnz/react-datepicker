@@ -18,8 +18,6 @@ export default class ClockView extends React.Component {
 		this._onAMPMClick = this._onAMPMClick.bind(this);
 	}
 
-	componentWillMount() {}
-
 	componentDidMount() {
 		this.setState({ viewingHours: true, viewingMinutes: false });
 
@@ -65,6 +63,7 @@ export default class ClockView extends React.Component {
 	_onOkClick() {
 		this.props.onOK();
 		this._removeOverlay();
+		analytics.track("timepicker:click", { action: "OK" });
 	}
 
 	_getTime(format) {
@@ -73,12 +72,12 @@ export default class ClockView extends React.Component {
 
 	_onHoursClick() {
 		this.setState({ viewingHours: true, viewingMinutes: false });
-		analytics.track("timepicker:click:hours");
+		analytics.track("timepicker:click", { action: "hours" });
 	}
 
 	_onMinutesClick() {
 		this.setState({ viewingHours: false, viewingMinutes: true });
-		analytics.track("timepicker:click:minutes");
+		analytics.track("timepicker:click", { action: "minutes" });
 	}
 
 	_onAMPMClick(e) {
@@ -86,10 +85,10 @@ export default class ClockView extends React.Component {
 			currentPeriod = this.state.selectedTime.format("a");
 
 		if (period !== currentPeriod) {
-			this.setState({ currentTime: this.state.selectedTime.subtract(12, "hours")});
+			this.setState({ selectedTime: this.state.selectedTime.subtract(12, "hours")});
 		}
 
-		analytics.track("timepicker:click:ampm", { period: period });
+		analytics.track("timepicker:click", { action: "am-pm", period: period });
 	}
 
 	_onPointClick(e) {
@@ -119,7 +118,7 @@ export default class ClockView extends React.Component {
 			this.setState({ selectedTime: this.state.selectedTime.minutes(point) });
 		}
 
-		analytics.track("timepicker:click:point", { period: period, point: point });
+		analytics.track("timepicker:click", { action: "clock-face", period: period, point: point });
 	}
 
 	render() {
@@ -164,7 +163,7 @@ export default class ClockView extends React.Component {
 			let classes = clock.ampm;
 
 			if (this.state.selectedTime.format("a") === period) {
-				classes += " " + clock["selected"];
+				classes += " " + clock.selected;
 			}
 
 			return classes;
