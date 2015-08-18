@@ -18,5 +18,8 @@
         "document": true,
         "jstz": true,
         "analytics": true
-    }
+    },
+    "plugins": [
+        "react"
+    ]
 }

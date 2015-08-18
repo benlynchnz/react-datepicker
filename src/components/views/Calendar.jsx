@@ -1,10 +1,8 @@
-import styles from '../../DatePickerStyle.css';
-import utils from '../utils';
+import styles from "../../DatePickerStyle.css";
+import utils from "../utils";
 import Constants from "../constants";
 
 export default class CalendarView extends React.Component {
-
-	displayName: 'datepicker-calendar'
 
 	constructor(props) {
 		super(props);
@@ -44,9 +42,9 @@ export default class CalendarView extends React.Component {
 		let selectedDate = this.state.selectedDate.toISOString();
 
 		this.setState({
-			viewingDay: moment(selectedDate).endOf('day'),
-			viewingMonth: moment(selectedDate).endOf('month'),
-			viewingYear: moment(selectedDate).endOf('year')
+			viewingDay: moment(selectedDate).endOf("day"),
+			viewingMonth: moment(selectedDate).endOf("month"),
+			viewingYear: moment(selectedDate).endOf("year")
 		});
 
 		this._createOverlay();
@@ -56,14 +54,14 @@ export default class CalendarView extends React.Component {
 	}
 
 	_attachEvents() {
-		let input = this.refs['hidden-input'].getDOMNode();
+		let input = this.refs["hidden-input"].getDOMNode();
 		input.focus();
 
 		let clickHandler = (e) => {
 			let lostFocus = e.target.classList.contains(styles.modal);
 			if (lostFocus) {
-				document.removeEventListener('click', clickHandler);
-				input.removeEventListener('keydown', keyUpHandler);
+				document.removeEventListener("click", clickHandler);
+				input.removeEventListener("keydown", keyUpHandler);
 				this._onBlur();
 			} else {
 				input.focus();
@@ -121,53 +119,53 @@ export default class CalendarView extends React.Component {
 						keys = [keyMap.VALUE];
 					}
 				} else if (keyMap.DURATION_DAYS) {
-					duration = 'Days';
+					duration = "Days";
 				} else if (keyMap.DURATION_WEEKS) {
-					duration = 'Weeks';
+					duration = "Weeks";
 				} else if (keyMap.DURATION_MONTHS) {
-					duration = 'Months';
+					duration = "Months";
 				} else if (keyMap.DURATION_YEARS) {
-					duration = 'Years';
+					duration = "Years";
 				} else if (keyMap.DELETE) {
 					keys.pop();
 				}
 
 				if (keyMap.ACTION_ADD) {
-					direction = 'Add';
+					direction = "Add";
 				}
 
 				if (keyMap.ACTION_SUBTRACT) {
-					direction = 'Subtract';
+					direction = "Subtract";
 				}
 
 				if (keyMap.RIGHT) {
-					let update = Number(keys.join('')) + 1;
+					let update = Number(keys.join("")) + 1;
 					keys = [update];
 					if (update > 0) {
-						direction = 'Add';
+						direction = "Add";
 					}
 				}
 
 				if (keyMap.LEFT) {
-					let update = Number(keys.join('')) - 1;
+					let update = Number(keys.join("")) - 1;
 					if (update < 0) {
-						direction = 'Subtract';
+						direction = "Subtract";
 					}
 					keys = [update];
 				}
 
 				value = keys.join('');
 
-				if ((value > 0 && direction === 'Subtract') || (value < 0 && direction === 'Add')) {
-					let update = Number(keys.join('')) * -1;
+				if ((value > 0 && direction === "Subtract") || (value < 0 && direction === "Add")) {
+					let update = Number(keys.join("")) * -1;
 					keys = [update];
-					value = keys.join('');
+					value = keys.join("");
 				}
 
 				if (keys.length === 1 && Math.abs(Number(value)) === 1) {
-					duration = _.trimRight(duration, 's');
-				} else if (!_.endsWith(duration, 's')) {
-					duration += 's';
+					duration = _.trimRight(duration, "s");
+				} else if (!_.endsWith(duration, "s")) {
+					duration += "s";
 				}
 
 				moveTo = moment(moveTo).add(value, duration.toLowerCase());
@@ -191,9 +189,9 @@ export default class CalendarView extends React.Component {
 						powerKeys: {
 							active: true,
 							keys: [],
-							direction: subtract ? 'Subtract' : 'Add',
+							direction: subtract ? "Subtract" : "Add",
 							duration: this.state.powerKeys.duration,
-							style: { display: 'block' }
+							style: { display: "block" }
 						}
 					});
 				};
@@ -209,7 +207,7 @@ export default class CalendarView extends React.Component {
 				}
 
 				if (keyMap.ENTER) {
-					input.removeEventListener('keydown', keyUpHandler);
+					input.removeEventListener("keydown", keyUpHandler);
 					this._onOkClick();
 					e.preventDefault();
 					e.stopPropagation();
@@ -217,30 +215,30 @@ export default class CalendarView extends React.Component {
 				}
 
 				if (keyMap.ESC) {
-					input.removeEventListener('keydown', keyUpHandler);
+					input.removeEventListener("keydown", keyUpHandler);
 					this._onBlur();
 					return;
 				}
 			}
 		};
 
-		input.addEventListener('keydown', keyUpHandler);
-		document.addEventListener('click', clickHandler);
+		input.addEventListener("keydown", keyUpHandler);
+		document.addEventListener("click", clickHandler);
 	}
 
 	_createOverlay() {
-		if (!document.getElementById('overlay')) {
-			let el = document.createElement('div');
-			el.id = 'overlay';
+		if (!document.getElementById("overlay")) {
+			let el = document.createElement("div");
+			el.id = "overlay";
 			el.classList.add(styles.overlay);
 			document.body.appendChild(el);
 		}
 	}
 
 	_removeOverlay() {
-		let el = document.getElementById('overlay');
+		let el = document.getElementById("overlay");
 		if (el) {
-			el.outerHTML = '';
+			el.outerHTML = "";
 		}
 	}
 
@@ -255,12 +253,12 @@ export default class CalendarView extends React.Component {
 	}
 
 	_onDayClick(e) {
-		let day = Number(e.target.getAttribute('data-date').split('/')[2]),
+		let day = Number(e.target.getAttribute("data-date").split("/")[2]),
 			month = this.state.viewingMonth.month(),
 			year = this.state.viewingYear.year(),
 			newDate = moment().year(year).month(month).date(day);
 
-		this.props.onUpdate(newDate.endOf('day'));
+		this.props.onUpdate(newDate.endOf("day"));
 		this.setState({
 			selectedDate: newDate,
 			moveToDate: newDate
@@ -279,15 +277,15 @@ export default class CalendarView extends React.Component {
 		let moveBack, update;
 
 		if (e.target) {
-			moveBack = e.target.classList.contains(styles['arrow-left']) ? true : false;
+			moveBack = e.target.classList.contains(styles["arrow-left"]) ? true : false;
 		} else {
 			moveBack = (e === -1) ? true : false;
 		}
 
 		if (moveBack) {
-			update = this.state.viewingMonth.subtract(1, 'month');
+			update = this.state.viewingMonth.subtract(1, "month");
 		} else {
-			update = this.state.viewingMonth.add(1, 'month');
+			update = this.state.viewingMonth.add(1, "month");
 		}
 
 		this.setState({ viewingMonth: update });
@@ -297,15 +295,15 @@ export default class CalendarView extends React.Component {
 		let moveBack, update;
 
 		if (e.target) {
-			moveBack = e.target.classList.contains(styles['arrow-left']) ? true : false;
+			moveBack = e.target.classList.contains(styles["arrow-left"]) ? true : false;
 		} else {
 			moveBack = (e === -1) ? true : false;
 		}
 
 		if (moveBack) {
-			update = this.state.viewingYear.subtract(1, 'year');
+			update = this.state.viewingYear.subtract(1, "year");
 		} else {
-			update = this.state.viewingYear.add(1, 'year');
+			update = this.state.viewingYear.add(1, "year");
 		}
 
 		this.setState({ viewingYear: update });
@@ -315,17 +313,17 @@ export default class CalendarView extends React.Component {
 		let format;
 
 		switch (type) {
-			case 'DAYOFWEEK':
-				format = 'dddd';
+			case "DAYOFWEEK":
+				format = "dddd";
 				break;
-			case 'DAYOFMONTH':
-				format = 'DD';
+			case "DAYOFMONTH":
+				format = "DD";
 				break;
-			case 'MONTH':
-				format = 'MMM';
+			case "MONTH":
+				format = "MMM";
 				break;
-			case 'YEAR':
-				format = 'YYYY';
+			case "YEAR":
+				format = "YYYY";
 				break;
 		}
 
@@ -337,18 +335,18 @@ export default class CalendarView extends React.Component {
 			state = this.state.viewingMonth;
 
 		switch (type) {
-			case 'DAYOFWEEK':
-				format = 'dddd';
+			case "DAYOFWEEK":
+				format = "dddd";
 				state = this.state.viewingDay;
 				break;
-			case 'DAYOFMONTH':
-				format = 'DD';
+			case "DAYOFMONTH":
+				format = "DD";
 				break;
-			case 'MONTH':
-				format = 'MMM';
+			case "MONTH":
+				format = "MMM";
 				break;
-			case 'YEAR':
-				format = 'YYYY';
+			case "YEAR":
+				format = "YYYY";
 				state = this.state.viewingYear;
 				break;
 		}
@@ -360,38 +358,38 @@ export default class CalendarView extends React.Component {
 		let days = [];
 
 		for (var x = this.state.firstDayOfWeek; x < this._getFirstDayOfMonth(); x++) {
-			days.push('');
+			days.push("");
 		}
 
 		for (var y = 0; y < this.state.viewingMonth.daysInMonth(); y++) {
-			days.push(this.state.viewingMonth.startOf('month').add(y, 'days').format('DD'));
+			days.push(this.state.viewingMonth.startOf("month").add(y, "days").format("DD"));
 		}
 
 		return _.chunk(days, 7);
 	}
 
 	_getFirstDayOfMonth() {
-		return Number(this.state.viewingMonth.startOf('month').format('d'));
+		return Number(this.state.viewingMonth.startOf("month").format("d"));
 	}
 
 	_getCellDate(cell) {
-		return this.state.viewingYear.year() + '/' + this.state.viewingMonth.format('MM') + '/' + cell;
+		return this.state.viewingYear.year() + "/" + this.state.viewingMonth.format("MM") + "/" + cell;
 	}
 
 	_getCellDateAsISO(cell) {
-		return moment(this._getCellDate(cell), 'YYYY/MM/DD');
+		return moment(this._getCellDate(cell), "YYYY/MM/DD");
 	}
 
 	_getCellDateClass(cell) {
-		if (cell && (this.state.selectedDate.format('YYYY/MM/DD') === this._getCellDate(cell))) {
+		if (cell && (this.state.selectedDate.format("YYYY/MM/DD") === this._getCellDate(cell))) {
 			return styles.selected;
 		}
 
-		if (cell && this.state.moveToDate && (this.state.moveToDate.format('YYYY/MM/DD') === this._getCellDate(cell))) {
-			return styles['move-to'];
+		if (cell && this.state.moveToDate && (this.state.moveToDate.format("YYYY/MM/DD") === this._getCellDate(cell))) {
+			return styles["move-to"];
 		}
 
-		if (cell && this.state.today.format('YYYY/MM/DD') === this._getCellDate(cell)) {
+		if (cell && this.state.today.format("YYYY/MM/DD") === this._getCellDate(cell)) {
 			return styles.today;
 		}
 	}
@@ -401,18 +399,18 @@ export default class CalendarView extends React.Component {
 			<div ref="wrapper">
 					<div className={styles.modal}>
 					<div className={styles.wrapper} ref="wrapper">
-						<div className={styles.header}>{this._getDate('DAYOFWEEK')}</div>
+						<div className={styles.header}>{this._getDate("DAYOFWEEK")}</div>
 						<div className={styles.date}>
 							<div className={styles.month}>
-								<span className={styles['arrow-left']} onClick={this._onMonthClick}></span>
-									{this._getCalendarDate('MONTH')}
-								<span className={styles['arrow-right']} onClick={this._onMonthClick}></span>
+								<span className={styles["arrow-left"]} onClick={this._onMonthClick}></span>
+									{this._getCalendarDate("MONTH")}
+								<span className={styles["arrow-right"]} onClick={this._onMonthClick}></span>
 							</div>
-							<div className={styles.day}>{this._getDate('DAYOFMONTH')}</div>
+							<div className={styles.day}>{this._getDate("DAYOFMONTH")}</div>
 							<div className={styles.year}>
-								<span className={styles['arrow-left']} onClick={this._onYearClick}></span>
-									{this._getCalendarDate('YEAR')}
-								<span className={styles['arrow-right']} onClick={this._onYearClick}></span>
+								<span className={styles["arrow-left"]} onClick={this._onYearClick}></span>
+									{this._getCalendarDate("YEAR")}
+								<span className={styles["arrow-right"]} onClick={this._onYearClick}></span>
 							</div>
 						</div>
 						<table className={styles.table}>
@@ -431,7 +429,7 @@ export default class CalendarView extends React.Component {
 										<tr key={i}>
 											{row.map((cell, j) => {
 												if (cell) {
-													if (this._getCellDateAsISO(cell).isBetween(this.state.minDate, this.state.maxDate, 'day')) {
+													if (this._getCellDateAsISO(cell).isBetween(this.state.minDate, this.state.maxDate, "day")) {
 														return (
 															<td key={j}>
 																<a
@@ -459,18 +457,18 @@ export default class CalendarView extends React.Component {
 								{this.state.closeOnSelect ? null : (<button className={styles.btn} onClick={this._onOkClick}>OK</button>)}
 							</div>
 						</div>
-						<div className={styles['power-keys']} style={this.state.powerKeys.style}>
-							<li className={styles['power-keys-item']}>{this.state.powerKeys.direction}</li>
+						<div className={styles["power-keys"]} style={this.state.powerKeys.style}>
+							<li className={styles["power-keys-item"]}>{this.state.powerKeys.direction}</li>
 							{(this.state.powerKeys.keys.length
-								? <li className={styles['power-keys-item']}>{Math.abs(this.state.powerKeys.value)}</li>
+								? <li className={styles["power-keys-item"]}>{Math.abs(this.state.powerKeys.value)}</li>
 								: null
 							)}
 							{(this.state.powerKeys.keys.length
-								? <li className={styles['power-keys-item']}>{this.state.powerKeys.duration}</li>
+								? <li className={styles["power-keys-item"]}>{this.state.powerKeys.duration}</li>
 								: null
 							)}
 						</div>
-						<div className={styles['hidden-input']}>
+						<div className={styles["hidden-input"]}>
 							<input type="text" ref="hidden-input" onFocus={this._onFocus} />
 						</div>
 					</div>
