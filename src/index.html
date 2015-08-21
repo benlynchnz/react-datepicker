@@ -4,10 +4,14 @@
 
 		<title>React | Date Picker</title>
 
+		<script src="./webcomponents-lite.min.js"></script>
+
 		<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700italic,700,900,900italic' rel='stylesheet' type='text/css'>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
-		<link rel="stylesheet" type="text/css" href="datepicker.css" />
+
+		<link rel="import" href="./libs.html">
+		<link rel="import" href="./datepicker.html">
 
 		<style>
 			body {
@@ -31,12 +35,7 @@
 			}
 		</style>
 
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.4.0/moment-timezone-with-data.min.js"></script>
 
-
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
 
 	</head>
 
@@ -86,8 +85,6 @@
 			</div>
 		</div>
 
-		<script src="datepicker.js"></script>
-
 		<script>
 			var getQueryString = function ( field, url ) {
 			    var href = url ? url : window.location.href;
@@ -96,6 +93,7 @@
 			    return string ? string[1] : null;
 			};
 		</script>
+
 
 		<script>
 			'use strict';
