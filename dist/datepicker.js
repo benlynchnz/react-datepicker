@@ -411,7 +411,8 @@ return /******/ (function(modules) { // webpackBootstrap
 					},
 					name: range.name,
 					period: range.period,
-					diff_in_days: to.diff(from, "days")
+					diff_in_days: to.diff(from, "days"),
+					diff_in_hours: to.diff(from, "hours")
 				};
 
 				return JSON.stringify(payload);
@@ -772,9 +773,8 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}, {
 			key: '_onBlur',
-			value: function _onBlur(date) {
+			value: function _onBlur() {
 				this.setState({ show: false });
-				_utils2['default'].dispatch(this, _constants2['default'].BLUR, JSON.stringify({ date: date }));
 			}
 		}, {
 			key: '_onFocus',
@@ -791,7 +791,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: '_onOk',
 			value: function _onOk(date) {
-				this._onBlur(date);
+				this._onBlur();
 			}
 		}, {
 			key: 'render',
@@ -1068,9 +1068,9 @@ return /******/ (function(modules) { // webpackBootstrap
 						selectedDateRange: customRange
 					});
 				} else {
-					customRange.dates.to = date.endOf("day");
+					customRange.dates.to = date.startOf("day");
 					this.setState({
-						toDate: date.endOf("day"),
+						toDate: date.startOf("day"),
 						selectedDateRange: customRange
 					});
 				}
@@ -1246,23 +1246,23 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 	var _store = __webpack_require__(2);
 
@@ -1288,8 +1288,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		function TimePickerView(props) {
 			_classCallCheck(this, TimePickerView);
 
-			_get(Object.getPrototypeOf(TimePickerView.prototype), 'constructor', this).call(this, props);
-			this.state = _store2['default'].getState();
+			_get(Object.getPrototypeOf(TimePickerView.prototype), "constructor", this).call(this, props);
+			this.state = _store2["default"].getState();
 
 			this._updateState = this._updateState.bind(this);
 			this._onBlur = this._onBlur.bind(this);
@@ -1301,70 +1301,71 @@ return /******/ (function(modules) { // webpackBootstrap
 		_inherits(TimePickerView, _React$Component);
 
 		_createClass(TimePickerView, [{
-			key: 'componentDidMount',
+			key: "componentDidMount",
 			value: function componentDidMount() {
-				return _utils2['default'].componentDidMount(this);
+				return _utils2["default"].componentDidMount(this);
 			}
 		}, {
-			key: '_updateState',
+			key: "_updateState",
 			value: function _updateState(props) {}
 		}, {
-			key: '_onBlur',
+			key: "_onBlur",
 			value: function _onBlur() {
 				this.setState({ show: false });
-				analytics.track('timepicker:hide', {
+				analytics.track("timepicker:hide", {
 					selected_time: this.state.selectedTime.toISOString(),
-					hours: this.state.selectedTime.format('h'),
-					minutes: this.state.selectedTime.format('mm'),
-					am_pm: this.state.selectedTime.format('a')
+					hours: this.state.selectedTime.format("h"),
+					minutes: this.state.selectedTime.format("mm"),
+					am_pm: this.state.selectedTime.format("a")
 				});
-				_utils2['default'].dispatch(this, _constants2['default'].BLUR, JSON.stringify({ time: this.state.selectedTime }));
+				_utils2["default"].dispatch(this, _constants2["default"].BLUR, JSON.stringify({ time: this.state.selectedTime }));
 			}
 		}, {
-			key: '_onFocus',
+			key: "_onFocus",
 			value: function _onFocus() {
 				//this.setState({ moveToDate: this.props.selectedDate });
 				this.setState({ show: true });
 			}
 		}, {
-			key: '_onUpdate',
+			key: "_onUpdate",
 			value: function _onUpdate(date) {}
 		}, {
-			key: '_onOk',
+			key: "_onOk",
 			value: function _onOk() {
 				this._onBlur();
+				_utils2["default"].dispatch(this, _constants2["default"].OK, JSON.stringify({ time: this.state.selectedTime }));
 			}
 		}, {
-			key: 'render',
+			key: "render",
 			value: function render() {
 				if (!this.state.show) {
 					return React.createElement(
-						'div',
-						{ className: _DatePickerStyleCss2['default']['input-group'] },
-						React.createElement('input', {
-							id: this.props.element.id + '-input',
-							type: 'text',
-							className: 'input',
-							ref: 'datepicker-input',
-							value: this.state.selectedTime.format('h:mm a'),
+						"div",
+						{ className: _DatePickerStyleCss2["default"]["input-group"] },
+						React.createElement("input", {
+							id: this.props.element.id + "-input",
+							type: "text",
+							className: "input",
+							ref: "datepicker-input",
+							value: this.state.selectedTime.format("h:mm a"),
 							onClick: this._onFocus,
 							onFocus: this._onFocus,
 							readOnly: true })
 					);
 				} else {
 					return React.createElement(
-						'div',
-						{ className: _DatePickerStyleCss2['default']['input-group'] },
-						React.createElement('input', {
-							id: this.props.element.id + '-input',
-							type: 'text',
-							className: 'input',
-							ref: 'datepicker-input',
-							value: this.state.selectedTime.format('h:mm a'),
+						"div",
+						{ className: _DatePickerStyleCss2["default"]["input-group"] },
+						React.createElement("input", {
+							id: this.props.element.id + "-input",
+							type: "text",
+							className: "input",
+							ref: "datepicker-input",
+							value: this.state.selectedTime.format("h:mm a"),
 							onClick: this._onFocus,
 							onFocus: this._onFocus,
 							readOnly: true }),
-						React.createElement(_ClockJsx2['default'], _extends({}, this.state, {
+						React.createElement(_ClockJsx2["default"], _extends({}, this.state, {
 							onBlur: this._onBlur,
 							onOK: this._onOk,
 							onUpdate: this._onUpdate }))
@@ -1376,9 +1377,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		return TimePickerView;
 	})(React.Component);
 
-	exports['default'] = TimePickerView;
+	exports["default"] = TimePickerView;
 	;
-	module.exports = exports['default'];
+	module.exports = exports["default"];
 
 	//this.setState({ selectedDate: date });
 	//utils.dispatch(this, Constants.DATE_SELECTED, JSON.stringify({ date: date }));
@@ -1672,8 +1673,8 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}, {
 			key: "_onOkClick",
-			value: function _onOkClick(date) {
-				this.props.onOK(date);
+			value: function _onOkClick() {
+				this.props.onOK();
 				this._removeOverlay();
 			}
 		}, {

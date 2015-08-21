@@ -112,6 +112,14 @@
 			}
 			datePicker.addEventListener('event', datePickerHandler);
 
+			let timePicker = document.getElementById('myDatePicker3');
+
+			let timePickerHandler = function(e) {
+				console.log('ACTION:: ' + e.detail.action);
+				console.log('PAYLOAD:: ' + e.detail.payload);
+			}
+			timePicker.addEventListener('event', timePickerHandler)
+
 
 
 			let dateRangePicker = document.getElementById('myDateRangePicker');

@@ -63,6 +63,7 @@
 	font-size: 16px;
 	font-weight: 300;
 	border-radius: 2px 2px 0 0;
+	font-family: 'Roboto', sans-serif;
 }
 
 .date {
@@ -70,6 +71,7 @@
 	text-align: center;
 	padding: 10px;
 	font-weight: 300;
+	font-family: 'Roboto', sans-serif;
 }
 
 .left {
@@ -100,6 +102,7 @@
 	font-size: 30px;
 	line-height: 35px;
 	font-weight: 300;
+	font-family: 'Roboto', sans-serif;
 }
 
 .day {
@@ -107,6 +110,7 @@
 	line-height: 60px;
 	padding-bottom: 10px;
 	font-weight: 300;
+	font-family: 'Roboto', sans-serif;
 }
 
 .year {
@@ -114,6 +118,7 @@
 	line-height: 35px;
 	opacity: 0.7;
 	font-weight: 300;
+	font-family: 'Roboto', sans-serif;
 }
 
 .arrow-left {
@@ -152,6 +157,7 @@
 	border-collapse: collapse;
 	border-spacing: 0;
 	box-sizing: border-box;
+	font-family: 'Roboto', sans-serif;
 }
 
 .table tr > th {
@@ -215,12 +221,12 @@
 	margin-left: 30px;
 	background-color: transparent;
 	border: 0;
-	font-family: 'Roboto';
 	color: #444;
 	font-size: 15px;
 	text-transform: uppercase;
 	cursor: pointer;
 	background-image: none;
+	font-family: 'Roboto', sans-serif;
 }
 
 .btn:hover {
@@ -254,6 +260,7 @@
 	list-style: none;
 	float: left;
 	margin-right: 10px;
+	font-family: 'Roboto', sans-serif;
 }
 
 
@@ -328,6 +335,7 @@
 	cursor: pointer;
 	border: 1px solid #ddd;
 	font-weight: 500;
+	font-family: 'Roboto', sans-serif;
 }
 
 .date-range-wrapper-icon-calendar {

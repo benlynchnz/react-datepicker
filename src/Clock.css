@@ -2,7 +2,9 @@
     background-color: #3498DB;
     height: 80px;
     padding-right: 20px;
-    padding-top: 20px;
+    padding-bottom: 10px;
+    font-family: 'Roboto', sans-serif;
+
 }
 
 .time {
@@ -20,6 +22,7 @@
     cursor: pointer;
     padding: 0 5px 3px 5px;
     background-color: #258CD0;
+    font-family: 'Roboto', sans-serif;
 }
 
 .time li.selected {
@@ -43,6 +46,7 @@
     font-weight: bold;
     background-color: #258CD0;
     padding: 0 4px;
+    font-family: 'Roboto', sans-serif;
 }
 
 .time li .ampm.selected {
@@ -75,6 +79,7 @@
     border-radius: 50%;
     padding: 7px;
     cursor: pointer;
+    font-family: 'Roboto', sans-serif;
 }
 
 .clock-face-point.selected {

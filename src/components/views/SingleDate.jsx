@@ -84,9 +84,8 @@ export default class DatePickerSingleView extends React.Component {
 		}
 	}
 
-	_onBlur(date) {
+	_onBlur() {
 		this.setState({ show: false });
-		utils.dispatch(this, Constants.BLUR, JSON.stringify({ date: date }));
 	}
 
 	_onFocus() {
@@ -100,7 +99,7 @@ export default class DatePickerSingleView extends React.Component {
 	}
 
 	_onOk(date) {
-		this._onBlur(date);
+		this._onBlur();
 	}
 
 	render() {

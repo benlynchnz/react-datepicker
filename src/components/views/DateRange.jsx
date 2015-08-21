@@ -172,9 +172,9 @@ export default class DatePickerRangeView extends React.Component {
 				selectedDateRange: customRange
 			});
 		} else {
-			customRange.dates.to = date.endOf("day");
+			customRange.dates.to = date.startOf("day");
 			this.setState({
-				toDate: date.endOf("day"),
+				toDate: date.startOf("day"),
 				selectedDateRange: customRange
 			});
 		}

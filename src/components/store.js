@@ -174,7 +174,8 @@ class Store extends EventEmitter {
 			},
 			name: range.name,
 			period: range.period,
-			diff_in_days: to.diff(from, "days")
+			diff_in_days: to.diff(from, "days"),
+			diff_in_hours: to.diff(from, "hours")
 		};
 
 		return JSON.stringify(payload);

@@ -2,7 +2,9 @@
     background-color: #3498DB;
     height: 80px;
     padding-right: 20px;
-    padding-top: 20px;
+    padding-bottom: 10px;
+    font-family: 'Roboto', sans-serif;
+
 }
 
 .Clock__time___30xaB {
@@ -20,6 +22,7 @@
     cursor: pointer;
     padding: 0 5px 3px 5px;
     background-color: #258CD0;
+    font-family: 'Roboto', sans-serif;
 }
 
 .Clock__time___30xaB li.Clock__selected___3OyXs {
@@ -43,6 +46,7 @@
     font-weight: bold;
     background-color: #258CD0;
     padding: 0 4px;
+    font-family: 'Roboto', sans-serif;
 }
 
 .Clock__time___30xaB li .Clock__ampm___3YtC5.Clock__selected___3OyXs {
@@ -75,6 +79,7 @@
     border-radius: 50%;
     padding: 7px;
     cursor: pointer;
+    font-family: 'Roboto', sans-serif;
 }
 
 .Clock__clock-face-point___1VrCC.Clock__selected___3OyXs {
@@ -241,6 +246,7 @@
 	font-size: 16px;
 	font-weight: 300;
 	border-radius: 2px 2px 0 0;
+	font-family: 'Roboto', sans-serif;
 }
 
 .DatePickerStyle__date___1vfXM {
@@ -248,6 +254,7 @@
 	text-align: center;
 	padding: 10px;
 	font-weight: 300;
+	font-family: 'Roboto', sans-serif;
 }
 
 .DatePickerStyle__left___g_KzY {
@@ -278,6 +285,7 @@
 	font-size: 30px;
 	line-height: 35px;
 	font-weight: 300;
+	font-family: 'Roboto', sans-serif;
 }
 
 .DatePickerStyle__day___2hqAq {
@@ -285,6 +293,7 @@
 	line-height: 60px;
 	padding-bottom: 10px;
 	font-weight: 300;
+	font-family: 'Roboto', sans-serif;
 }
 
 .DatePickerStyle__year___1n785 {
@@ -292,6 +301,7 @@
 	line-height: 35px;
 	opacity: 0.7;
 	font-weight: 300;
+	font-family: 'Roboto', sans-serif;
 }
 
 .DatePickerStyle__arrow-left___3mDM7 {
@@ -330,6 +340,7 @@
 	border-collapse: collapse;
 	border-spacing: 0;
 	box-sizing: border-box;
+	font-family: 'Roboto', sans-serif;
 }
 
 .DatePickerStyle__table___4qAHf tr > th {
@@ -393,12 +404,12 @@
 	margin-left: 30px;
 	background-color: transparent;
 	border: 0;
-	font-family: 'Roboto';
 	color: #444;
 	font-size: 15px;
 	text-transform: uppercase;
 	cursor: pointer;
 	background-image: none;
+	font-family: 'Roboto', sans-serif;
 }
 
 .DatePickerStyle__btn___3cSbl:hover {
@@ -432,6 +443,7 @@
 	list-style: none;
 	float: left;
 	margin-right: 10px;
+	font-family: 'Roboto', sans-serif;
 }
 
 
@@ -506,6 +518,7 @@
 	cursor: pointer;
 	border: 1px solid #ddd;
 	font-weight: 500;
+	font-family: 'Roboto', sans-serif;
 }
 
 .DatePickerStyle__date-range-wrapper-icon-calendar___Fkaq2 {

@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-import Store from '../store';
-import utils from '../utils';
-import Constants from '../constants';
-import Clock from './Clock.jsx';
+import Store from "../store";
+import utils from "../utils";
+import Constants from "../constants";
+import Clock from "./Clock.jsx";
 import styles from "../../DatePickerStyle.css";
 
 export default class TimePickerView extends React.Component {
@@ -48,6 +48,7 @@ export default class TimePickerView extends React.Component {
 
 	_onOk() {
 		this._onBlur();
+		utils.dispatch(this, Constants.OK, JSON.stringify({ time: this.state.selectedTime }));
 	}
 
 	render() {

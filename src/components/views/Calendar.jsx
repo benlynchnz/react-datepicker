@@ -247,8 +247,8 @@ export default class CalendarView extends React.Component {
 		this._removeOverlay();
 	}
 
-	_onOkClick(date) {
-		this.props.onOK(date);
+	_onOkClick() {
+		this.props.onOK();
 		this._removeOverlay();
 	}
 
