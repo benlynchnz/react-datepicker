@@ -27,12 +27,6 @@ export default class TimePickerView extends React.Component {
 
 	_onBlur() {
 		this.setState({ show: false });
-		analytics.track("timepicker:hide", {
-			selected_time: this.state.selectedTime.toISOString(),
-			hours: this.state.selectedTime.format("h"),
-			minutes: this.state.selectedTime.format("mm"),
-			am_pm: this.state.selectedTime.format("a")
-		});
 		utils.dispatch(this, Constants.BLUR, JSON.stringify({ time: this.state.selectedTime }));
 	}
 

@@ -23,8 +23,6 @@ export default class ClockView extends React.Component {
 
 		this._createOverlay();
 		this._attachEvents();
-
-		analytics.track("timepicker:show");
 	}
 
 	_attachEvents() {
@@ -63,7 +61,6 @@ export default class ClockView extends React.Component {
 	_onOkClick() {
 		this.props.onOK();
 		this._removeOverlay();
-		analytics.track("timepicker:click", { action: "OK" });
 	}
 
 	_getTime(format) {
@@ -72,12 +69,10 @@ export default class ClockView extends React.Component {
 
 	_onHoursClick() {
 		this.setState({ viewingHours: true, viewingMinutes: false });
-		analytics.track("timepicker:click", { action: "hours" });
 	}
 
 	_onMinutesClick() {
 		this.setState({ viewingHours: false, viewingMinutes: true });
-		analytics.track("timepicker:click", { action: "minutes" });
 	}
 
 	_onAMPMClick(e) {
@@ -87,8 +82,6 @@ export default class ClockView extends React.Component {
 		if (period !== currentPeriod) {
 			this.setState({ selectedTime: this.state.selectedTime.subtract(12, "hours")});
 		}
-
-		analytics.track("timepicker:click", { action: "am-pm", period: period });
 	}
 
 	_onPointClick(e) {
@@ -117,8 +110,6 @@ export default class ClockView extends React.Component {
 		} else {
 			this.setState({ selectedTime: this.state.selectedTime.minutes(point) });
 		}
-
-		analytics.track("timepicker:click", { action: "clock-face", period: period, point: point });
 	}
 
 	render() {

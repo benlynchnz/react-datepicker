@@ -1,8 +1,7 @@
 .header {
     background-color: #3498DB;
-    height: 80px;
-    padding-right: 20px;
-    padding-bottom: 10px;
+    height: 60px;
+    padding: 15px;
     font-family: 'Roboto', sans-serif;
 
 }
@@ -11,6 +10,7 @@
     list-style: none;
     height: inherit;
     float: right;
+    margin: 0;
 }
 
 .time li {
