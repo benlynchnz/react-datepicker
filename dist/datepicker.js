@@ -1296,8 +1296,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			this._onBlur = this._onBlur.bind(this);
 			this._onFocus = this._onFocus.bind(this);
 			this._onOk = this._onOk.bind(this);
-			this._onUpdate = this._onUpdate.bind(this);
-			this._onCancel = this._onCancel.bind(this);
 		}
 
 		_inherits(TimePickerView, _React$Component);
@@ -1317,20 +1315,11 @@ return /******/ (function(modules) { // webpackBootstrap
 				_utils2["default"].dispatch(this, _constants2["default"].BLUR, JSON.stringify({ time: this.state.selectedTime }));
 			}
 		}, {
-			key: "_onCancel",
-			value: function _onCancel() {
-				this.setState({ show: false });
-				_utils2["default"].dispatch(this, _constants2["default"].CANCEL, JSON.stringify({ time: this.state.selectedTime }));
-			}
-		}, {
 			key: "_onFocus",
 			value: function _onFocus() {
 				//this.setState({ moveToDate: this.props.selectedDate });
 				this.setState({ show: true });
 			}
-		}, {
-			key: "_onUpdate",
-			value: function _onUpdate(date) {}
 		}, {
 			key: "_onOk",
 			value: function _onOk() {
@@ -1370,7 +1359,6 @@ return /******/ (function(modules) { // webpackBootstrap
 						React.createElement(_ClockJsx2["default"], _extends({}, this.state, {
 							onBlur: this._onBlur,
 							onOK: this._onOk,
-							onCancel: this._onCancel,
 							onUpdate: this._onUpdate }))
 					);
 				}
@@ -1383,9 +1371,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports["default"] = TimePickerView;
 	;
 	module.exports = exports["default"];
-
-	//this.setState({ selectedDate: date });
-	//utils.dispatch(this, Constants.DATE_SELECTED, JSON.stringify({ date: date }));
 
 /***/ },
 /* 8 */
