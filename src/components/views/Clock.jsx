@@ -11,6 +11,7 @@ export default class ClockView extends React.Component {
 		this._removeOverlay = this._removeOverlay.bind(this);
 		this._onBlur = this._onBlur.bind(this);
 		this._onOkClick = this._onOkClick.bind(this);
+		this._onCancelClick = this._onCancelClick.bind(this);
 		this._getTime = this._getTime.bind(this);
 		this._onHoursClick = this._onHoursClick.bind(this);
 		this._onMinutesClick = this._onMinutesClick.bind(this);
@@ -55,6 +56,11 @@ export default class ClockView extends React.Component {
 
 	_onBlur() {
 		this.props.onBlur();
+		this._removeOverlay();
+	}
+
+	_onCancelClick() {
+		this.props.onCancel();
 		this._removeOverlay();
 	}
 
@@ -188,7 +194,7 @@ export default class ClockView extends React.Component {
 
 						<div className={styles.footer}>
 							<div className={styles.buttons}>
-								<button className={styles.btn} onClick={this._onBlur}>Cancel</button>
+								<button className={styles.btn} onClick={this._onCancelClick}>Cancel</button>
 								{this.state.closeOnSelect ? null : (<button className={styles.btn} onClick={this._onOkClick}>OK</button>)}
 							</div>
 						</div>

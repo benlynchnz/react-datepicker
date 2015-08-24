@@ -275,11 +275,11 @@
 	margin-right: 15px;
 	margin-bottom: 5px;
 	-webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .date-range-list-item-btn {
@@ -446,6 +446,7 @@ ul.date-ranges li {
 	color: rgba(0,0,0,.87);
 	text-align: left;
 	cursor: pointer;
+	font-family: 'Roboto', sans-serif;
 }
 
 ul.date-ranges li.selected {
