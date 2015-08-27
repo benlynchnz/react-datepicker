@@ -8,8 +8,6 @@ import styles from "../../DatePickerStyle.css";
 
 export default class DatePickerSingleView extends React.Component {
 
-	displayName: 'datepicker-single'
-
 	constructor(props) {
 		super(props);
 		this.state = Store.getState();
@@ -140,4 +138,4 @@ export default class DatePickerSingleView extends React.Component {
 		}
 	}
 
-};
+}

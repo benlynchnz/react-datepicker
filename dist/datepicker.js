@@ -839,7 +839,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(React.Component);
 
 	exports['default'] = DatePickerSingleView;
-	;
 	module.exports = exports['default'];
 
 /***/ },
@@ -1296,6 +1295,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			this._onBlur = this._onBlur.bind(this);
 			this._onFocus = this._onFocus.bind(this);
 			this._onOk = this._onOk.bind(this);
+			this._onCancel = this._onCancel.bind(this);
 		}
 
 		_inherits(TimePickerView, _React$Component);
@@ -1315,9 +1315,14 @@ return /******/ (function(modules) { // webpackBootstrap
 				_utils2["default"].dispatch(this, _constants2["default"].BLUR, JSON.stringify({ time: this.state.selectedTime }));
 			}
 		}, {
+			key: "_onCancel",
+			value: function _onCancel() {
+				this._onBlur();
+				_utils2["default"].dispatch(this, _constants2["default"].CANCEL, JSON.stringify({ time: this.state.selectedTime }));
+			}
+		}, {
 			key: "_onFocus",
 			value: function _onFocus() {
-				//this.setState({ moveToDate: this.props.selectedDate });
 				this.setState({ show: true });
 			}
 		}, {
@@ -1359,7 +1364,8 @@ return /******/ (function(modules) { // webpackBootstrap
 						React.createElement(_ClockJsx2["default"], _extends({}, this.state, {
 							onBlur: this._onBlur,
 							onOK: this._onOk,
-							onUpdate: this._onUpdate }))
+							onUpdate: this._onUpdate,
+							onCancel: this._onCancel }))
 					);
 				}
 			}
@@ -1369,7 +1375,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(React.Component);
 
 	exports["default"] = TimePickerView;
-	;
 	module.exports = exports["default"];
 
 /***/ },

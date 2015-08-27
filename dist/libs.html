@@ -5,3 +5,31 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-with-addons.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.3/lodash.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.71/Bacon.min.js"></script>
+<script type="text/javascript" src="https://s3-ap-southeast-2.amazonaws.com/static.jude.io/postoffice/ui-service-postoffice.js"></script>
+
+<script>
+  window.BUS = new Bacon.Bus();
+
+  var handler = function(e) {
+    // console.log(e.isEnd());
+
+    console.log(e.value());
+
+    if (e.value().action === "METHOD") {
+      e.value().method();
+    }
+  };
+
+  console.log(window.BUS.first());
+
+  window.BUS.subscribe(handler);
+
+
+  var PO = window.POST_OFFICE;
+
+  var datepicker = PO.channel("datepicker");
+
+  var sub = datepicker.subscribe("INIT", function(data) {
+    console.log("SUB", data);
+  });
+</script>

@@ -154,7 +154,7 @@ export default class CalendarView extends React.Component {
 					keys = [update];
 				}
 
-				value = keys.join('');
+				value = keys.join("");
 
 				if ((value > 0 && direction === "Subtract") || (value < 0 && direction === "Add")) {
 					let update = Number(keys.join("")) * -1;

@@ -16,6 +16,7 @@ export default class TimePickerView extends React.Component {
 		this._onBlur = this._onBlur.bind(this);
 		this._onFocus = this._onFocus.bind(this);
 		this._onOk = this._onOk.bind(this);
+		this._onCancel = this._onCancel.bind(this);
 	}
 
 	componentDidMount() {
@@ -29,8 +30,12 @@ export default class TimePickerView extends React.Component {
 		utils.dispatch(this, Constants.BLUR, JSON.stringify({ time: this.state.selectedTime }));
 	}
 
+	_onCancel() {
+		this._onBlur();
+		utils.dispatch(this, Constants.CANCEL, JSON.stringify({ time: this.state.selectedTime }));
+	}
+
 	_onFocus() {
-		//this.setState({ moveToDate: this.props.selectedDate });
 		this.setState({ show: true });
 	}
 
@@ -69,10 +74,10 @@ export default class TimePickerView extends React.Component {
 					<Clock {...this.state}
 						onBlur={this._onBlur}
 						onOK={this._onOk}
-						onUpdate={this._onUpdate} />
+						onUpdate={this._onUpdate}
+						onCancel={this._onCancel} />
 				</div>
 			);
 		}
 	}
-
-};
+}

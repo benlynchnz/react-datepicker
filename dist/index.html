@@ -85,6 +85,8 @@
 			</div>
 		</div>
 
+		<button id="btn">change</button>
+
 		<script>
 			var getQueryString = function ( field, url ) {
 			    var href = url ? url : window.location.href;
@@ -124,6 +126,18 @@
 			}
 
 			dateRangePicker.addEventListener('event', dateRangePickerHandler);
+
+			var btn = document.getElementById("btn");
+
+			btn.addEventListener("click", function() {
+				window.POST_OFFICE.publish({
+					channel: "datepicker",
+					topic: "setdate",
+					data: {
+						date: moment().subtract(4, "days")
+					}
+				});
+			});
 
 		</script>
 
