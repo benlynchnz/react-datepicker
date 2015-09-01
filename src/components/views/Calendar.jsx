@@ -28,10 +28,10 @@ export default class CalendarView extends React.Component {
 	componentWillMount() {
 		if (this.props.range) {
 			if (this.props.isFrom) {
-				this.setState({ selectedDate: moment(this.props.selectedDateRange.dates.from) });
+				this.setState({ selectedDate: moment(this.props.selectedDateRange.dates.display.from) });
 			} else {
 				this.setState({
-					selectedDate: moment(this.props.selectedDateRange.dates.to),
+					selectedDate: moment(this.props.selectedDateRange.dates.display.to),
 					minDate: this.state.fromDate
 				});
 			}
@@ -49,8 +49,6 @@ export default class CalendarView extends React.Component {
 
 		this._createOverlay();
 		this._attachEvents();
-
-		utils.dispatch(this, Constants.SHOW, JSON.stringify({ time: this.state.selectedDate }));
 	}
 
 	_attachEvents() {
@@ -429,7 +427,8 @@ export default class CalendarView extends React.Component {
 										<tr key={i}>
 											{row.map((cell, j) => {
 												if (cell) {
-													if (this._getCellDateAsISO(cell).isBetween(this.state.minDate, this.state.maxDate, "day")) {
+													let min = this.state.minDate.toISOString();
+													if (this._getCellDateAsISO(cell).isBetween(moment(min).subtract(1, "day"), this.state.maxDate, "day")) {
 														return (
 															<td key={j}>
 																<a

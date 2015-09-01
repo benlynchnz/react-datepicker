@@ -9,7 +9,7 @@ export default class DatePickerView extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { range: false, timepicker: false };
+		this.state = { range: false, timepicker: false, passedDates: null };
 		this._updateState = this._updateState.bind(this);
 	}
 
@@ -26,7 +26,30 @@ export default class DatePickerView extends React.Component {
 			this.setState({ timepicker: true });
 		}
 
-		if (props["data-default-range"]) {
+		if (props["data-dates"]) {
+			let dates = props["data-dates"].split(","),
+				from = moment(dates[0]),
+				to = moment(dates[1]);
+
+			let customRange = _.findWhere(Store.getConvenienceDates(), { name: "Custom" });
+			customRange.dates = {
+				display: {
+					from: from,
+					to: to
+				},
+				query: {
+					from: from,
+					to: to
+				}
+			};
+
+			this.setState({ passedDates: customRange });
+			_.delay(() => {
+				utils.dispatch(this, Constants.DATE_RANGE_DEFAULT, Store.buildOutput(customRange));
+			}, 10);
+		}
+
+		if (props["data-default-range"] && !props["data-dates"]) {
 			let range = props["data-default-range"],
 				rangeValues = _.findWhere(Store.getConvenienceDates(), { name: range });
 
@@ -36,13 +59,13 @@ export default class DatePickerView extends React.Component {
 
 			_.delay(() => {
 				utils.dispatch(this, Constants.DATE_RANGE_DEFAULT, Store.buildOutput(rangeValues));
-			}, 0);
+			}, 10);
 		}
 	}
 
 	render() {
 		if (this.state.range) {
-			return <DateRangeView {...this.state} element={this.props.element} default={this.state.defaultRange} />;
+			return <DateRangeView {...this.state} element={this.props.element} default={this.state.defaultRange} passedDates={this.state.passedDates}/>;
 		}
 
 		if (this.state.timepicker) {

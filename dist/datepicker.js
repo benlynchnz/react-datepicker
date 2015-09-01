@@ -160,7 +160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			_classCallCheck(this, DatePickerView);
 
 			_get(Object.getPrototypeOf(DatePickerView.prototype), "constructor", this).call(this, props);
-			this.state = { range: false, timepicker: false };
+			this.state = { range: false, timepicker: false, passedDates: null };
 			this._updateState = this._updateState.bind(this);
 		}
 
@@ -184,7 +184,32 @@ return /******/ (function(modules) { // webpackBootstrap
 					this.setState({ timepicker: true });
 				}
 
-				if (props["data-default-range"]) {
+				if (props["data-dates"]) {
+					(function () {
+						var dates = props["data-dates"].split(","),
+						    from = moment(dates[0]),
+						    to = moment(dates[1]);
+
+						var customRange = _.findWhere(_componentsStore2["default"].getConvenienceDates(), { name: "Custom" });
+						customRange.dates = {
+							display: {
+								from: from,
+								to: to
+							},
+							query: {
+								from: from,
+								to: to
+							}
+						};
+
+						_this.setState({ passedDates: customRange });
+						_.delay(function () {
+							_componentsUtils2["default"].dispatch(_this, _componentsConstants2["default"].DATE_RANGE_DEFAULT, _componentsStore2["default"].buildOutput(customRange));
+						}, 10);
+					})();
+				}
+
+				if (props["data-default-range"] && !props["data-dates"]) {
 					(function () {
 						var range = props["data-default-range"],
 						    rangeValues = _.findWhere(_componentsStore2["default"].getConvenienceDates(), { name: range });
@@ -195,7 +220,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 						_.delay(function () {
 							_componentsUtils2["default"].dispatch(_this, _componentsConstants2["default"].DATE_RANGE_DEFAULT, _componentsStore2["default"].buildOutput(rangeValues));
-						}, 0);
+						}, 10);
 					})();
 				}
 			}
@@ -203,7 +228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: "render",
 			value: function render() {
 				if (this.state.range) {
-					return React.createElement(_componentsViewsDateRangeJsx2["default"], _extends({}, this.state, { element: this.props.element, "default": this.state.defaultRange }));
+					return React.createElement(_componentsViewsDateRangeJsx2["default"], _extends({}, this.state, { element: this.props.element, "default": this.state.defaultRange, passedDates: this.state.passedDates }));
 				}
 
 				if (this.state.timepicker) {
@@ -238,104 +263,143 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _events = __webpack_require__(11);
 
-	var today = function today() {
+	var today = function today(isDisplay) {
 		return {
 			from: moment().startOf("day"),
-			to: moment().add(1, "day").startOf("day")
+			to: moment().add(1, "day").startOf("day").subtract(isDisplay ? 1 : 0, "ms")
 		};
 	};
 
-	var last_x_days = function last_x_days(days) {
+	var last_x_days = function last_x_days(days, isDisplay) {
 		return {
-			from: moment().subtract(days, "days").startOf("day"),
-			to: moment().subtract(days, "days").startOf("day").add(days, "days")
+			from: moment().startOf("day").subtract(days, "days"),
+			to: moment().startOf("day").subtract(isDisplay ? 1 : 0, "ms")
 		};
 	};
 
-	var yesterday = function yesterday() {
+	var yesterday = function yesterday(isDisplay) {
 		return {
 			from: moment().subtract(1, "days").startOf("day"),
-			to: moment().subtract(1, "days").add(1, "days").startOf("day")
+			to: moment().subtract(1, "days").add(1, "days").startOf("day").subtract(isDisplay ? 1 : 0, "ms")
 		};
 	};
 
 	var last_x_period = function last_x_period(amount, period) {
 		var from = moment().subtract(amount, period).startOf(period);
-		var to = moment(from.toISOString()).endOf(period).add(1, "ms");
+		var to = moment(from.toISOString()).endOf(period);
 		return {
 			from: from,
 			to: to
 		};
 	};
 
-	var last_week = function last_week() {
+	var last_week = function last_week(isDisplay) {
 		return {
 			from: moment().startOf("isoWeek").subtract(1, "week"),
-			to: moment().startOf("isoWeek")
+			to: moment().startOf("isoWeek").subtract(isDisplay ? 1 : 0, "ms")
 		};
 	};
 
-	var this_week = function this_week() {
+	var this_week = function this_week(isDisplay) {
 		var from = moment().startOf("isoWeek");
 		return {
 			from: from,
-			to: moment(from.toISOString()).add(7, "days").startOf("day")
+			to: moment(from.toISOString()).add(7, "days").startOf("day").subtract(isDisplay ? 1 : 0, "ms")
 		};
 	};
 
 	var convenienceDates = [{
 		name: "Today",
 		period: "days",
-		dates: today()
+		dates: {
+			display: today(true),
+			query: today()
+		}
 	}, {
 		name: "Yesterday",
 		period: "days",
-		dates: yesterday()
+		dates: {
+			display: yesterday(true),
+			query: yesterday()
+		}
 	}, {
 		name: "Last 7 days",
 		period: "days",
-		dates: last_x_days(7)
+		dates: {
+			display: last_x_days(7, true),
+			query: last_x_days(7)
+		}
 	}, {
 		name: "Last 30 days",
 		period: "days",
-		dates: last_x_days(30),
+		dates: {
+			display: last_x_days(30, true),
+			query: last_x_days(30)
+		},
 		"default": true
 	}, {
 		name: "This week",
 		period: "weeks",
-		dates: this_week()
+		dates: {
+			display: this_week(true),
+			query: this_week()
+		}
 	}, {
 		name: "Last week",
 		period: "weeks",
-		dates: last_week()
+		dates: {
+			display: last_week(true),
+			query: last_week()
+		}
 	}, {
 		name: "This month",
 		period: "months",
-		dates: last_x_period(0, "month")
+		dates: {
+			display: last_x_period(0, "month", true),
+			query: last_x_period(0, "month")
+		}
 	}, {
 		name: "Last month",
 		period: "months",
-		dates: last_x_period(1, "month")
+		dates: {
+			display: last_x_period(1, "month", true),
+			query: last_x_period(1, "month")
+		}
 	}, {
 		name: "This quarter",
 		period: "quarter",
-		dates: last_x_period(0, "quarter")
+		dates: {
+			display: last_x_period(0, "quarter", true),
+			query: last_x_period(0, "quarter")
+		}
 	}, {
 		name: "Last quarter",
 		period: "quarter",
-		dates: last_x_period(1, "quarter")
+		dates: {
+			display: last_x_period(1, "quarter", true),
+			query: last_x_period(1, "quarter")
+		}
 	}, {
 		name: "This year",
 		period: "years",
-		dates: last_x_period(0, "year")
+		dates: {
+			display: last_x_period(0, "year", true),
+			query: last_x_period(0, "year")
+		}
 	}, {
 		name: "Last year",
 		period: "years",
-		dates: last_x_period(1, "year")
+		dates: {
+			display: last_x_period(1, "year", true),
+			query: last_x_period(1, "year")
+		}
 	}, {
 		name: "Custom",
 		period: "days",
-		dates: today()
+		dates: {
+			display: today(true),
+			query: today()
+		}
 	}];
 
 	var round5 = function round5(x) {
@@ -362,6 +426,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		firstDayOfWeek: 1,
 		moveDates: false,
 		showRanges: true,
+		timepicker: false,
 		show: false,
 		powerKeys: {
 			active: false,
@@ -401,18 +466,30 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: "buildOutput",
 			value: function buildOutput(range) {
-				var from = moment(range.dates.from),
-				    to = moment(range.dates.to);
+				var display_from = moment(range.dates.display.from).toISOString();
+				var display_to = moment(range.dates.display.to).toISOString();
+				var query_from = moment(range.dates.query.from).toISOString();
+				var query_to = moment(range.dates.query.to).toISOString();
+
+				if (range.name === "Custom" && moment(query_to).format("SSS") !== "000") {
+					query_to = moment(query_to).add(1, "ms").toISOString();
+				}
 
 				var payload = {
 					dates: {
-						from: from.toISOString(),
-						to: to.toISOString()
+						display: {
+							from: display_from,
+							to: display_to
+						},
+						query: {
+							from: query_from,
+							to: query_to
+						}
 					},
 					name: range.name,
 					period: range.period,
-					diff_in_days: to.diff(from, "days"),
-					diff_in_hours: to.diff(from, "hours")
+					diff_in_days: moment(query_to).diff(moment(query_from), "days"),
+					diff_in_hours: moment(query_to).diff(moment(query_from), "hours")
 				};
 
 				return JSON.stringify(payload);
@@ -424,11 +501,6 @@ return /******/ (function(modules) { // webpackBootstrap
 				    to = moment(range.dates.to);
 
 				return to.diff(from, range.period);
-			}
-		}, {
-			key: "getTimezone",
-			value: function getTimezone() {
-				return _state.zone.org;
 			}
 		}, {
 			key: "emitChange",
@@ -898,8 +970,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.state.selectedDateRange = props.defaultRange;
 			}
 
-			if (props.org_zone) {
-				this.state.zone.org = props.org_zone;
+			if (props.passedDates) {
+				this.state.selectedDateRange = props.passedDates;
 			}
 
 			this._updateState = this._updateState.bind(this);
@@ -1030,8 +1102,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 
 				this.setState({
-					fromDate: this.state.selectedDateRange.dates.from,
-					toDate: this.state.selectedDateRange.dates.to
+					fromDate: this.state.selectedDateRange.dates.display.from,
+					toDate: this.state.selectedDateRange.dates.display.to
 				});
 
 				this.setState({ ready: true });
@@ -1062,15 +1134,17 @@ return /******/ (function(modules) { // webpackBootstrap
 				customRange.dates = this.state.selectedDateRange.dates;
 
 				if (isFrom) {
-					customRange.dates.from = date.startOf("day");
+					customRange.dates.query.from = date.startOf("day");
+					customRange.dates.display.from = date.startOf("day");
 					this.setState({
 						fromDate: date.startOf("day"),
 						selectedDateRange: customRange
 					});
 				} else {
-					customRange.dates.to = date.startOf("day");
+					customRange.dates.query.to = date.endOf("day");
+					customRange.dates.display.to = date.endOf("day");
 					this.setState({
-						toDate: date.startOf("day"),
+						toDate: date.endOf("day"),
 						selectedDateRange: customRange
 					});
 				}
@@ -1099,8 +1173,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				var direction = e.currentTarget.getAttribute("data-direction"),
 				    diff = 1,
 				    period = this.state.selectedDateRange.period,
-				    from = moment(this.state.selectedDateRange.dates.from).toISOString(),
-				    to = moment(this.state.selectedDateRange.dates.to).toISOString();
+				    from = moment(this.state.selectedDateRange.dates.display.from).toISOString(),
+				    to = moment(this.state.selectedDateRange.dates.display.to).toISOString();
 
 				if (direction === "forward") {
 					diff = diff * -1;
@@ -1110,8 +1184,14 @@ return /******/ (function(modules) { // webpackBootstrap
 					name: "Custom",
 					period: period,
 					dates: {
-						from: moment(from).subtract(diff, period),
-						to: moment(to).subtract(diff, period)
+						query: {
+							from: moment(from).subtract(diff, period),
+							to: moment(to).subtract(diff, period)
+						},
+						display: {
+							from: moment(from).subtract(diff, period),
+							to: moment(to).subtract(diff, period)
+						}
 					}
 				};
 
@@ -1189,12 +1269,12 @@ return /******/ (function(modules) { // webpackBootstrap
 							React.createElement(
 								"li",
 								{ className: layoutStyle() },
-								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-from", "data-range": "from", value: moment(this.state.selectedDateRange.dates.from).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus, readOnly: true })
+								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-from", "data-range": "from", value: moment(this.state.selectedDateRange.dates.display.from).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus, readOnly: true })
 							),
 							React.createElement(
 								"li",
 								{ className: layoutStyle() },
-								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-to", "data-range": "to", value: moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus, readOnly: true })
+								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-to", "data-range": "to", value: moment(this.state.selectedDateRange.dates.display.to).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus, readOnly: true })
 							),
 							this.state.moveDates ? React.createElement(
 								"div",
@@ -1440,10 +1520,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function componentWillMount() {
 				if (this.props.range) {
 					if (this.props.isFrom) {
-						this.setState({ selectedDate: moment(this.props.selectedDateRange.dates.from) });
+						this.setState({ selectedDate: moment(this.props.selectedDateRange.dates.display.from) });
 					} else {
 						this.setState({
-							selectedDate: moment(this.props.selectedDateRange.dates.to),
+							selectedDate: moment(this.props.selectedDateRange.dates.display.to),
 							minDate: this.state.fromDate
 						});
 					}
@@ -1462,8 +1542,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				this._createOverlay();
 				this._attachEvents();
-
-				_utils2["default"].dispatch(this, _constants2["default"].SHOW, JSON.stringify({ time: this.state.selectedDate }));
 			}
 		}, {
 			key: "_attachEvents",
@@ -1893,7 +1971,8 @@ return /******/ (function(modules) { // webpackBootstrap
 											{ key: i },
 											row.map(function (cell, j) {
 												if (cell) {
-													if (_this2._getCellDateAsISO(cell).isBetween(_this2.state.minDate, _this2.state.maxDate, "day")) {
+													var min = _this2.state.minDate.toISOString();
+													if (_this2._getCellDateAsISO(cell).isBetween(moment(min).subtract(1, "day"), _this2.state.maxDate, "day")) {
 														return React.createElement(
 															"td",
 															{ key: j },
@@ -1982,7 +2061,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -2012,116 +2091,113 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
 
 	var DateRangeMenu = (function (_React$Component) {
-	    function DateRangeMenu(props) {
-	        _classCallCheck(this, DateRangeMenu);
+	  function DateRangeMenu(props) {
+	    _classCallCheck(this, DateRangeMenu);
 
-	        _get(Object.getPrototypeOf(DateRangeMenu.prototype), "constructor", this).call(this, props);
+	    _get(Object.getPrototypeOf(DateRangeMenu.prototype), "constructor", this).call(this, props);
+	    this.state = {};
+	    this._onClick = this._onClick.bind(this);
+	    this._onRangeClick = this._onRangeClick.bind(this);
+	    this._onBlur = this._onBlur.bind(this);
+	  }
 
-	        this.state = {};
+	  _inherits(DateRangeMenu, _React$Component);
 
-	        this._onClick = this._onClick.bind(this);
-	        this._onRangeClick = this._onRangeClick.bind(this);
-	        this._onBlur = this._onBlur.bind(this);
+	  _createClass(DateRangeMenu, [{
+	    key: "componentDidMount",
+	    value: function componentDidMount() {
+	      this.setState({
+	        isReady: true
+	      });
 	    }
+	  }, {
+	    key: "_onBlur",
+	    value: function _onBlur() {
+	      this.refs.menu.getDOMNode().style.display = "none";
+	    }
+	  }, {
+	    key: "_onClick",
+	    value: function _onClick() {
+	      var _this = this;
 
-	    _inherits(DateRangeMenu, _React$Component);
+	      this.refs.menu.getDOMNode().style.display = "block";
 
-	    _createClass(DateRangeMenu, [{
-	        key: "componentDidMount",
-	        value: function componentDidMount() {
-	            this.setState({
-	                isReady: true
-	            });
+	      var clickHandler = function clickHandler(e) {
+	        var hasFocus = _utils2["default"].closest(e.target, _DatePickerStyleCss2["default"]["date-ranges"]);
+
+	        if (!hasFocus) {
+	          document.removeEventListener("click", clickHandler);
+	          _this._onBlur();
 	        }
-	    }, {
-	        key: "_onBlur",
-	        value: function _onBlur() {
-	            this.refs.menu.getDOMNode().style.display = "none";
+	      };
+
+	      document.addEventListener("click", clickHandler);
+	    }
+	  }, {
+	    key: "_onRangeClick",
+	    value: function _onRangeClick(e) {
+	      var range = e.target.getAttribute("data-name"),
+	          selected = _.findWhere(this.props.ranges, { name: range });
+
+	      _utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, _store2["default"].buildOutput(selected));
+	      this._onBlur();
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var _this2 = this;
+
+	      var isSelected = function isSelected(item) {
+	        if (item.name === _this2.props.selected.name) {
+	          return _DatePickerStyleCss2["default"].selected;
 	        }
-	    }, {
-	        key: "_onClick",
-	        value: function _onClick() {
-	            var _this = this;
+	      };
 
-	            this.refs.menu.getDOMNode().style.display = "block";
+	      if (this.state.isReady) {
+	        return React.createElement(
+	          "div",
+	          { ref: "menu-wrapper" },
+	          React.createElement(
+	            "div",
+	            { className: _DatePickerStyleCss2["default"]["date-range-wrapper"], onClick: this._onClick },
+	            React.createElement(
+	              "div",
+	              { className: _DatePickerStyleCss2["default"]["date-range-wrapper-text"] },
+	              this.props.selected.name
+	            ),
+	            React.createElement(
+	              "div",
+	              { className: _DatePickerStyleCss2["default"]["date-range-wrapper-icon-caret"] },
+	              React.createElement(
+	                "i",
+	                { className: "material-icons" },
+	                "arrow_drop_down"
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            "ul",
+	            { className: _DatePickerStyleCss2["default"]["date-ranges"], ref: "menu" },
+	            this.props.ranges.map(function (item, i) {
+	              return React.createElement(
+	                "li",
+	                {
+	                  className: isSelected(item),
+	                  key: i,
+	                  "data-name": item.name,
+	                  onClick: _this2._onRangeClick },
+	                item.name
+	              );
+	            })
+	          )
+	        );
+	      } else {
+	        return React.createElement("div", null);
+	      }
+	    }
+	  }]);
 
-	            var clickHandler = function clickHandler(e) {
-	                var hasFocus = _utils2["default"].closest(e.target, _DatePickerStyleCss2["default"]["date-ranges"]);
-
-	                if (!hasFocus) {
-	                    document.removeEventListener("click", clickHandler);
-	                    _this._onBlur();
-	                }
-	            };
-
-	            document.addEventListener("click", clickHandler);
-	        }
-	    }, {
-	        key: "_onRangeClick",
-	        value: function _onRangeClick(e) {
-	            var range = e.target.getAttribute("data-name"),
-	                selected = _.findWhere(this.props.ranges, { name: range });
-
-	            _utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, _store2["default"].buildOutput(selected));
-
-	            this._onBlur();
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            var _this2 = this;
-
-	            var isSelected = function isSelected(item) {
-	                if (item.name === _this2.props.selected.name) {
-	                    return _DatePickerStyleCss2["default"].selected;
-	                }
-	            };
-
-	            if (this.state.isReady) {
-	                return React.createElement(
-	                    "div",
-	                    { ref: "menu-wrapper" },
-	                    React.createElement(
-	                        "div",
-	                        { className: _DatePickerStyleCss2["default"]["date-range-wrapper"], onClick: this._onClick },
-	                        React.createElement(
-	                            "div",
-	                            { className: _DatePickerStyleCss2["default"]["date-range-wrapper-text"] },
-	                            this.props.selected.name
-	                        ),
-	                        React.createElement(
-	                            "div",
-	                            { className: _DatePickerStyleCss2["default"]["date-range-wrapper-icon-caret"] },
-	                            React.createElement(
-	                                "i",
-	                                { className: "material-icons" },
-	                                "arrow_drop_down"
-	                            )
-	                        )
-	                    ),
-	                    React.createElement(
-	                        "ul",
-	                        { className: _DatePickerStyleCss2["default"]["date-ranges"], ref: "menu" },
-	                        this.props.ranges.map(function (item, i) {
-	                            return React.createElement(
-	                                "li",
-	                                {
-	                                    className: isSelected(item),
-	                                    key: i,
-	                                    "data-name": item.name,
-	                                    onClick: _this2._onRangeClick },
-	                                item.name
-	                            );
-	                        })
-	                    )
-	                );
-	            } else {
-	                return React.createElement("div", null);
-	            }
-	        }
-	    }]);
-
-	    return DateRangeMenu;
+	  return DateRangeMenu;
 	})(React.Component);
 
 	exports["default"] = DateRangeMenu;
@@ -2283,10 +2359,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					this.setState({
 						viewingHours: !this.state.viewingHours,
 						viewingMinutes: !this.state.viewingMinutes,
-						selectedTime: this.state.selectedTime.hours(point)
+						selectedTime: this.state.selectedTime.hours(point).seconds(0).milliseconds(0)
 					});
 				} else {
-					this.setState({ selectedTime: this.state.selectedTime.minutes(point) });
+					this.setState({ selectedTime: this.state.selectedTime.minutes(point).seconds(0).milliseconds(0) });
 				}
 			}
 		}, {

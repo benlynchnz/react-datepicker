@@ -111,10 +111,10 @@ export default class ClockView extends React.Component {
 			this.setState({
 				viewingHours: !this.state.viewingHours,
 				viewingMinutes: !this.state.viewingMinutes,
-				selectedTime: this.state.selectedTime.hours(point)
+				selectedTime: this.state.selectedTime.hours(point).seconds(0).milliseconds(0)
 			});
 		} else {
-			this.setState({ selectedTime: this.state.selectedTime.minutes(point) });
+			this.setState({ selectedTime: this.state.selectedTime.minutes(point).seconds(0).milliseconds(0) });
 		}
 	}
 

@@ -15,8 +15,8 @@ export default class DatePickerRangeView extends React.Component {
 			this.state.selectedDateRange = props.defaultRange;
 		}
 
-		if (props.org_zone) {
-			this.state.zone.org = props.org_zone;
+		if (props.passedDates) {
+			this.state.selectedDateRange = props.passedDates;
 		}
 
 		this._updateState = this._updateState.bind(this);
@@ -47,14 +47,14 @@ export default class DatePickerRangeView extends React.Component {
 	_onRangeChange() {
 		let el = document.getElementById(this.props.element.id);
 
-        let handler = (e) => {
-            let action = e.detail.action;
+		let handler = (e) => {
+			let action = e.detail.action;
 			if (action === Constants.DATE_RANGE_CHANGE) {
 				this._onDateChange(JSON.parse(e.detail.payload));
 			}
-        };
+		};
 
-        el.addEventListener("event", handler);
+		el.addEventListener("event", handler);
 	}
 
 	_updateState(props) {
@@ -137,8 +137,8 @@ export default class DatePickerRangeView extends React.Component {
 		}
 
 		this.setState({
-			fromDate: this.state.selectedDateRange.dates.from,
-			toDate: this.state.selectedDateRange.dates.to
+			fromDate: this.state.selectedDateRange.dates.display.from,
+			toDate: this.state.selectedDateRange.dates.display.to
 		});
 
 		this.setState({ ready: true });
@@ -166,15 +166,17 @@ export default class DatePickerRangeView extends React.Component {
 		customRange.dates = this.state.selectedDateRange.dates;
 
 		if (isFrom) {
-			customRange.dates.from = date.startOf("day");
+			customRange.dates.query.from = date.startOf("day");
+			customRange.dates.display.from = date.startOf("day");
 			this.setState({
 				fromDate: date.startOf("day"),
 				selectedDateRange: customRange
 			});
 		} else {
-			customRange.dates.to = date.startOf("day");
+			customRange.dates.query.to = date.endOf("day");
+			customRange.dates.display.to = date.endOf("day");
 			this.setState({
-				toDate: date.startOf("day"),
+				toDate: date.endOf("day"),
 				selectedDateRange: customRange
 			});
 		}
@@ -199,8 +201,8 @@ export default class DatePickerRangeView extends React.Component {
 		let direction = e.currentTarget.getAttribute("data-direction"),
 			diff = 1,
 			period = this.state.selectedDateRange.period,
-			from = moment(this.state.selectedDateRange.dates.from).toISOString(),
-			to = moment(this.state.selectedDateRange.dates.to).toISOString();
+			from = moment(this.state.selectedDateRange.dates.display.from).toISOString(),
+			to = moment(this.state.selectedDateRange.dates.display.to).toISOString();
 
 		if (direction === "forward") {
 			diff = diff * -1;
@@ -210,8 +212,14 @@ export default class DatePickerRangeView extends React.Component {
 			name: "Custom",
 			period: period,
 			dates: {
-				from: moment(from).subtract(diff, period),
-				to: moment(to).subtract(diff, period)
+				query: {
+					from: moment(from).subtract(diff, period),
+					to: moment(to).subtract(diff, period)
+				},
+				display: {
+					from: moment(from).subtract(diff, period),
+					to: moment(to).subtract(diff, period)
+				}
 			}
 		};
 
@@ -283,10 +291,10 @@ export default class DatePickerRangeView extends React.Component {
 						) : null }
 
 						<li className={layoutStyle()}>
-							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-from" data-range="from" value={moment(this.state.selectedDateRange.dates.from).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
+							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-from" data-range="from" value={moment(this.state.selectedDateRange.dates.display.from).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
 						</li>
 						<li className={layoutStyle()}>
-							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-to" data-range="to" value={moment(this.state.selectedDateRange.dates.to).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
+							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-to" data-range="to" value={moment(this.state.selectedDateRange.dates.display.to).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
 						</li>
 
 						{this.state.moveDates ? (
