@@ -65,7 +65,9 @@ export default class DatePickerRangeView extends React.Component {
 		}
 
 		if (props["data-convenience-dates"]) {
-			let opts = props["data-convenience-dates"].split(",");
+			let opts = props["data-convenience-dates"].split(",").map((item) => {
+				return item.trim();
+			});
 			if (opts.length) {
 				this.setState({
 					convenienceDateOptions: opts
