@@ -200,7 +200,8 @@ export default class DatePickerRangeView extends React.Component {
 	}
 
 	_onArrowClick(e) {
-		let direction = e.currentTarget.getAttribute("data-direction"),
+		let moveTo,
+			direction = e.currentTarget.getAttribute("data-direction"),
 			diff = 1,
 			period = this.state.selectedDateRange.period,
 			from = moment(this.state.selectedDateRange.dates.display.from).toISOString(),
@@ -210,24 +211,30 @@ export default class DatePickerRangeView extends React.Component {
 			diff = diff * -1;
 		}
 
+		if (period === "months" || period === "years" || period === "quarter") {
+			moveTo = moment(from).subtract(diff, period).endOf(period);
+		} else {
+			moveTo = moment(to).subtract(diff, period);
+		}
+
 		let newRange = {
 			name: "Custom",
 			period: period,
 			dates: {
 				query: {
 					from: moment(from).subtract(diff, period),
-					to: moment(to).subtract(diff, period)
+					to: moveTo
 				},
 				display: {
 					from: moment(from).subtract(diff, period),
-					to: moment(to).subtract(diff, period)
+					to: moveTo
 				}
 			}
 		};
 
 		this.setState({
 			fromDate: moment(from).subtract(diff, period),
-			toDate: moment(to).subtract(diff, period),
+			toDate: moveTo,
 			selectedDateRange: newRange
 		});
 

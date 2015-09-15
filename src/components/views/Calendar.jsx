@@ -32,7 +32,7 @@ export default class CalendarView extends React.Component {
 			} else {
 				this.setState({
 					selectedDate: moment(this.props.selectedDateRange.dates.display.to),
-					minDate: this.state.fromDate
+					minDate: moment(this.state.selectedDateRange.dates.display.from)
 				});
 			}
 		}
