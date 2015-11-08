@@ -355,8 +355,14 @@ export default class CalendarView extends React.Component {
 	_getDaysInMonth() {
 		let days = [];
 
-		for (var x = this.state.firstDayOfWeek; x < this._getFirstDayOfMonth(); x++) {
-			days.push("");
+		// If first day of month is Sunday & the user display is M - S
+		// TODO: fix this ugly hack
+		if (this.state.firstDayOfWeek > this._getFirstDayOfMonth()) {
+			days.push("", "", "", "", "", "");
+		} else {
+			for (var x = this.state.firstDayOfWeek; x < this._getFirstDayOfMonth(); x++) {
+				days.push("");
+			}
 		}
 
 		for (var y = 0; y < this.state.viewingMonth.daysInMonth(); y++) {

@@ -209,7 +209,7 @@ class Store extends EventEmitter {
 		const query_from = moment(range.dates.query.from).toISOString();
 		let query_to = moment(range.dates.query.to).toISOString();
 
-		if (range.name === "Custom" && moment(query_to).format("SSS") !== "000") {
+		if (moment(query_to).format("SSS") !== "000") {
 			query_to = moment(query_to).add(1, "ms").toISOString();
 		}
 
