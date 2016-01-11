@@ -304,7 +304,10 @@ export default class CalendarView extends React.Component {
 			update = this.state.viewingYear.add(1, "year");
 		}
 
-		this.setState({ viewingYear: update });
+		let viewingMonth = this.state.viewingMonth.format("MMM");
+		update.month(viewingMonth);
+
+		this.setState({ viewingMonth: update, viewingYear: update });
 	}
 
 	_getDate(type) {
