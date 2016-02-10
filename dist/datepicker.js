@@ -1,2 +1,2865 @@
-!function(e,t){if("object"==typeof exports&&"object"==typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define(t);else{var a=t();for(var n in a)("object"==typeof exports?exports:e)[n]=a[n]}}(this,function(){return function(e){function t(n){if(a[n])return a[n].exports;var i=a[n]={exports:{},id:n,loaded:!1};return e[n].call(i.exports,i,i.exports,t),i.loaded=!0,i.exports}var a={};return t.m=e,t.c=a,t.p="",t(0)}([function(e,t,a){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(t,"__esModule",{value:!0});var i=a(11),r=n(i);try{new CustomEvent("test")}catch(s){var o=function(e,t){var a=void 0;return t=t||{bubbles:!1,cancelable:!1,detail:void 0},a=document.createEvent("CustomEvent"),a.initCustomEvent(e,t.bubbles,t.cancelable,t.detail),a};o.prototype=window.Event.prototype,window.CustomEvent=o}var l=function(){var e=document.getElementsByTagName("react-datepicker"),t=document.getElementsByClassName("react-datepicker");Array.prototype.forEach.call(e,function(e){React.render(React.createElement(r["default"],{element:e}),e)}),Array.prototype.forEach.call(t,function(e){React.render(React.createElement(r["default"],{element:e}),e)})};"undefined"!=typeof document&&l(),document.addEventListener("render",l),t["default"]=r["default"],e.exports=t["default"]},function(e,t,a){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n={FOCUS:"FOCUS",BLUR:"BLUR",OK:"OK",CANCEL:"CANCEL",SHOW:"SHOW",DATE_SELECTED:"DATE_SELECTED",DATE_RANGE_CHANGE:"DATE_RANGE_CHANGE",DATE_RANGE_DEFAULT:"DATE_RANGE_DEFAULT",CALENDAR_HIDE:"CALENDAR_HIDE",SUBMIT_CLICK:"SUBMIT_CLICK",INIT:"INIT",ARROW_CLICK:"ARROW_CLICK"};t["default"]=n,e.exports=t["default"]},function(e,t,a){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n={},i=function(e,t){for(var a=e.matches||e.webkitMatchesSelector||e.mozMatchesSelector||e.msMatchesSelector;e;){if(a.bind(e)(t))return!0;e=e.parentElement}return!1};n.closest=i;var r=function(e){var t=e.which,a=e.shiftKey,n=e.ctrlKey,i=8===t,r=187===t,s=107===t,o=109===t,l=189===t,c=37===t||74===t,u=39===t||75===t,d=38===t,f=40===t,m=13===t,h=27===t,_=a&&n,p=a&&!n,v=68===t,y=87===t,g=77===t,k=89===t,b=a&&r||s,O=a&&l||o,D=49===t||97===t,C=50===t||98===t,E=51===t||99===t,S=52===t||100===t,w=53===t||101===t,R=54===t||102===t,T=55===t||103===t,M=56===t||104===t,N=57===t||105===t,A=96===t||48===t,P=null;return D&&(P=1),C&&(P=2),E&&(P=3),S&&(P=4),w&&(P=5),R&&(P=6),T&&(P=7),M&&(P=8),N&&(P=9),A&&(P=0),{SHIFT:a,ADD:r,SUBTRACT:l,DELETE:i,CTRL:n,LEFT:c,RIGHT:u,UP:d,DOWN:f,ENTER:m,ESC:h,YEAR:_,MONTH:p,DURATION_DAYS:v,DURATION_WEEKS:y,DURATION_MONTHS:g,DURATION_YEARS:k,ACTION_ADD:b,ACTION_SUBTRACT:O,VALUE:P}};n.keyMap=r;var s=function(e){var t=React.findDOMNode(e),a=!1,n={},i=t.parentNode;Object.keys(i.attributes).forEach(function(e){var t=void 0;"length"!==e&&(a=!0,t=i.attributes[e],n[t.name]=t.value)}),a&&e._updateState(n),e.setState({element:e.props.element})};n.componentDidMount=s;var o=function(e,t,a){var n=new CustomEvent("event",{detail:{action:t,payload:a}});e.props.element.dispatchEvent(n)};n.dispatch=o,t["default"]=n,e.exports=t["default"]},function(e,t,a){e.exports={overlay:"DatePickerStyle__overlay___2LzVe",modal:"DatePickerStyle__modal___1ErLw",fadeIn:"DatePickerStyle__fadeIn___pe3Rh",wrapper:"DatePickerStyle__wrapper___3Emxc",input:"DatePickerStyle__input___3oQ6t","hidden-input":"DatePickerStyle__hidden-input___2-B40",header:"DatePickerStyle__header___IS3_k",date:"DatePickerStyle__date___1vfXM",left:"DatePickerStyle__left___g_KzY",right:"DatePickerStyle__right___22ruE",hide:"DatePickerStyle__hide___13Weh",show:"DatePickerStyle__show___SZ3Ll",month:"DatePickerStyle__month___2gpUF",day:"DatePickerStyle__day___2hqAq",year:"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp",table:"DatePickerStyle__table___4qAHf",selected:"DatePickerStyle__selected___j7zX0","move-to":"DatePickerStyle__move-to___jDGLn",today:"DatePickerStyle__today___C9UIO",footer:"DatePickerStyle__footer___2Blrk",buttons:"DatePickerStyle__buttons___1oDgg",btn:"DatePickerStyle__btn___3cSbl","power-keys":"DatePickerStyle__power-keys___10dk6","power-keys-item":"DatePickerStyle__power-keys-item___1frz9","date-range-list":"DatePickerStyle__date-range-list___2c-Cd","date-range-list-item":"DatePickerStyle__date-range-list-item___3FlfZ","date-range-list-item-btn":"DatePickerStyle__date-range-list-item-btn___2Oyag","date-range-layout-vertical":"DatePickerStyle__date-range-layout-vertical___8jcq1","date-range-wrapper":"DatePickerStyle__date-range-wrapper___2_ZpW","date-range-wrapper-icon-calendar":"DatePickerStyle__date-range-wrapper-icon-calendar___Fkaq2","date-range-wrapper-text":"DatePickerStyle__date-range-wrapper-text___2IM2g","date-range-wrapper-icon-caret":"DatePickerStyle__date-range-wrapper-icon-caret___3Hosk","date-range-slim":"DatePickerStyle__date-range-slim___2lYZl","submit-btn":"DatePickerStyle__submit-btn___1oWxa","menu-items":"DatePickerStyle__menu-items___3VrmY","date-ranges":"DatePickerStyle__date-ranges___1gSZQ"}},function(e,t,a){"use strict";function n(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var r=function(){function e(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,a,n){return a&&e(t.prototype,a),n&&e(t,n),t}}(),s=a(13),o=function(e){return{from:moment().startOf("day"),to:moment().add(1,"day").startOf("day").subtract(e?1:0,"ms")}},l=function(e,t){return{from:moment().startOf("day").subtract(e,"days"),to:moment().startOf("day").subtract(t?1:0,"ms")}},c=function(e){return{from:moment().subtract(1,"days").startOf("day"),to:moment().subtract(1,"days").add(1,"days").startOf("day").subtract(e?1:0,"ms")}},u=function(e,t){var a=moment().subtract(e,t).startOf(t),n=moment(a.toISOString()).endOf(t);return{from:a,to:n}},d=function(e){return{from:moment().startOf("isoWeek").subtract(1,"week"),to:moment().startOf("isoWeek").subtract(e?1:0,"ms")}},f=function(e){var t=moment().startOf("isoWeek");return{from:t,to:moment(t.toISOString()).add(7,"days").startOf("day").subtract(e?1:0,"ms")}},m=[{name:"Today",period:"days",dates:{display:o(!0),query:o()}},{name:"Yesterday",period:"days",dates:{display:c(!0),query:c()}},{name:"Last 7 days",period:"days",dates:{display:l(7,!0),query:l(7)}},{name:"Last 30 days",period:"days",dates:{display:l(30,!0),query:l(30)},"default":!0},{name:"This week",period:"weeks",dates:{display:f(!0),query:f()}},{name:"Last week",period:"weeks",dates:{display:d(!0),query:d()}},{name:"This month",period:"months",dates:{display:u(0,"month",!0),query:u(0,"month")}},{name:"Last month",period:"months",dates:{display:u(1,"month",!0),query:u(1,"month")}},{name:"This quarter",period:"quarter",dates:{display:u(0,"quarter",!0),query:u(0,"quarter")}},{name:"Last quarter",period:"quarter",dates:{display:u(1,"quarter",!0),query:u(1,"quarter")}},{name:"This year",period:"years",dates:{display:u(0,"year",!0),query:u(0,"year")}},{name:"Last year",period:"years",dates:{display:u(1,"year",!0),query:u(1,"year")}},{name:"Custom",period:"days",dates:{display:o(!0),query:o()}}],h=function(e){return 5*Math.ceil(e/5)},p={selectedDate:moment().endOf("day"),selectedTime:moment().minutes(h(moment().format("mm"))),fromDate:moment().endOf("day"),toDate:moment().endOf("day"),selectedDateRange:_.findWhere(m,{"default":!0}),convenienceDateOptions:[],moveToDate:moment().endOf("day"),today:moment().endOf("day"),viewingDay:moment().endOf("day"),viewingMonth:moment().endOf("month"),viewingYear:moment().endOf("year"),minDate:moment().subtract(999,"years"),maxDate:moment().add(999,"years"),displayFormat:"DD MMM YYYY",closeOnSelect:!1,daysOfWeek:["M","T","W","T","F","S","S"],firstDayOfWeek:1,moveDates:!1,showRanges:!0,timepicker:!1,show:!1,powerKeys:{active:!1,direction:null,keys:[],value:0,duration:"Days",style:{display:"none"}}},v="CHANGE",y=function(e){function t(){n(this,t),null!=e&&e.apply(this,arguments)}return i(t,e),r(t,[{key:"getState",value:function(){return p}},{key:"getConvenienceDates",value:function(){return m}},{key:"buildOutput",value:function(e){var t=moment(e.dates.display.from).toISOString(),a=moment(e.dates.display.to).toISOString(),n=moment(e.dates.query.from).toISOString(),i=moment(e.dates.query.to).toISOString();"000"!==moment(i).format("SSS")&&(i=moment(i).add(1,"ms").toISOString());var r={dates:{display:{from:t,to:a},query:{from:n,to:i}},name:e.name,period:e.period,diff_in_days:moment(i).diff(moment(n),"days"),diff_in_hours:moment(i).diff(moment(n),"hours")};return JSON.stringify(r)}},{key:"getDifference",value:function(e){var t=moment(e.dates.from),a=moment(e.dates.to);return a.diff(t,e.period)}},{key:"emitChange",value:function(){this.emit(v)}},{key:"addChangeListener",value:function(e){this.on(v,e)}},{key:"removeChangeListener",value:function(e){this.removeListener(v,e)}}]),t}(s.EventEmitter),g=new y;t["default"]=g,e.exports=t["default"]},function(e,t,a){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,a,n){return a&&e(t.prototype,a),n&&e(t,n),t}}(),o=function(e,t,a){for(var n=!0;n;){var i=e,r=t,s=a;o=c=l=void 0,n=!1;var o=Object.getOwnPropertyDescriptor(i,r);if(void 0!==o){if("value"in o)return o.value;var l=o.get;return void 0===l?void 0:l.call(s)}var c=Object.getPrototypeOf(i);if(null===c)return void 0;e=c,t=r,a=s,n=!0}},l=a(3),c=n(l),u=a(2),d=n(u),f=a(1),m=(n(f),function(e){function t(e){i(this,t),o(Object.getPrototypeOf(t.prototype),"constructor",this).call(this,e),this.state=this.props,this._createOverlay=this._createOverlay.bind(this),this._attachEvents=this._attachEvents.bind(this),this._removeOverlay=this._removeOverlay.bind(this),this._onBlur=this._onBlur.bind(this),this._onOkClick=this._onOkClick.bind(this),this._onDayClick=this._onDayClick.bind(this),this._onMonthClick=this._onMonthClick.bind(this),this._onYearClick=this._onYearClick.bind(this),this._getDate=this._getDate.bind(this),this._getCalendarDate=this._getCalendarDate.bind(this),this._getDaysInMonth=this._getDaysInMonth.bind(this),this._getFirstDayOfMonth=this._getFirstDayOfMonth.bind(this),this._getCellDate=this._getCellDate.bind(this),this._getCellDateAsISO=this._getCellDateAsISO.bind(this),this._getCellDateClass=this._getCellDateClass.bind(this)}return r(t,e),s(t,[{key:"componentWillMount",value:function(){this.props.range&&(this.props.isFrom?this.setState({selectedDate:moment(this.props.selectedDateRange.dates.display.from)}):this.setState({selectedDate:moment(this.props.selectedDateRange.dates.display.to),minDate:moment(this.state.selectedDateRange.dates.display.from)}))}},{key:"componentDidMount",value:function(){var e=this.state.selectedDate.toISOString();this.setState({viewingDay:moment(e).endOf("day"),viewingMonth:moment(e).endOf("month"),viewingYear:moment(e).endOf("year")}),this._createOverlay(),this._attachEvents()}},{key:"_attachEvents",value:function(){var e=this,t=this.refs["hidden-input"].getDOMNode();t.focus();var a=function r(a){var n=a.target.classList.contains(c["default"].modal);n?(document.removeEventListener("click",r),t.removeEventListener("keydown",i),e._onBlur()):t.focus()},n=!1,i=function s(a){var i=d["default"].keyMap(a),r=e.state.powerKeys.duration,o=e.state.powerKeys.direction,l=e.state.selectedDate.toISOString(),c=e.state.powerKeys.keys,u=void 0;if(n){if(i.ESC||i.ENTER)return n=!1,e.setState({powerKeys:{active:!1,keys:[],direction:null,value:0,duration:"Days",style:{display:"none"}}}),i.ENTER&&(e.setState({selectedDate:e.state.moveToDate}),e.props.onUpdate(e.state.selectedDate),a.preventDefault(),a.stopPropagation()),void(i.ESC&&(e.setState({moveToDate:e.state.selectedDate}),a.preventDefault(),a.stopPropagation()));if(i.VALUE||0===i.VALUE?c.length?c.push(i.VALUE):c=[i.VALUE]:i.DURATION_DAYS?r="Days":i.DURATION_WEEKS?r="Weeks":i.DURATION_MONTHS?r="Months":i.DURATION_YEARS?r="Years":i.DELETE&&c.pop(),i.ACTION_ADD&&(o="Add"),i.ACTION_SUBTRACT&&(o="Subtract"),i.RIGHT){var f=Number(c.join(""))+1;c=[f],f>0&&(o="Add")}if(i.LEFT){var f=Number(c.join(""))-1;0>f&&(o="Subtract"),c=[f]}if(u=c.join(""),u>0&&"Subtract"===o||0>u&&"Add"===o){var f=-1*Number(c.join(""));c=[f],u=c.join("")}1===c.length&&1===Math.abs(Number(u))?r=_.trimRight(r,"s"):_.endsWith(r,"s")||(r+="s"),l=moment(l).add(u,r.toLowerCase()),e.setState({powerKeys:{active:!0,keys:c,value:u,direction:o,duration:r},moveToDate:l})}else{var m=function(t){n=!0,e.setState({powerKeys:{active:!0,keys:[],direction:t?"Subtract":"Add",duration:e.state.powerKeys.duration,style:{display:"block"}}})};if(i.ACTION_ADD||i.ACTION_SUBTRACT)return void m(i.ACTION_SUBTRACT);if(i.LEFT||i.RIGHT)return void m(i.LEFT);if(i.ENTER)return t.removeEventListener("keydown",s),e._onOkClick(),a.preventDefault(),void a.stopPropagation();if(i.ESC)return t.removeEventListener("keydown",s),void e._onBlur()}};t.addEventListener("keydown",i),document.addEventListener("click",a)}},{key:"_createOverlay",value:function(){if(!document.getElementById("overlay")){var e=document.createElement("div");e.id="overlay",e.classList.add(c["default"].overlay),document.body.appendChild(e)}}},{key:"_removeOverlay",value:function(){var e=document.getElementById("overlay");e&&(e.outerHTML="")}},{key:"_onBlur",value:function(){this.props.onBlur(),this._removeOverlay()}},{key:"_onOkClick",value:function(){this.props.onOK(),this._removeOverlay()}},{key:"_onDayClick",value:function(e){var t=Number(e.target.getAttribute("data-date").split("/")[2]),a=this.state.viewingMonth.month(),n=this.state.viewingYear.year(),i=moment().year(n).month(a).date(t);this.props.onUpdate(i.endOf("day")),this.setState({selectedDate:i,moveToDate:i}),this.state.range&&this.state.isFrom&&this.setState({toDate:i}),this.state.closeOnSelect&&this._onOkClick(i.endOf("day"))}},{key:"_onMonthClick",value:function(e){var t=void 0,a=void 0;t=e.target?e.target.classList.contains(c["default"]["arrow-left"])?!0:!1:-1===e?!0:!1,a=t?this.state.viewingMonth.subtract(1,"month"):this.state.viewingMonth.add(1,"month"),this.setState({viewingMonth:a,viewingYear:a})}},{key:"_onYearClick",value:function(e){var t=void 0,a=void 0;t=e.target?e.target.classList.contains(c["default"]["arrow-left"])?!0:!1:-1===e?!0:!1,a=t?this.state.viewingYear.subtract(1,"year"):this.state.viewingYear.add(1,"year");var n=this.state.viewingMonth.format("MMM");a.month(n),this.setState({viewingMonth:a,viewingYear:a})}},{key:"_getDate",value:function(e){var t=void 0;switch(e){case"DAYOFWEEK":t="dddd";break;case"DAYOFMONTH":t="DD";break;case"MONTH":t="MMM";break;case"YEAR":t="YYYY"}return this.state.selectedDate.format(t)}},{key:"_getCalendarDate",value:function(e){var t=void 0,a=this.state.viewingMonth;switch(e){case"DAYOFWEEK":t="dddd",a=this.state.viewingDay;break;case"DAYOFMONTH":t="DD";break;case"MONTH":t="MMM";break;case"YEAR":t="YYYY",a=this.state.viewingYear}return a.format(t)}},{key:"_getDaysInMonth",value:function(){var e=[];if(this.state.firstDayOfWeek>this._getFirstDayOfMonth())e.push("","","","","","");else for(var t=this.state.firstDayOfWeek;t<this._getFirstDayOfMonth();t++)e.push("");for(var a=0;a<this.state.viewingMonth.daysInMonth();a++)e.push(this.state.viewingMonth.startOf("month").add(a,"days").format("DD"));return _.chunk(e,7)}},{key:"_getFirstDayOfMonth",value:function(){return Number(this.state.viewingMonth.startOf("month").format("d"))}},{key:"_getCellDate",value:function(e){return this.state.viewingYear.year()+"/"+this.state.viewingMonth.format("MM")+"/"+e}},{key:"_getCellDateAsISO",value:function(e){return moment(this._getCellDate(e),"YYYY/MM/DD")}},{key:"_getCellDateClass",value:function(e){return e&&this.state.selectedDate.format("YYYY/MM/DD")===this._getCellDate(e)?c["default"].selected:e&&this.state.moveToDate&&this.state.moveToDate.format("YYYY/MM/DD")===this._getCellDate(e)?c["default"]["move-to"]:e&&this.state.today.format("YYYY/MM/DD")===this._getCellDate(e)?c["default"].today:void 0}},{key:"render",value:function(){var e=this;return React.createElement("div",{ref:"wrapper"},React.createElement("div",{className:c["default"].modal},React.createElement("div",{className:c["default"].wrapper,ref:"wrapper"},React.createElement("div",{className:c["default"].header},this._getDate("DAYOFWEEK")),React.createElement("div",{className:c["default"].date},React.createElement("div",{className:c["default"].month},React.createElement("span",{className:c["default"]["arrow-left"],onClick:this._onMonthClick}),this._getCalendarDate("MONTH"),React.createElement("span",{className:c["default"]["arrow-right"],onClick:this._onMonthClick})),React.createElement("div",{className:c["default"].day},this._getDate("DAYOFMONTH")),React.createElement("div",{className:c["default"].year},React.createElement("span",{className:c["default"]["arrow-left"],onClick:this._onYearClick}),this._getCalendarDate("YEAR"),React.createElement("span",{className:c["default"]["arrow-right"],onClick:this._onYearClick}))),React.createElement("table",{className:c["default"].table},React.createElement("thead",null,React.createElement("tr",null,this.state.daysOfWeek.map(function(e,t){return React.createElement("th",{key:t},e)}))),React.createElement("tbody",null,this._getDaysInMonth().map(function(t,a){return React.createElement("tr",{key:a},t.map(function(t,a){if(t){var n=e.state.minDate.toISOString();return e._getCellDateAsISO(t).isBetween(moment(n).subtract(1,"day"),e.state.maxDate,"day")?React.createElement("td",{key:a},React.createElement("a",{"data-date":e._getCellDate(t),className:e._getCellDateClass(t),onClick:e._onDayClick},t)):React.createElement("td",{key:a},t)}return React.createElement("td",{key:a})}))}))),React.createElement("div",{className:c["default"].footer},React.createElement("div",{className:c["default"].buttons},React.createElement("button",{className:c["default"].btn,onClick:this._onBlur},"Cancel"),this.state.closeOnSelect?null:React.createElement("button",{className:c["default"].btn,onClick:this._onOkClick},"OK"))),React.createElement("div",{className:c["default"]["power-keys"],style:this.state.powerKeys.style},React.createElement("li",{className:c["default"]["power-keys-item"]},this.state.powerKeys.direction),this.state.powerKeys.keys.length?React.createElement("li",{className:c["default"]["power-keys-item"]},Math.abs(this.state.powerKeys.value)):null,this.state.powerKeys.keys.length?React.createElement("li",{className:c["default"]["power-keys-item"]},this.state.powerKeys.duration):null),React.createElement("div",{className:c["default"]["hidden-input"]},React.createElement("input",{type:"text",ref:"hidden-input",onFocus:this._onFocus})))))}}]),t}(React.Component));t["default"]=m,e.exports=t["default"]},function(e,t,a){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,a,n){return a&&e(t.prototype,a),n&&e(t,n),t}}(),o=function(e,t,a){for(var n=!0;n;){var i=e,r=t,s=a;o=c=l=void 0,n=!1;var o=Object.getOwnPropertyDescriptor(i,r);if(void 0!==o){if("value"in o)return o.value;var l=o.get;return void 0===l?void 0:l.call(s)}var c=Object.getPrototypeOf(i);if(null===c)return void 0;e=c,t=r,a=s,n=!0}},l=a(3),c=n(l),u=a(12),d=n(u),f=function(e){function t(e){i(this,t),o(Object.getPrototypeOf(t.prototype),"constructor",this).call(this,e),this.state=this.props,this._createOverlay=this._createOverlay.bind(this),this._removeOverlay=this._removeOverlay.bind(this),this._onBlur=this._onBlur.bind(this),this._onOkClick=this._onOkClick.bind(this),this._onCancelClick=this._onCancelClick.bind(this),this._getTime=this._getTime.bind(this),this._onHoursClick=this._onHoursClick.bind(this),this._onMinutesClick=this._onMinutesClick.bind(this),this._onPointClick=this._onPointClick.bind(this),this._onAMPMClick=this._onAMPMClick.bind(this)}return r(t,e),s(t,[{key:"componentDidMount",value:function(){this.setState({viewingHours:!0,viewingMinutes:!1}),this._createOverlay(),this._attachEvents()}},{key:"_attachEvents",value:function(){var e=this,t=function a(t){var n=t.target.classList.contains(c["default"].modal);n&&(document.removeEventListener("click",a),e._onBlur())};document.addEventListener("click",t)}},{key:"_createOverlay",value:function(){if(!document.getElementById("overlay")){var e=document.createElement("div");e.id="overlay",e.classList.add(c["default"].overlay),document.body.appendChild(e)}}},{key:"_removeOverlay",value:function(){var e=document.getElementById("overlay");e&&(e.outerHTML="")}},{key:"_onBlur",value:function(){this.props.onBlur(),this._removeOverlay()}},{key:"_onCancelClick",value:function(){this.props.onCancel(),this._removeOverlay()}},{key:"_onOkClick",value:function(){this.props.onOK(),this._removeOverlay()}},{key:"_getTime",value:function(e){return this.state.selectedTime.format(e)}},{key:"_onHoursClick",value:function(){this.setState({viewingHours:!0,viewingMinutes:!1})}},{key:"_onMinutesClick",value:function(){this.setState({viewingHours:!1,viewingMinutes:!0})}},{key:"_onAMPMClick",value:function(e){var t=e.currentTarget.getAttribute("data-period"),a=this.state.selectedTime.format("a");t!==a&&this.setState({selectedTime:this.state.selectedTime.subtract(12,"hours")})}},{key:"_onPointClick",value:function(e){var t=e.currentTarget.getAttribute("data-point"),a=this.state.viewingHours?"HH":"mm",n="pm"===this.state.selectedTime.format("a")?!0:!1;n&&"HH"===a&&(t=Number(t)+12,24===t&&(t=12)),!n&&"HH"===a&&t>=12&&(t=Number(t)-12),"HH"===a?this.setState({viewingHours:!this.state.viewingHours,viewingMinutes:!this.state.viewingMinutes,selectedTime:this.state.selectedTime.hours(t).seconds(0).milliseconds(0)}):this.setState({selectedTime:this.state.selectedTime.minutes(t).seconds(0).milliseconds(0)})}},{key:"render",value:function(){var e=this,t=function(t){var a=function(a){var n=d["default"]["clock-face-point"];return n+=" "+d["default"][t+a],"h"===t&&e._getTime("h")===a&&(n+=" "+d["default"].selected),"m"===t&&e._getTime("mm")===a&&(n+=" "+d["default"].selected),n},n=["12","1","2","3","4","5","6","7","8","9","10","11"],i=["00","05","10","15","20","25","30","35","40","45","50","55"],r=n;return"m"===t&&(r=i),r.map(function(t,n){return React.createElement("div",{key:n,onClick:e._onPointClick,"data-point":t,className:a(t)},t)})},a=function(t){var a=d["default"].ampm;return e.state.selectedTime.format("a")===t&&(a+=" "+d["default"].selected),a};return React.createElement("div",{ref:"wrapper"},React.createElement("div",{className:c["default"].modal},React.createElement("div",{className:c["default"].wrapper,ref:"wrapper"},React.createElement("div",{className:d["default"].header},React.createElement("ul",{className:d["default"].time},React.createElement("li",{className:this.state.viewingHours?d["default"].selected:null,onClick:this._onHoursClick},this._getTime("h")),React.createElement("li",{className:d["default"].ignore},":"),React.createElement("li",{className:this.state.viewingMinutes?d["default"].selected:null,onClick:this._onMinutesClick},this._getTime("mm")),React.createElement("li",{className:d["default"].ampm},React.createElement("div",{className:a("am"),"data-period":"am",onClick:this._onAMPMClick},"AM"),React.createElement("div",{className:a("pm"),"data-period":"pm",onClick:this._onAMPMClick},"PM")))),React.createElement("div",{className:d["default"].wrapper},React.createElement("div",{className:d["default"]["clock-face"]},t(this.state.viewingHours?"h":"m"),React.createElement("div",{className:d["default"].center}))),React.createElement("div",{className:c["default"].footer},React.createElement("div",{className:c["default"].buttons},React.createElement("button",{className:c["default"].btn,onClick:this._onCancelClick},"Cancel"),this.state.closeOnSelect?null:React.createElement("button",{className:c["default"].btn,onClick:this._onOkClick},"OK"))))))}}]),t}(React.Component);t["default"]=f,e.exports=t["default"]},function(e,t,a){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var a=arguments[t];for(var n in a)Object.prototype.hasOwnProperty.call(a,n)&&(e[n]=a[n])}return e},o=function(){function e(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,a,n){return a&&e(t.prototype,a),n&&e(t,n),t}}(),l=function(e,t,a){for(var n=!0;n;){var i=e,r=t,s=a;o=c=l=void 0,n=!1;var o=Object.getOwnPropertyDescriptor(i,r);if(void 0!==o){if("value"in o)return o.value;var l=o.get;return void 0===l?void 0:l.call(s)}var c=Object.getPrototypeOf(i);if(null===c)return void 0;e=c,t=r,a=s,n=!0}},c=a(4),u=n(c),d=a(2),f=n(d),m=a(1),h=n(m),p=a(5),v=n(p),y=a(8),g=n(y),k=a(3),b=n(k),O=function(e){function t(e){i(this,t),l(Object.getPrototypeOf(t.prototype),"constructor",this).call(this,e),this.state=u["default"].getState(),e.defaultRange&&(this.state.selectedDateRange=e.defaultRange),e.passedDates&&(this.state.selectedDateRange=e.passedDates),this._updateState=this._updateState.bind(this),this._onBlur=this._onBlur.bind(this),this._onFocus=this._onFocus.bind(this),this._onUpdate=this._onUpdate.bind(this),this._onOk=this._onOk.bind(this),this._onDateChange=this._onDateChange.bind(this),this._onRangeChange=this._onRangeChange.bind(this),this._onSubmitBtnClick=this._onSubmitBtnClick.bind(this),this._onArrowClick=this._onArrowClick.bind(this)}return r(t,e),o(t,[{key:"componentWillMount",value:function(){u["default"].addChangeListener(this._onChange.bind(this))}},{key:"componentDidMount",value:function(){return this._onRangeChange(),this.setState({ready:!1}),f["default"].componentDidMount(this)}},{key:"_onChange",value:function(){this.setState({reload:!0})}},{key:"_onRangeChange",value:function(){var e=this,t=document.getElementById(this.props.element.id),a=function(t){var a=t.detail.action;a===h["default"].DATE_RANGE_CHANGE&&e._onDateChange(JSON.parse(t.detail.payload))};t.addEventListener("event",a)}},{key:"_updateState",value:function(e){if(e["data-display-format"]&&this.setState({displayFormat:e["data-display-format"]}),e["data-convenience-dates"]){var t=e["data-convenience-dates"].split(",").map(function(e){return e.trim()});t.length&&this.setState({convenienceDateOptions:t})}if(e["data-selected-date"]){var a=void 0;a=e["data-selected-date-format"]?moment(e["data-selected-date"],e["data-selected-date-format"]):moment(e["data-selected-date"]);var n=a.toISOString();this.setState({selectedDate:a.endOf("day"),moveToDate:moment(n).endOf("day"),viewingMonth:moment(n).endOf("month"),viewingYear:moment(n).endOf("year")})}if(e["data-min-date"]&&this.setState({minDate:moment(e["data-min-date"])}),e["data-max-date"]&&this.setState({maxDate:moment(e["data-max-date"])}),e["data-close-on-select"]&&this.setState({closeOnSelect:!0}),e["data-hide-inputs"]&&this.setState({hideInputs:!0}),e["data-layout-vertical"]&&this.setState({layoutVertical:!0}),e["data-submit-btn"]&&this.setState({hasSubmitBtn:!0}),e["data-move-dates"]&&this.setState({moveDates:!0}),e["data-hide-ranges"]&&this.setState({showRanges:!1}),e["data-first-day-of-week"]){var i=Number(e["data-first-day-of-week"]);this.setState({firstDayOfWeek:i,daysOfWeek:0===i?["S","M","T","W","T","F","S"]:["M","T","W","T","F","S","S"]})}this.setState({fromDate:this.state.selectedDateRange.dates.display.from,toDate:this.state.selectedDateRange.dates.display.to}),this.setState({ready:!0})}},{key:"_onBlur",value:function(){this.setState({show:!1})}},{key:"_onFocus",value:function(e){var t="from"===e.target.getAttribute("data-range")?!0:!1;this.setState({isFrom:t,moveToDate:this.props.selectedDate,range:!0,show:!0})}},{key:"_onUpdate",value:function(e){var t=this.state.isFrom,a=_.findWhere(u["default"].getConvenienceDates(),{name:"Custom"});a.dates=this.state.selectedDateRange.dates,t?(a.dates.query.from=e.startOf("day"),a.dates.display.from=e.startOf("day"),this.setState({fromDate:e.startOf("day"),selectedDateRange:a})):(a.dates.query.to=e.endOf("day"),a.dates.display.to=e.endOf("day"),this.setState({toDate:e.endOf("day"),selectedDateRange:a})),this.setState({selectedDateRange:a}),f["default"].dispatch(this,h["default"].DATE_RANGE_CHANGE,u["default"].buildOutput(a))}},{key:"_onOk",value:function(){this._onBlur()}},{key:"_onDateChange",value:function(e){this.setState({selectedDateRange:e})}},{key:"_onSubmitBtnClick",value:function(){f["default"].dispatch(this,h["default"].SUBMIT_CLICK,u["default"].buildOutput(this.state.selectedDateRange))}},{key:"_onArrowClick",value:function(e){var t=void 0,a=e.currentTarget.getAttribute("data-direction"),n=1,i=this.state.selectedDateRange.period,r=moment(this.state.selectedDateRange.dates.display.from).toISOString(),s=moment(this.state.selectedDateRange.dates.display.to).toISOString();"forward"===a&&(n=-1*n),t="months"===i||"years"===i||"quarter"===i?moment(r).subtract(n,i).endOf(i):moment(s).subtract(n,i);var o={name:"Custom",period:i,dates:{query:{from:moment(r).subtract(n,i),to:t},display:{from:moment(r).subtract(n,i),to:t}}};this.setState({fromDate:moment(r).subtract(n,i),toDate:t,selectedDateRange:o}),f["default"].dispatch(this,h["default"].ARROW_CLICK,u["default"].buildOutput(o))}},{key:"render",value:function(){var e=this,t=u["default"].getConvenienceDates(),a=[];this.state.convenienceDateOptions.length?this.state.convenienceDateOptions.forEach(function(e){var n=_.findWhere(t,{name:e});n&&a.push(n)}):a=t;var n=function(){var t=b["default"]["date-range-list-item"];return t+=" "+b["default"]["date-range-list-item-btn"],e.state.layoutVertical&&(t+=" "+b["default"]["date-range-layout-vertical"]),t},i=function(){var t=b["default"]["date-range-list-item"];return e.state.layoutVertical&&(t+=" "+b["default"]["date-range-layout-vertical"]),t},r=function(){var t=b["default"]["date-range-list"];return e.state.layoutVertical&&(t+=" "+b["default"]["date-range-slim"]),t};return this.state.ready?React.createElement("div",{className:r()},React.createElement("ul",null,this.state.showRanges?React.createElement("li",{className:i()},React.createElement(g["default"],{
-element:this.props.element,ranges:a,selected:this.state.selectedDateRange})):null,React.createElement("li",{className:i()},React.createElement("input",{type:"text",style:this.state.hideInputs?{display:"none"}:null,className:b["default"].input,ref:"datepicker-input-from","data-range":"from",value:moment(this.state.selectedDateRange.dates.display.from).format(this.state.displayFormat),onFocus:this._onFocus,onClick:this._onFocus,readOnly:!0})),React.createElement("li",{className:i()},React.createElement("input",{type:"text",style:this.state.hideInputs?{display:"none"}:null,className:b["default"].input,ref:"datepicker-input-to","data-range":"to",value:moment(this.state.selectedDateRange.dates.display.to).format(this.state.displayFormat),onFocus:this._onFocus,onClick:this._onFocus,readOnly:!0})),this.state.moveDates?React.createElement("div",null,React.createElement("li",{className:n(),"data-direction":"back",onClick:this._onArrowClick},React.createElement("i",{className:"material-icons"},"keyboard_arrow_left")),React.createElement("li",{className:n(),"data-direction":"forward",onClick:this._onArrowClick},React.createElement("i",{className:"material-icons"},"keyboard_arrow_right"))):null,this.state.hasSubmitBtn?React.createElement("li",{className:i()},React.createElement("button",{className:b["default"]["submit-btn"],onClick:this._onSubmitBtnClick},"Submit")):null),this.state.show?React.createElement(v["default"],s({},this.state,{onBlur:this._onBlur,onOK:this._onOk,onUpdate:this._onUpdate})):null):React.createElement("div",null)}}]),t}(React.Component);t["default"]=O,e.exports=t["default"]},function(e,t,a){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,a,n){return a&&e(t.prototype,a),n&&e(t,n),t}}(),o=function(e,t,a){for(var n=!0;n;){var i=e,r=t,s=a;o=c=l=void 0,n=!1;var o=Object.getOwnPropertyDescriptor(i,r);if(void 0!==o){if("value"in o)return o.value;var l=o.get;return void 0===l?void 0:l.call(s)}var c=Object.getPrototypeOf(i);if(null===c)return void 0;e=c,t=r,a=s,n=!0}},l=a(1),c=n(l),u=a(4),d=n(u),f=a(2),m=n(f),h=a(3),p=n(h),v=function(e){function t(e){i(this,t),o(Object.getPrototypeOf(t.prototype),"constructor",this).call(this,e),this.state={},this._onClick=this._onClick.bind(this),this._onRangeClick=this._onRangeClick.bind(this),this._onBlur=this._onBlur.bind(this)}return r(t,e),s(t,[{key:"componentDidMount",value:function(){this.setState({isReady:!0})}},{key:"_onBlur",value:function(){this.refs.menu.getDOMNode().style.display="none"}},{key:"_onClick",value:function(){var e=this;this.refs.menu.getDOMNode().style.display="block";var t=function a(t){var n=m["default"].closest(t.target,p["default"]["date-ranges"]);n||(document.removeEventListener("click",a),e._onBlur())};document.addEventListener("click",t)}},{key:"_onRangeClick",value:function(e){var t=e.target.getAttribute("data-name"),a=_.findWhere(this.props.ranges,{name:t});m["default"].dispatch(this,c["default"].DATE_RANGE_CHANGE,d["default"].buildOutput(a)),this._onBlur()}},{key:"render",value:function(){var e=this,t=function(t){return t.name===e.props.selected.name?p["default"].selected:void 0};return this.state.isReady?React.createElement("div",{ref:"menu-wrapper"},React.createElement("div",{className:p["default"]["date-range-wrapper"],onClick:this._onClick},React.createElement("div",{className:p["default"]["date-range-wrapper-text"]},this.props.selected.name),React.createElement("div",{className:p["default"]["date-range-wrapper-icon-caret"]},React.createElement("i",{className:"material-icons"},"arrow_drop_down"))),React.createElement("ul",{className:p["default"]["date-ranges"],ref:"menu"},this.props.ranges.map(function(a,n){return React.createElement("li",{className:t(a),key:n,"data-name":a.name,onClick:e._onRangeClick},a.name)}))):React.createElement("div",null)}}]),t}(React.Component);t["default"]=v,e.exports=t["default"]},function(e,t,a){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var a=arguments[t];for(var n in a)Object.prototype.hasOwnProperty.call(a,n)&&(e[n]=a[n])}return e},o=function(){function e(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,a,n){return a&&e(t.prototype,a),n&&e(t,n),t}}(),l=function(e,t,a){for(var n=!0;n;){var i=e,r=t,s=a;o=c=l=void 0,n=!1;var o=Object.getOwnPropertyDescriptor(i,r);if(void 0!==o){if("value"in o)return o.value;var l=o.get;return void 0===l?void 0:l.call(s)}var c=Object.getPrototypeOf(i);if(null===c)return void 0;e=c,t=r,a=s,n=!0}},c=a(4),u=n(c),d=a(2),f=n(d),m=a(1),h=n(m),_=a(5),p=n(_),v=a(3),y=n(v),g=function(e){function t(e){i(this,t),l(Object.getPrototypeOf(t.prototype),"constructor",this).call(this,e),this.state=u["default"].getState(),this._updateState=this._updateState.bind(this),this._onBlur=this._onBlur.bind(this),this._onFocus=this._onFocus.bind(this),this._onOk=this._onOk.bind(this),this._onUpdate=this._onUpdate.bind(this)}return r(t,e),o(t,[{key:"componentDidMount",value:function(){return f["default"].componentDidMount(this)}},{key:"_updateState",value:function(e){if(e["data-display-format"]&&this.setState({displayFormat:e["data-display-format"]}),e["data-selected-date"]){var t=void 0,a=-1!==e["data-selected-date"].indexOf("UTC"),n=e["data-selected-date"];if(t=e["data-selected-date-format"]?moment(n,e["data-selected-date-format"]):moment(n),a){var i=t.utcOffset();t=t.add(i,"minutes")}var r=t.toISOString();this.setState({selectedDate:t.endOf("day"),moveToDate:moment(r).endOf("day"),viewingMonth:moment(r).endOf("month"),viewingYear:moment(r).endOf("year")})}if(e["data-min-date"]&&this.setState({minDate:moment(e["data-min-date"])}),e["data-max-date"]&&this.setState({maxDate:moment(e["data-max-date"])}),e["data-close-on-select"]&&this.setState({closeOnSelect:!0}),e["data-first-day-of-week"]){var s=Number(e["data-first-day-of-week"]);this.setState({firstDayOfWeek:s,daysOfWeek:0===s?["S","M","T","W","T","F","S"]:["M","T","W","T","F","S","S"]})}}},{key:"_onBlur",value:function(){this.setState({show:!1})}},{key:"_onFocus",value:function(){this.setState({moveToDate:this.props.selectedDate}),this.setState({show:!0})}},{key:"_onUpdate",value:function(e){this.setState({selectedDate:e}),f["default"].dispatch(this,h["default"].DATE_SELECTED,JSON.stringify({date:e}))}},{key:"_onOk",value:function(e){this._onBlur()}},{key:"render",value:function(){return this.state.show?React.createElement("div",{className:y["default"]["input-group"]},React.createElement("input",{id:this.props.element.id+"-input",type:"text",className:"input",ref:"datepicker-input","data-iso":this.state.selectedDate.toISOString(),value:this.state.selectedDate.format(this.state.displayFormat),onClick:this._onFocus,onFocus:this._onFocus,readOnly:!0}),React.createElement(p["default"],s({},this.state,{onBlur:this._onBlur,onOK:this._onOk,onUpdate:this._onUpdate}))):React.createElement("div",{className:y["default"]["input-group"]},React.createElement("input",{id:this.props.element.id+"-input",type:"text",className:"input",ref:"datepicker-input","data-iso":this.state.selectedDate.toISOString(),value:this.state.selectedDate.format(this.state.displayFormat),onClick:this._onFocus,onFocus:this._onFocus,readOnly:!0}))}}]),t}(React.Component);t["default"]=g,e.exports=t["default"]},function(e,t,a){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var a=arguments[t];for(var n in a)Object.prototype.hasOwnProperty.call(a,n)&&(e[n]=a[n])}return e},o=function(){function e(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,a,n){return a&&e(t.prototype,a),n&&e(t,n),t}}(),l=function(e,t,a){for(var n=!0;n;){var i=e,r=t,s=a;o=c=l=void 0,n=!1;var o=Object.getOwnPropertyDescriptor(i,r);if(void 0!==o){if("value"in o)return o.value;var l=o.get;return void 0===l?void 0:l.call(s)}var c=Object.getPrototypeOf(i);if(null===c)return void 0;e=c,t=r,a=s,n=!0}},c=a(4),u=n(c),d=a(2),f=n(d),m=a(1),h=n(m),_=a(6),p=n(_),v=a(3),y=n(v),g=function(e){function t(e){i(this,t),l(Object.getPrototypeOf(t.prototype),"constructor",this).call(this,e),this.state=u["default"].getState(),this._updateState=this._updateState.bind(this),this._onBlur=this._onBlur.bind(this),this._onFocus=this._onFocus.bind(this),this._onOk=this._onOk.bind(this),this._onCancel=this._onCancel.bind(this)}return r(t,e),o(t,[{key:"componentDidMount",value:function(){return f["default"].componentDidMount(this)}},{key:"_updateState",value:function(e){}},{key:"_onBlur",value:function(){this.setState({show:!1}),f["default"].dispatch(this,h["default"].BLUR,JSON.stringify({time:this.state.selectedTime}))}},{key:"_onCancel",value:function(){this._onBlur(),f["default"].dispatch(this,h["default"].CANCEL,JSON.stringify({time:this.state.selectedTime}))}},{key:"_onFocus",value:function(){this.setState({show:!0})}},{key:"_onOk",value:function(){this._onBlur(),f["default"].dispatch(this,h["default"].OK,JSON.stringify({time:this.state.selectedTime}))}},{key:"render",value:function(){return this.state.show?React.createElement("div",{className:y["default"]["input-group"]},React.createElement("input",{id:this.props.element.id+"-input",type:"text",className:"input",ref:"datepicker-input",value:this.state.selectedTime.format("h:mm a"),onClick:this._onFocus,onFocus:this._onFocus,readOnly:!0}),React.createElement(p["default"],s({},this.state,{onBlur:this._onBlur,onOK:this._onOk,onUpdate:this._onUpdate,onCancel:this._onCancel}))):React.createElement("div",{className:y["default"]["input-group"]},React.createElement("input",{id:this.props.element.id+"-input",type:"text",className:"input",ref:"datepicker-input",value:this.state.selectedTime.format("h:mm a"),onClick:this._onFocus,onFocus:this._onFocus,readOnly:!0}))}}]),t}(React.Component);t["default"]=g,e.exports=t["default"]},function(e,t,a){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var s=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var a=arguments[t];for(var n in a)Object.prototype.hasOwnProperty.call(a,n)&&(e[n]=a[n])}return e},o=function(){function e(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,a,n){return a&&e(t.prototype,a),n&&e(t,n),t}}(),l=function(e,t,a){for(var n=!0;n;){var i=e,r=t,s=a;o=c=l=void 0,n=!1;var o=Object.getOwnPropertyDescriptor(i,r);if(void 0!==o){if("value"in o)return o.value;var l=o.get;return void 0===l?void 0:l.call(s)}var c=Object.getPrototypeOf(i);if(null===c)return void 0;e=c,t=r,a=s,n=!0}},c=a(4),u=n(c),d=a(1),f=n(d),m=a(2),h=n(m),p=a(9),v=n(p),y=a(7),g=n(y),k=a(10),b=n(k),O=function(e){function t(e){i(this,t),l(Object.getPrototypeOf(t.prototype),"constructor",this).call(this,e),this.state={range:!1,timepicker:!1,passedDates:null},this._updateState=this._updateState.bind(this)}return r(t,e),o(t,[{key:"componentDidMount",value:function(){return h["default"].componentDidMount(this)}},{key:"_updateState",value:function(e){var t=this;"true"===e["data-range"]&&this.setState({range:!0}),"true"===e["data-time"]&&this.setState({timepicker:!0}),e["data-dates"]&&!function(){var a=e["data-dates"].split(","),n=moment(a[0]),i=moment(a[1]),r=_.findWhere(u["default"].getConvenienceDates(),{name:"Custom"});r.dates={display:{from:n,to:i},query:{from:n,to:i}},t.setState({passedDates:r}),_.delay(function(){h["default"].dispatch(t,f["default"].DATE_RANGE_DEFAULT,u["default"].buildOutput(r))},10)}(),e["data-default-range"]&&!e["data-dates"]&&!function(){var a=e["data-default-range"],n=_.findWhere(u["default"].getConvenienceDates(),{name:a});t.setState({defaultRange:n}),_.delay(function(){h["default"].dispatch(t,f["default"].DATE_RANGE_DEFAULT,u["default"].buildOutput(n))},10)}()}},{key:"render",value:function(){return this.state.range?React.createElement(g["default"],s({},this.state,{element:this.props.element,"default":this.state.defaultRange,passedDates:this.state.passedDates})):this.state.timepicker?React.createElement(b["default"],s({},this.state,{element:this.props.element})):React.createElement(v["default"],s({},this.state,{element:this.props.element}))}}]),t}(React.Component);t["default"]=O,e.exports=t["default"]},function(e,t,a){e.exports={header:"Clock__header___3nj4c",time:"Clock__time___30xaB",selected:"Clock__selected___3OyXs",ignore:"Clock__ignore___3_qPf",ampm:"Clock__ampm___3YtC5",wrapper:"Clock__wrapper___BmBGi","clock-face":"Clock__clock-face___275r-","clock-face-point":"Clock__clock-face-point___1VrCC",h12:"Clock__h12___3BZpU",m00:"Clock__m00___VSINN",h1:"Clock__h1___3q9j_",m05:"Clock__m05___1IgqT",h2:"Clock__h2___jbbsR",m10:"Clock__m10___LjRNB",h3:"Clock__h3___19_Dt",m15:"Clock__m15___3nEwt",h4:"Clock__h4___3cEaf",m20:"Clock__m20___1xP3z",h5:"Clock__h5___1qPjH",m25:"Clock__m25___5KcPD",h6:"Clock__h6___n14sL",m30:"Clock__m30___1xMeT",h7:"Clock__h7___3jA1K",m35:"Clock__m35___W3pI7",h8:"Clock__h8___VSBvL",m40:"Clock__m40___2T0oj",h9:"Clock__h9___27B8R",m45:"Clock__m45___2b3yh",h10:"Clock__h10___3-ZEU",m50:"Clock__m50___3Wh0w",h11:"Clock__h11___3wfWG",m55:"Clock__m55___2ET6p",center:"Clock__center___3sPC4"}},function(e,t,a){function n(){this._events=this._events||{},this._maxListeners=this._maxListeners||void 0}function i(e){return"function"==typeof e}function r(e){return"number"==typeof e}function s(e){return"object"==typeof e&&null!==e}function o(e){return void 0===e}e.exports=n,n.EventEmitter=n,n.prototype._events=void 0,n.prototype._maxListeners=void 0,n.defaultMaxListeners=10,n.prototype.setMaxListeners=function(e){if(!r(e)||0>e||isNaN(e))throw TypeError("n must be a positive number");return this._maxListeners=e,this},n.prototype.emit=function(e){var t,a,n,r,l,c;if(this._events||(this._events={}),"error"===e&&(!this._events.error||s(this._events.error)&&!this._events.error.length)){if(t=arguments[1],t instanceof Error)throw t;throw TypeError('Uncaught, unspecified "error" event.')}if(a=this._events[e],o(a))return!1;if(i(a))switch(arguments.length){case 1:a.call(this);break;case 2:a.call(this,arguments[1]);break;case 3:a.call(this,arguments[1],arguments[2]);break;default:for(n=arguments.length,r=new Array(n-1),l=1;n>l;l++)r[l-1]=arguments[l];a.apply(this,r)}else if(s(a)){for(n=arguments.length,r=new Array(n-1),l=1;n>l;l++)r[l-1]=arguments[l];for(c=a.slice(),n=c.length,l=0;n>l;l++)c[l].apply(this,r)}return!0},n.prototype.addListener=function(e,t){var a;if(!i(t))throw TypeError("listener must be a function");if(this._events||(this._events={}),this._events.newListener&&this.emit("newListener",e,i(t.listener)?t.listener:t),this._events[e]?s(this._events[e])?this._events[e].push(t):this._events[e]=[this._events[e],t]:this._events[e]=t,s(this._events[e])&&!this._events[e].warned){var a;a=o(this._maxListeners)?n.defaultMaxListeners:this._maxListeners,a&&a>0&&this._events[e].length>a&&(this._events[e].warned=!0,console.error("(node) warning: possible EventEmitter memory leak detected. %d listeners added. Use emitter.setMaxListeners() to increase limit.",this._events[e].length),"function"==typeof console.trace&&console.trace())}return this},n.prototype.on=n.prototype.addListener,n.prototype.once=function(e,t){function a(){this.removeListener(e,a),n||(n=!0,t.apply(this,arguments))}if(!i(t))throw TypeError("listener must be a function");var n=!1;return a.listener=t,this.on(e,a),this},n.prototype.removeListener=function(e,t){var a,n,r,o;if(!i(t))throw TypeError("listener must be a function");if(!this._events||!this._events[e])return this;if(a=this._events[e],r=a.length,n=-1,a===t||i(a.listener)&&a.listener===t)delete this._events[e],this._events.removeListener&&this.emit("removeListener",e,t);else if(s(a)){for(o=r;o-->0;)if(a[o]===t||a[o].listener&&a[o].listener===t){n=o;break}if(0>n)return this;1===a.length?(a.length=0,delete this._events[e]):a.splice(n,1),this._events.removeListener&&this.emit("removeListener",e,t)}return this},n.prototype.removeAllListeners=function(e){var t,a;if(!this._events)return this;if(!this._events.removeListener)return 0===arguments.length?this._events={}:this._events[e]&&delete this._events[e],this;if(0===arguments.length){for(t in this._events)"removeListener"!==t&&this.removeAllListeners(t);return this.removeAllListeners("removeListener"),this._events={},this}if(a=this._events[e],i(a))this.removeListener(e,a);else for(;a.length;)this.removeListener(e,a[a.length-1]);return delete this._events[e],this},n.prototype.listeners=function(e){var t;return t=this._events&&this._events[e]?i(this._events[e])?[this._events[e]]:this._events[e].slice():[]},n.listenerCount=function(e,t){var a;return a=e._events&&e._events[t]?i(e._events[t])?1:e._events[t].length:0}}])});
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define(factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	var _datepickerJsx = __webpack_require__(1);
+
+	var _datepickerJsx2 = _interopRequireDefault(_datepickerJsx);
+
+	// Polyfill CustomEvent for IE
+	try {
+		new CustomEvent("test");
+	} catch (e) {
+		var _CustomEvent = function _CustomEvent(event, params) {
+			var evt = undefined;
+			params = params || {
+				bubbles: false,
+				cancelable: false,
+				detail: undefined
+			};
+
+			evt = document.createEvent("CustomEvent");
+			evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+			return evt;
+		};
+
+		_CustomEvent.prototype = window.Event.prototype;
+		window.CustomEvent = _CustomEvent;
+	}
+
+	var renderHandler = function renderHandler() {
+		var reactComp = document.getElementsByTagName("react-datepicker"),
+		    classComp = document.getElementsByClassName("react-datepicker");
+
+		Array.prototype.forEach.call(reactComp, function (el) {
+			React.render(React.createElement(_datepickerJsx2["default"], { element: el }), el);
+		});
+
+		Array.prototype.forEach.call(classComp, function (el) {
+			React.render(React.createElement(_datepickerJsx2["default"], { element: el }), el);
+		});
+	};
+
+	if (typeof document !== "undefined") {
+		renderHandler();
+	}
+
+	document.addEventListener("render", renderHandler);
+
+	exports["default"] = _datepickerJsx2["default"];
+	module.exports = exports["default"];
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _componentsStore = __webpack_require__(2);
+
+	var _componentsStore2 = _interopRequireDefault(_componentsStore);
+
+	var _componentsConstants = __webpack_require__(3);
+
+	var _componentsConstants2 = _interopRequireDefault(_componentsConstants);
+
+	var _componentsUtils = __webpack_require__(4);
+
+	var _componentsUtils2 = _interopRequireDefault(_componentsUtils);
+
+	var _componentsViewsSingleDateJsx = __webpack_require__(5);
+
+	var _componentsViewsSingleDateJsx2 = _interopRequireDefault(_componentsViewsSingleDateJsx);
+
+	var _componentsViewsDateRangeJsx = __webpack_require__(6);
+
+	var _componentsViewsDateRangeJsx2 = _interopRequireDefault(_componentsViewsDateRangeJsx);
+
+	var _componentsViewsTimePickerJsx = __webpack_require__(7);
+
+	var _componentsViewsTimePickerJsx2 = _interopRequireDefault(_componentsViewsTimePickerJsx);
+
+	var DatePickerView = (function (_React$Component) {
+		function DatePickerView(props) {
+			_classCallCheck(this, DatePickerView);
+
+			_get(Object.getPrototypeOf(DatePickerView.prototype), "constructor", this).call(this, props);
+			this.state = { range: false, timepicker: false, passedDates: null };
+			this._updateState = this._updateState.bind(this);
+		}
+
+		_inherits(DatePickerView, _React$Component);
+
+		_createClass(DatePickerView, [{
+			key: "componentDidMount",
+			value: function componentDidMount() {
+				return _componentsUtils2["default"].componentDidMount(this);
+			}
+		}, {
+			key: "_updateState",
+			value: function _updateState(props) {
+				var _this = this;
+
+				if (props["data-range"] === "true") {
+					this.setState({ range: true });
+				}
+
+				if (props["data-time"] === "true") {
+					this.setState({ timepicker: true });
+				}
+
+				if (props["data-dates"]) {
+					(function () {
+						var dates = props["data-dates"].split(","),
+						    from = moment(dates[0]),
+						    to = moment(dates[1]);
+
+						var customRange = _.findWhere(_componentsStore2["default"].getConvenienceDates(), { name: "Custom" });
+						customRange.dates = {
+							display: {
+								from: from,
+								to: to
+							},
+							query: {
+								from: from,
+								to: to
+							}
+						};
+
+						_this.setState({ passedDates: customRange });
+						_.delay(function () {
+							_componentsUtils2["default"].dispatch(_this, _componentsConstants2["default"].DATE_RANGE_DEFAULT, _componentsStore2["default"].buildOutput(customRange));
+						}, 10);
+					})();
+				}
+
+				if (props["data-default-range"] && !props["data-dates"]) {
+					(function () {
+						var range = props["data-default-range"],
+						    rangeValues = _.findWhere(_componentsStore2["default"].getConvenienceDates(), { name: range });
+
+						_this.setState({
+							defaultRange: rangeValues
+						});
+
+						_.delay(function () {
+							_componentsUtils2["default"].dispatch(_this, _componentsConstants2["default"].DATE_RANGE_DEFAULT, _componentsStore2["default"].buildOutput(rangeValues));
+						}, 10);
+					})();
+				}
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				if (this.state.range) {
+					return React.createElement(_componentsViewsDateRangeJsx2["default"], _extends({}, this.state, { element: this.props.element, "default": this.state.defaultRange, passedDates: this.state.passedDates }));
+				}
+
+				if (this.state.timepicker) {
+					return React.createElement(_componentsViewsTimePickerJsx2["default"], _extends({}, this.state, { element: this.props.element }));
+				}
+
+				return React.createElement(_componentsViewsSingleDateJsx2["default"], _extends({}, this.state, { element: this.props.element }));
+			}
+		}]);
+
+		return DatePickerView;
+	})(React.Component);
+
+	exports["default"] = DatePickerView;
+	module.exports = exports["default"];
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _events = __webpack_require__(11);
+
+	var today = function today(isDisplay) {
+		return {
+			from: moment().startOf("day"),
+			to: moment().add(1, "day").startOf("day").subtract(isDisplay ? 1 : 0, "ms")
+		};
+	};
+
+	var last_x_days = function last_x_days(days, isDisplay) {
+		return {
+			from: moment().startOf("day").subtract(days, "days"),
+			to: moment().startOf("day").subtract(isDisplay ? 1 : 0, "ms")
+		};
+	};
+
+	var yesterday = function yesterday(isDisplay) {
+		return {
+			from: moment().subtract(1, "days").startOf("day"),
+			to: moment().subtract(1, "days").add(1, "days").startOf("day").subtract(isDisplay ? 1 : 0, "ms")
+		};
+	};
+
+	var last_x_period = function last_x_period(amount, period) {
+		var from = moment().subtract(amount, period).startOf(period);
+		var to = moment(from.toISOString()).endOf(period);
+		return {
+			from: from,
+			to: to
+		};
+	};
+
+	var last_week = function last_week(isDisplay) {
+		return {
+			from: moment().startOf("isoWeek").subtract(1, "week"),
+			to: moment().startOf("isoWeek").subtract(isDisplay ? 1 : 0, "ms")
+		};
+	};
+
+	var this_week = function this_week(isDisplay) {
+		var from = moment().startOf("isoWeek");
+		return {
+			from: from,
+			to: moment(from.toISOString()).add(7, "days").startOf("day").subtract(isDisplay ? 1 : 0, "ms")
+		};
+	};
+
+	var convenienceDates = [{
+		name: "Today",
+		period: "days",
+		dates: {
+			display: today(true),
+			query: today()
+		}
+	}, {
+		name: "Yesterday",
+		period: "days",
+		dates: {
+			display: yesterday(true),
+			query: yesterday()
+		}
+	}, {
+		name: "Last 7 days",
+		period: "days",
+		dates: {
+			display: last_x_days(7, true),
+			query: last_x_days(7)
+		}
+	}, {
+		name: "Last 30 days",
+		period: "days",
+		dates: {
+			display: last_x_days(30, true),
+			query: last_x_days(30)
+		},
+		"default": true
+	}, {
+		name: "This week",
+		period: "weeks",
+		dates: {
+			display: this_week(true),
+			query: this_week()
+		}
+	}, {
+		name: "Last week",
+		period: "weeks",
+		dates: {
+			display: last_week(true),
+			query: last_week()
+		}
+	}, {
+		name: "This month",
+		period: "months",
+		dates: {
+			display: last_x_period(0, "month", true),
+			query: last_x_period(0, "month")
+		}
+	}, {
+		name: "Last month",
+		period: "months",
+		dates: {
+			display: last_x_period(1, "month", true),
+			query: last_x_period(1, "month")
+		}
+	}, {
+		name: "This quarter",
+		period: "quarter",
+		dates: {
+			display: last_x_period(0, "quarter", true),
+			query: last_x_period(0, "quarter")
+		}
+	}, {
+		name: "Last quarter",
+		period: "quarter",
+		dates: {
+			display: last_x_period(1, "quarter", true),
+			query: last_x_period(1, "quarter")
+		}
+	}, {
+		name: "This year",
+		period: "years",
+		dates: {
+			display: last_x_period(0, "year", true),
+			query: last_x_period(0, "year")
+		}
+	}, {
+		name: "Last year",
+		period: "years",
+		dates: {
+			display: last_x_period(1, "year", true),
+			query: last_x_period(1, "year")
+		}
+	}, {
+		name: "Custom",
+		period: "days",
+		dates: {
+			display: today(true),
+			query: today()
+		}
+	}];
+
+	var round5 = function round5(x) {
+		return Math.ceil(x / 5) * 5;
+	};
+
+	var _state = {
+		selectedDate: moment().endOf("day"),
+		selectedTime: moment().minutes(round5(moment().format("mm"))),
+		fromDate: moment().endOf("day"),
+		toDate: moment().endOf("day"),
+		selectedDateRange: _.findWhere(convenienceDates, { "default": true }),
+		convenienceDateOptions: [],
+		moveToDate: moment().endOf("day"),
+		today: moment().endOf("day"),
+		viewingDay: moment().endOf("day"),
+		viewingMonth: moment().endOf("month"),
+		viewingYear: moment().endOf("year"),
+		minDate: moment().subtract(999, "years"),
+		maxDate: moment().add(999, "years"),
+		displayFormat: "DD MMM YYYY",
+		closeOnSelect: false,
+		daysOfWeek: ["M", "T", "W", "T", "F", "S", "S"],
+		firstDayOfWeek: 1,
+		moveDates: false,
+		showRanges: true,
+		timepicker: false,
+		show: false,
+		powerKeys: {
+			active: false,
+			direction: null,
+			keys: [],
+			value: 0,
+			duration: "Days",
+			style: {
+				display: "none"
+			}
+		}
+	};
+
+	var CHANGE = "CHANGE";
+
+	var Store = (function (_EventEmitter) {
+		function Store() {
+			_classCallCheck(this, Store);
+
+			if (_EventEmitter != null) {
+				_EventEmitter.apply(this, arguments);
+			}
+		}
+
+		_inherits(Store, _EventEmitter);
+
+		_createClass(Store, [{
+			key: "getState",
+			value: function getState() {
+				return _state;
+			}
+		}, {
+			key: "getConvenienceDates",
+			value: function getConvenienceDates() {
+				return convenienceDates;
+			}
+		}, {
+			key: "getCustomRange",
+			value: function getCustomRange() {
+				return _.findWhere(convenienceDates, { name: "Custom" });
+			}
+		}, {
+			key: "buildOutput",
+			value: function buildOutput(range) {
+				var display_from = moment(range.dates.display.from).toISOString();
+				var display_to = moment(range.dates.display.to).toISOString();
+				var query_from = moment(range.dates.query.from).toISOString();
+				var query_to = moment(range.dates.query.to).toISOString();
+
+				if (moment(query_to).format("SSS") !== "000") {
+					query_to = moment(query_to).add(1, "ms").toISOString();
+				}
+
+				var payload = {
+					dates: {
+						display: {
+							from: display_from,
+							to: display_to
+						},
+						query: {
+							from: query_from,
+							to: query_to
+						}
+					},
+					name: range.name,
+					period: range.period,
+					diff_in_days: moment(query_to).diff(moment(query_from), "days"),
+					diff_in_hours: moment(query_to).diff(moment(query_from), "hours")
+				};
+
+				return JSON.stringify(payload);
+			}
+		}, {
+			key: "getDifference",
+			value: function getDifference(range) {
+				var from = moment(range.dates.from),
+				    to = moment(range.dates.to);
+
+				return to.diff(from, range.period);
+			}
+		}, {
+			key: "emitChange",
+			value: function emitChange() {
+				this.emit(CHANGE);
+			}
+		}, {
+			key: "addChangeListener",
+			value: function addChangeListener(cb) {
+				this.on(CHANGE, cb);
+			}
+		}, {
+			key: "removeChangeListener",
+			value: function removeChangeListener(cb) {
+				this.removeListener(CHANGE, cb);
+			}
+		}]);
+
+		return Store;
+	})(_events.EventEmitter);
+
+	var _Store = new Store();
+
+	exports["default"] = _Store;
+	module.exports = exports["default"];
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var constants = {
+		FOCUS: "FOCUS",
+		BLUR: "BLUR",
+		OK: "OK",
+		CANCEL: "CANCEL",
+		SHOW: "SHOW",
+		DATE_SELECTED: "DATE_SELECTED",
+		DATE_RANGE_CHANGE: "DATE_RANGE_CHANGE",
+		DATE_RANGE_DEFAULT: "DATE_RANGE_DEFAULT",
+		CALENDAR_HIDE: "CALENDAR_HIDE",
+		SUBMIT_CLICK: "SUBMIT_CLICK",
+		INIT: "INIT",
+		ARROW_CLICK: "ARROW_CLICK"
+	};
+
+	exports["default"] = constants;
+	module.exports = exports["default"];
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var utils = {};
+
+	var closest = function closest(elem, selector) {
+
+		var matchesSelector = elem.matches || elem.webkitMatchesSelector || elem.mozMatchesSelector || elem.msMatchesSelector;
+
+		while (elem) {
+			if (matchesSelector.bind(elem)(selector)) {
+				return true;
+			} else {
+				elem = elem.parentElement;
+			}
+		}
+		return false;
+	};
+
+	utils.closest = closest;
+
+	var keyMap = function keyMap(e) {
+
+		var code = e.which,
+		    SHIFT = e.shiftKey,
+		    CTRL = e.ctrlKey,
+		    DELETE = code === 8,
+		    ADD = code === 187,
+		    NUMPAD_ADD = code === 107,
+		    NUMPAD_SUBTRACT = code === 109,
+		    SUBTRACT = code === 189,
+		    LEFT = code === 37 || code === 74,
+		    RIGHT = code === 39 || code === 75,
+		    UP = code === 38,
+		    DOWN = code === 40,
+		    ENTER = code === 13,
+		    ESC = code === 27,
+		    YEAR = SHIFT && CTRL,
+		    MONTH = SHIFT && !CTRL,
+		    DURATION_DAYS = code === 68,
+		    DURATION_WEEKS = code === 87,
+		    DURATION_MONTHS = code === 77,
+		    DURATION_YEARS = code === 89,
+		    ACTION_ADD = SHIFT && ADD || NUMPAD_ADD,
+		    ACTION_SUBTRACT = SHIFT && SUBTRACT || NUMPAD_SUBTRACT,
+		    ONE = code === 49 || code === 97,
+		    TWO = code === 50 || code === 98,
+		    THREE = code === 51 || code === 99,
+		    FOUR = code === 52 || code === 100,
+		    FIVE = code === 53 || code === 101,
+		    SIX = code === 54 || code === 102,
+		    SEVEN = code === 55 || code === 103,
+		    EIGHT = code === 56 || code === 104,
+		    NINE = code === 57 || code === 105,
+		    ZERO = code === 96 || code === 48,
+		    VALUE = null;
+
+		if (ONE) {
+			VALUE = 1;
+		}
+
+		if (TWO) {
+			VALUE = 2;
+		}
+
+		if (THREE) {
+			VALUE = 3;
+		}
+
+		if (FOUR) {
+			VALUE = 4;
+		}
+
+		if (FIVE) {
+			VALUE = 5;
+		}
+
+		if (SIX) {
+			VALUE = 6;
+		}
+
+		if (SEVEN) {
+			VALUE = 7;
+		}
+
+		if (EIGHT) {
+			VALUE = 8;
+		}
+
+		if (NINE) {
+			VALUE = 9;
+		}
+
+		if (ZERO) {
+			VALUE = 0;
+		}
+
+		return {
+			SHIFT: SHIFT,
+			ADD: ADD,
+			SUBTRACT: SUBTRACT,
+			DELETE: DELETE,
+			CTRL: CTRL,
+			LEFT: LEFT,
+			RIGHT: RIGHT,
+			UP: UP,
+			DOWN: DOWN,
+			ENTER: ENTER,
+			ESC: ESC,
+			YEAR: YEAR,
+			MONTH: MONTH,
+			DURATION_DAYS: DURATION_DAYS,
+			DURATION_WEEKS: DURATION_WEEKS,
+			DURATION_MONTHS: DURATION_MONTHS,
+			DURATION_YEARS: DURATION_YEARS,
+			ACTION_ADD: ACTION_ADD,
+			ACTION_SUBTRACT: ACTION_SUBTRACT,
+			VALUE: VALUE
+		};
+	};
+
+	utils.keyMap = keyMap;
+
+	var componentDidMount = function componentDidMount(ctx) {
+		var rootNode = React.findDOMNode(ctx),
+		    hasNextProps = false,
+		    nextProps = {},
+		    parentNode = rootNode.parentNode;
+
+		Object.keys(parentNode.attributes).forEach(function (key) {
+			var namedNode = undefined;
+
+			if (key !== "length") {
+				hasNextProps = true;
+				namedNode = parentNode.attributes[key];
+				nextProps[namedNode.name] = namedNode.value;
+			}
+		});
+
+		if (hasNextProps) {
+			ctx._updateState(nextProps);
+		}
+
+		ctx.setState({ element: ctx.props.element });
+	};
+
+	utils.componentDidMount = componentDidMount;
+
+	var dispatch = function dispatch(ctx, action, payload) {
+		var event = new CustomEvent("event", {
+			"detail": { action: action, payload: payload }
+		});
+
+		ctx.props.element.dispatchEvent(event);
+	};
+
+	utils.dispatch = dispatch;
+
+	exports["default"] = utils;
+	module.exports = exports["default"];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+		value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _store = __webpack_require__(2);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _utils = __webpack_require__(4);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _constants = __webpack_require__(3);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	var _CalendarJsx = __webpack_require__(8);
+
+	var _CalendarJsx2 = _interopRequireDefault(_CalendarJsx);
+
+	var _DatePickerStyleCss = __webpack_require__(12);
+
+	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
+
+	var DatePickerSingleView = (function (_React$Component) {
+		function DatePickerSingleView(props) {
+			_classCallCheck(this, DatePickerSingleView);
+
+			_get(Object.getPrototypeOf(DatePickerSingleView.prototype), 'constructor', this).call(this, props);
+			this.state = _store2['default'].getState();
+
+			this._updateState = this._updateState.bind(this);
+			this._onBlur = this._onBlur.bind(this);
+			this._onFocus = this._onFocus.bind(this);
+			this._onOk = this._onOk.bind(this);
+			this._onUpdate = this._onUpdate.bind(this);
+		}
+
+		_inherits(DatePickerSingleView, _React$Component);
+
+		_createClass(DatePickerSingleView, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				return _utils2['default'].componentDidMount(this);
+			}
+		}, {
+			key: '_updateState',
+			value: function _updateState(props) {
+				if (props['data-display-format']) {
+					this.setState({
+						displayFormat: props['data-display-format']
+					});
+				}
+
+				if (props['data-selected-date']) {
+					var date = undefined,
+					    isUTC = props['data-selected-date'].indexOf('UTC') !== -1,
+					    dateString = props['data-selected-date'];
+
+					if (props['data-selected-date-format']) {
+						date = moment(dateString, props['data-selected-date-format']);
+					} else {
+						date = moment(dateString);
+					}
+
+					if (isUTC) {
+						var offset = date.utcOffset();
+						date = date.add(offset, 'minutes');
+					}
+
+					var viewing = date.toISOString();
+
+					this.setState({
+						selectedDate: date.endOf('day'),
+						moveToDate: moment(viewing).endOf('day'),
+						viewingMonth: moment(viewing).endOf('month'),
+						viewingYear: moment(viewing).endOf('year')
+					});
+				}
+
+				if (props['data-min-date']) {
+					this.setState({
+						minDate: moment(props['data-min-date'])
+					});
+				}
+
+				if (props['data-max-date']) {
+					this.setState({
+						maxDate: moment(props['data-max-date'])
+					});
+				}
+
+				if (props['data-close-on-select']) {
+					this.setState({ closeOnSelect: true });
+				}
+
+				if (props['data-first-day-of-week']) {
+					var day = Number(props['data-first-day-of-week']);
+
+					this.setState({
+						firstDayOfWeek: day,
+						daysOfWeek: day === 0 ? ['S', 'M', 'T', 'W', 'T', 'F', 'S'] : ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+					});
+				}
+			}
+		}, {
+			key: '_onBlur',
+			value: function _onBlur() {
+				this.setState({ show: false });
+			}
+		}, {
+			key: '_onFocus',
+			value: function _onFocus() {
+				this.setState({ moveToDate: this.props.selectedDate });
+				this.setState({ show: true });
+			}
+		}, {
+			key: '_onUpdate',
+			value: function _onUpdate(date) {
+				this.setState({ selectedDate: date });
+				_utils2['default'].dispatch(this, _constants2['default'].DATE_SELECTED, JSON.stringify({ date: date }));
+			}
+		}, {
+			key: '_onOk',
+			value: function _onOk(date) {
+				this._onBlur();
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				if (!this.state.show) {
+					return React.createElement(
+						'div',
+						{ className: _DatePickerStyleCss2['default']['input-group'] },
+						React.createElement('input', {
+							id: this.props.element.id + '-input',
+							type: 'text',
+							className: 'input',
+							ref: 'datepicker-input',
+							'data-iso': this.state.selectedDate.toISOString(),
+							value: this.state.selectedDate.format(this.state.displayFormat),
+							onClick: this._onFocus,
+							onFocus: this._onFocus,
+							readOnly: true })
+					);
+				} else {
+					return React.createElement(
+						'div',
+						{ className: _DatePickerStyleCss2['default']['input-group'] },
+						React.createElement('input', {
+							id: this.props.element.id + '-input',
+							type: 'text',
+							className: 'input',
+							ref: 'datepicker-input',
+							'data-iso': this.state.selectedDate.toISOString(),
+							value: this.state.selectedDate.format(this.state.displayFormat),
+							onClick: this._onFocus,
+							onFocus: this._onFocus,
+							readOnly: true }),
+						React.createElement(_CalendarJsx2['default'], _extends({}, this.state, {
+							onBlur: this._onBlur,
+							onOK: this._onOk,
+							onUpdate: this._onUpdate }))
+					);
+				}
+			}
+		}]);
+
+		return DatePickerSingleView;
+	})(React.Component);
+
+	exports['default'] = DatePickerSingleView;
+	module.exports = exports['default'];
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _store = __webpack_require__(2);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _utils = __webpack_require__(4);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _constants = __webpack_require__(3);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	var _CalendarJsx = __webpack_require__(8);
+
+	var _CalendarJsx2 = _interopRequireDefault(_CalendarJsx);
+
+	var _DateRangesMenuItemsJsx = __webpack_require__(9);
+
+	var _DateRangesMenuItemsJsx2 = _interopRequireDefault(_DateRangesMenuItemsJsx);
+
+	var _DatePickerStyleCss = __webpack_require__(12);
+
+	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
+
+	var DatePickerRangeView = (function (_React$Component) {
+		function DatePickerRangeView(props) {
+			_classCallCheck(this, DatePickerRangeView);
+
+			_get(Object.getPrototypeOf(DatePickerRangeView.prototype), "constructor", this).call(this, props);
+			this.state = _store2["default"].getState();
+
+			if (props.defaultRange) {
+				this.state.selectedDateRange = props.defaultRange;
+			}
+
+			if (props.passedDates) {
+				this.state.selectedDateRange = props.passedDates;
+			}
+
+			this._updateState = this._updateState.bind(this);
+			this._onBlur = this._onBlur.bind(this);
+			this._onFocus = this._onFocus.bind(this);
+			this._onUpdate = this._onUpdate.bind(this);
+			this._onOk = this._onOk.bind(this);
+			this._onDateChange = this._onDateChange.bind(this);
+			this._onRangeChange = this._onRangeChange.bind(this);
+			this._onSubmitBtnClick = this._onSubmitBtnClick.bind(this);
+			this._onArrowClick = this._onArrowClick.bind(this);
+		}
+
+		_inherits(DatePickerRangeView, _React$Component);
+
+		_createClass(DatePickerRangeView, [{
+			key: "componentWillMount",
+			value: function componentWillMount() {
+				_store2["default"].addChangeListener(this._onChange.bind(this));
+			}
+		}, {
+			key: "componentDidMount",
+			value: function componentDidMount() {
+				this._onRangeChange();
+				this.setState({ ready: false });
+				return _utils2["default"].componentDidMount(this);
+			}
+		}, {
+			key: "_onChange",
+			value: function _onChange() {
+				this.setState({ reload: true });
+			}
+		}, {
+			key: "_onRangeChange",
+			value: function _onRangeChange() {
+				var _this = this;
+
+				var el = document.getElementById(this.props.element.id);
+
+				var handler = function handler(e) {
+					var action = e.detail.action;
+					if (action === _constants2["default"].DATE_RANGE_CHANGE) {
+						_this._onDateChange(JSON.parse(e.detail.payload));
+					}
+				};
+
+				el.addEventListener("event", handler);
+			}
+		}, {
+			key: "_updateState",
+			value: function _updateState(props) {
+				if (props["data-display-format"]) {
+					this.setState({
+						displayFormat: props["data-display-format"]
+					});
+				}
+
+				if (props["data-convenience-dates"]) {
+					var opts = props["data-convenience-dates"].split(",").map(function (item) {
+						return item.trim();
+					});
+					if (opts.length) {
+						this.setState({
+							convenienceDateOptions: opts
+						});
+					}
+				}
+
+				if (props["data-selected-date"]) {
+					var date = undefined;
+					if (props["data-selected-date-format"]) {
+						date = moment(props["data-selected-date"], props["data-selected-date-format"]);
+					} else {
+						date = moment(props["data-selected-date"]);
+					}
+
+					var viewing = date.toISOString();
+
+					this.setState({
+						selectedDate: date.endOf("day"),
+						moveToDate: moment(viewing).endOf("day"),
+						viewingMonth: moment(viewing).endOf("month"),
+						viewingYear: moment(viewing).endOf("year")
+					});
+				}
+
+				if (props["data-min-date"]) {
+					this.setState({
+						minDate: moment(props["data-min-date"])
+					});
+				}
+
+				if (props["data-max-date"]) {
+					this.setState({
+						maxDate: moment(props["data-max-date"])
+					});
+				}
+
+				if (props["data-close-on-select"]) {
+					this.setState({ closeOnSelect: true });
+				}
+
+				if (props["data-hide-inputs"]) {
+					this.setState({ hideInputs: true });
+				}
+
+				if (props["data-layout-vertical"]) {
+					this.setState({ layoutVertical: true });
+				}
+
+				if (props["data-submit-btn"]) {
+					this.setState({ hasSubmitBtn: true });
+				}
+
+				if (props["data-move-dates"]) {
+					this.setState({ moveDates: true });
+				}
+
+				if (props["data-hide-ranges"]) {
+					this.setState({ showRanges: false });
+				}
+
+				if (props["data-first-day-of-week"]) {
+					var day = Number(props["data-first-day-of-week"]);
+
+					this.setState({
+						firstDayOfWeek: day,
+						daysOfWeek: day === 0 ? ["S", "M", "T", "W", "T", "F", "S"] : ["M", "T", "W", "T", "F", "S", "S"]
+					});
+				}
+
+				this.setState({
+					fromDate: this.state.selectedDateRange.dates.display.from,
+					toDate: this.state.selectedDateRange.dates.display.to
+				});
+
+				this.setState({ ready: true });
+			}
+		}, {
+			key: "_onBlur",
+			value: function _onBlur() {
+				this.setState({ show: false });
+			}
+		}, {
+			key: "_onFocus",
+			value: function _onFocus(e) {
+				var isFrom = e.target.getAttribute("data-range") === "from";
+
+				this.setState({
+					isFrom: isFrom,
+					moveToDate: this.props.selectedDate,
+					range: true,
+					show: true
+				});
+			}
+		}, {
+			key: "_onUpdate",
+			value: function _onUpdate(date) {
+				var isFrom = this.state.isFrom;
+				var currStartDate = this.state.fromDate;
+				var currEndDate = this.state.toDate;
+
+				var customRange = {
+					name: "Custom",
+					period: "days",
+					dates: {
+						query: {
+							from: isFrom ? date.startOf("day") : currStartDate,
+							to: isFrom ? currEndDate : date.endOf("day")
+						},
+						display: {
+							from: isFrom ? date.startOf("day") : currStartDate,
+							to: isFrom ? currEndDate : date.endOf("day")
+						}
+					}
+				};
+
+				if (isFrom) {
+					this.setState({
+						fromDate: date.startOf("day"),
+						selectedDateRange: customRange
+					});
+				} else {
+					this.setState({
+						toDate: date.endOf("day"),
+						selectedDateRange: customRange
+					});
+				}
+
+				this.setState({ selectedDateRange: customRange });
+				_utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, _store2["default"].buildOutput(customRange));
+			}
+		}, {
+			key: "_onOk",
+			value: function _onOk() {
+				this._onBlur();
+			}
+		}, {
+			key: "_onDateChange",
+			value: function _onDateChange(range) {
+				this.setState({ selectedDateRange: range });
+			}
+		}, {
+			key: "_onSubmitBtnClick",
+			value: function _onSubmitBtnClick() {
+				_utils2["default"].dispatch(this, _constants2["default"].SUBMIT_CLICK, _store2["default"].buildOutput(this.state.selectedDateRange));
+			}
+		}, {
+			key: "_onArrowClick",
+			value: function _onArrowClick(e) {
+				var moveTo = undefined,
+				    direction = e.currentTarget.getAttribute("data-direction"),
+				    diff = 1,
+				    period = this.state.selectedDateRange.period,
+				    from = moment(this.state.selectedDateRange.dates.display.from).toISOString(),
+				    to = moment(this.state.selectedDateRange.dates.display.to).toISOString();
+
+				if (direction === "forward") {
+					diff = diff * -1;
+				}
+
+				if (period === "months" || period === "years" || period === "quarter") {
+					moveTo = moment(from).subtract(diff, period).endOf(period);
+				} else {
+					moveTo = moment(to).subtract(diff, period);
+				}
+
+				var newRange = {
+					name: "Custom",
+					period: period,
+					dates: {
+						query: {
+							from: moment(from).subtract(diff, period),
+							to: moveTo
+						},
+						display: {
+							from: moment(from).subtract(diff, period),
+							to: moveTo
+						}
+					}
+				};
+
+				this.setState({
+					fromDate: moment(from).subtract(diff, period),
+					toDate: moveTo,
+					selectedDateRange: newRange
+				});
+
+				_utils2["default"].dispatch(this, _constants2["default"].ARROW_CLICK, _store2["default"].buildOutput(newRange));
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				var _this2 = this;
+
+				var ranges = _store2["default"].getConvenienceDates(),
+				    options = [];
+
+				if (this.state.convenienceDateOptions.length) {
+					this.state.convenienceDateOptions.forEach(function (item) {
+						var range = _.findWhere(ranges, { name: item });
+						if (range) {
+							options.push(range);
+						}
+					});
+				} else {
+					options = ranges;
+				}
+
+				var btnLayoutStyle = function btnLayoutStyle() {
+					var classes = _DatePickerStyleCss2["default"]["date-range-list-item"];
+
+					classes += " " + _DatePickerStyleCss2["default"]["date-range-list-item-btn"];
+
+					if (_this2.state.layoutVertical) {
+						classes += " " + _DatePickerStyleCss2["default"]["date-range-layout-vertical"];
+					}
+
+					return classes;
+				};
+
+				var layoutStyle = function layoutStyle() {
+					var classes = _DatePickerStyleCss2["default"]["date-range-list-item"];
+
+					if (_this2.state.layoutVertical) {
+						classes += " " + _DatePickerStyleCss2["default"]["date-range-layout-vertical"];
+					}
+
+					return classes;
+				};
+
+				var layoutWrapper = function layoutWrapper() {
+					var classes = _DatePickerStyleCss2["default"]["date-range-list"];
+
+					if (_this2.state.layoutVertical) {
+						classes += " " + _DatePickerStyleCss2["default"]["date-range-slim"];
+					}
+
+					return classes;
+				};
+
+				if (this.state.ready) {
+					return React.createElement(
+						"div",
+						{ className: layoutWrapper() },
+						React.createElement(
+							"ul",
+							null,
+							this.state.showRanges ? React.createElement(
+								"li",
+								{ className: layoutStyle() },
+								React.createElement(_DateRangesMenuItemsJsx2["default"], { element: this.props.element, ranges: options, selected: this.state.selectedDateRange })
+							) : null,
+							React.createElement(
+								"li",
+								{ className: layoutStyle() },
+								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-from", "data-range": "from", value: moment(this.state.selectedDateRange.dates.display.from).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus, readOnly: true })
+							),
+							React.createElement(
+								"li",
+								{ className: layoutStyle() },
+								React.createElement("input", { type: "text", style: this.state.hideInputs ? { display: "none" } : null, className: _DatePickerStyleCss2["default"].input, ref: "datepicker-input-to", "data-range": "to", value: moment(this.state.selectedDateRange.dates.display.to).format(this.state.displayFormat), onFocus: this._onFocus, onClick: this._onFocus, readOnly: true })
+							),
+							this.state.moveDates ? React.createElement(
+								"div",
+								null,
+								React.createElement(
+									"li",
+									{ className: btnLayoutStyle(), "data-direction": "back", onClick: this._onArrowClick },
+									React.createElement(
+										"i",
+										{ className: "material-icons" },
+										"keyboard_arrow_left"
+									)
+								),
+								React.createElement(
+									"li",
+									{ className: btnLayoutStyle(), "data-direction": "forward", onClick: this._onArrowClick },
+									React.createElement(
+										"i",
+										{ className: "material-icons" },
+										"keyboard_arrow_right"
+									)
+								)
+							) : null,
+							this.state.hasSubmitBtn ? React.createElement(
+								"li",
+								{ className: layoutStyle() },
+								React.createElement(
+									"button",
+									{ className: _DatePickerStyleCss2["default"]["submit-btn"], onClick: this._onSubmitBtnClick },
+									"Submit"
+								)
+							) : null
+						),
+						this.state.show ? React.createElement(_CalendarJsx2["default"], _extends({}, this.state, { onBlur: this._onBlur, onOK: this._onOk, onUpdate: this._onUpdate })) : null
+					);
+				} else {
+					return React.createElement("div", null);
+				}
+			}
+		}]);
+
+		return DatePickerRangeView;
+	})(React.Component);
+
+	exports["default"] = DatePickerRangeView;
+	module.exports = exports["default"];
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _store = __webpack_require__(2);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _utils = __webpack_require__(4);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _constants = __webpack_require__(3);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	var _ClockJsx = __webpack_require__(10);
+
+	var _ClockJsx2 = _interopRequireDefault(_ClockJsx);
+
+	var _DatePickerStyleCss = __webpack_require__(12);
+
+	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
+
+	var TimePickerView = (function (_React$Component) {
+		function TimePickerView(props) {
+			_classCallCheck(this, TimePickerView);
+
+			_get(Object.getPrototypeOf(TimePickerView.prototype), "constructor", this).call(this, props);
+			this.state = _store2["default"].getState();
+
+			this._updateState = this._updateState.bind(this);
+			this._onBlur = this._onBlur.bind(this);
+			this._onFocus = this._onFocus.bind(this);
+			this._onOk = this._onOk.bind(this);
+			this._onCancel = this._onCancel.bind(this);
+		}
+
+		_inherits(TimePickerView, _React$Component);
+
+		_createClass(TimePickerView, [{
+			key: "componentDidMount",
+			value: function componentDidMount() {
+				return _utils2["default"].componentDidMount(this);
+			}
+		}, {
+			key: "_updateState",
+			value: function _updateState(props) {}
+		}, {
+			key: "_onBlur",
+			value: function _onBlur() {
+				this.setState({ show: false });
+				_utils2["default"].dispatch(this, _constants2["default"].BLUR, JSON.stringify({ time: this.state.selectedTime }));
+			}
+		}, {
+			key: "_onCancel",
+			value: function _onCancel() {
+				this._onBlur();
+				_utils2["default"].dispatch(this, _constants2["default"].CANCEL, JSON.stringify({ time: this.state.selectedTime }));
+			}
+		}, {
+			key: "_onFocus",
+			value: function _onFocus() {
+				this.setState({ show: true });
+			}
+		}, {
+			key: "_onOk",
+			value: function _onOk() {
+				this._onBlur();
+				_utils2["default"].dispatch(this, _constants2["default"].OK, JSON.stringify({ time: this.state.selectedTime }));
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				if (!this.state.show) {
+					return React.createElement(
+						"div",
+						{ className: _DatePickerStyleCss2["default"]["input-group"] },
+						React.createElement("input", {
+							id: this.props.element.id + "-input",
+							type: "text",
+							className: "input",
+							ref: "datepicker-input",
+							value: this.state.selectedTime.format("h:mm a"),
+							onClick: this._onFocus,
+							onFocus: this._onFocus,
+							readOnly: true })
+					);
+				} else {
+					return React.createElement(
+						"div",
+						{ className: _DatePickerStyleCss2["default"]["input-group"] },
+						React.createElement("input", {
+							id: this.props.element.id + "-input",
+							type: "text",
+							className: "input",
+							ref: "datepicker-input",
+							value: this.state.selectedTime.format("h:mm a"),
+							onClick: this._onFocus,
+							onFocus: this._onFocus,
+							readOnly: true }),
+						React.createElement(_ClockJsx2["default"], _extends({}, this.state, {
+							onBlur: this._onBlur,
+							onOK: this._onOk,
+							onUpdate: this._onUpdate,
+							onCancel: this._onCancel }))
+					);
+				}
+			}
+		}]);
+
+		return TimePickerView;
+	})(React.Component);
+
+	exports["default"] = TimePickerView;
+	module.exports = exports["default"];
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _DatePickerStyleCss = __webpack_require__(12);
+
+	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
+
+	var _utils = __webpack_require__(4);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _constants = __webpack_require__(3);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	var CalendarView = (function (_React$Component) {
+		function CalendarView(props) {
+			_classCallCheck(this, CalendarView);
+
+			_get(Object.getPrototypeOf(CalendarView.prototype), "constructor", this).call(this, props);
+			this.state = this.props;
+
+			this._createOverlay = this._createOverlay.bind(this);
+			this._attachEvents = this._attachEvents.bind(this);
+			this._removeOverlay = this._removeOverlay.bind(this);
+			this._onBlur = this._onBlur.bind(this);
+			this._onOkClick = this._onOkClick.bind(this);
+			this._onDayClick = this._onDayClick.bind(this);
+			this._onMonthClick = this._onMonthClick.bind(this);
+			this._onYearClick = this._onYearClick.bind(this);
+			this._getDate = this._getDate.bind(this);
+			this._getCalendarDate = this._getCalendarDate.bind(this);
+			this._getDaysInMonth = this._getDaysInMonth.bind(this);
+			this._getFirstDayOfMonth = this._getFirstDayOfMonth.bind(this);
+			this._getCellDate = this._getCellDate.bind(this);
+			this._getCellDateAsISO = this._getCellDateAsISO.bind(this);
+			this._getCellDateClass = this._getCellDateClass.bind(this);
+		}
+
+		_inherits(CalendarView, _React$Component);
+
+		_createClass(CalendarView, [{
+			key: "componentWillMount",
+			value: function componentWillMount() {
+				if (this.props.range) {
+					if (this.props.isFrom) {
+						this.setState({ selectedDate: moment(this.props.selectedDateRange.dates.display.from) });
+					} else {
+						this.setState({
+							selectedDate: moment(this.props.selectedDateRange.dates.display.to),
+							minDate: moment(this.state.selectedDateRange.dates.display.from)
+						});
+					}
+				}
+			}
+		}, {
+			key: "componentDidMount",
+			value: function componentDidMount() {
+				var selectedDate = this.state.selectedDate.toISOString();
+
+				this.setState({
+					viewingDay: moment(selectedDate).endOf("day"),
+					viewingMonth: moment(selectedDate).endOf("month"),
+					viewingYear: moment(selectedDate).endOf("year")
+				});
+
+				this._createOverlay();
+				this._attachEvents();
+			}
+		}, {
+			key: "_attachEvents",
+			value: function _attachEvents() {
+				var _this = this;
+
+				var input = this.refs["hidden-input"].getDOMNode();
+				input.focus();
+
+				var clickHandler = function clickHandler(e) {
+					var lostFocus = e.target.classList.contains(_DatePickerStyleCss2["default"].modal);
+					if (lostFocus) {
+						document.removeEventListener("click", clickHandler);
+						input.removeEventListener("keydown", keyUpHandler);
+						_this._onBlur();
+					} else {
+						input.focus();
+					}
+				};
+
+				var waitForKeys = false;
+
+				var keyUpHandler = function keyUpHandler(e) {
+
+					var keyMap = _utils2["default"].keyMap(e),
+					    duration = _this.state.powerKeys.duration,
+					    direction = _this.state.powerKeys.direction,
+					    moveTo = _this.state.selectedDate.toISOString(),
+					    keys = _this.state.powerKeys.keys,
+					    value = undefined;
+
+					if (waitForKeys) {
+
+						if (keyMap.ESC || keyMap.ENTER) {
+							waitForKeys = false;
+							_this.setState({
+								powerKeys: {
+									active: false,
+									keys: [],
+									direction: null,
+									value: 0,
+									duration: "Days",
+									style: {
+										display: "none"
+									}
+								}
+							});
+
+							if (keyMap.ENTER) {
+								_this.setState({ selectedDate: _this.state.moveToDate });
+								_this.props.onUpdate(_this.state.selectedDate);
+								e.preventDefault();
+								e.stopPropagation();
+							}
+
+							if (keyMap.ESC) {
+								_this.setState({ moveToDate: _this.state.selectedDate });
+								e.preventDefault();
+								e.stopPropagation();
+							}
+
+							return;
+						}
+
+						if (keyMap.VALUE || keyMap.VALUE === 0) {
+							if (keys.length) {
+								keys.push(keyMap.VALUE);
+							} else {
+								keys = [keyMap.VALUE];
+							}
+						} else if (keyMap.DURATION_DAYS) {
+							duration = "Days";
+						} else if (keyMap.DURATION_WEEKS) {
+							duration = "Weeks";
+						} else if (keyMap.DURATION_MONTHS) {
+							duration = "Months";
+						} else if (keyMap.DURATION_YEARS) {
+							duration = "Years";
+						} else if (keyMap.DELETE) {
+							keys.pop();
+						}
+
+						if (keyMap.ACTION_ADD) {
+							direction = "Add";
+						}
+
+						if (keyMap.ACTION_SUBTRACT) {
+							direction = "Subtract";
+						}
+
+						if (keyMap.RIGHT) {
+							var update = Number(keys.join("")) + 1;
+							keys = [update];
+							if (update > 0) {
+								direction = "Add";
+							}
+						}
+
+						if (keyMap.LEFT) {
+							var update = Number(keys.join("")) - 1;
+							if (update < 0) {
+								direction = "Subtract";
+							}
+							keys = [update];
+						}
+
+						value = keys.join("");
+
+						if (value > 0 && direction === "Subtract" || value < 0 && direction === "Add") {
+							var update = Number(keys.join("")) * -1;
+							keys = [update];
+							value = keys.join("");
+						}
+
+						if (keys.length === 1 && Math.abs(Number(value)) === 1) {
+							duration = _.trimRight(duration, "s");
+						} else if (!_.endsWith(duration, "s")) {
+							duration += "s";
+						}
+
+						moveTo = moment(moveTo).add(value, duration.toLowerCase());
+
+						_this.setState({
+							powerKeys: {
+								active: true,
+								keys: keys,
+								value: value,
+								direction: direction,
+								duration: duration
+							},
+							moveToDate: moveTo
+						});
+					} else {
+
+						var initPowerKeys = function initPowerKeys(subtract) {
+							waitForKeys = true;
+							_this.setState({
+								powerKeys: {
+									active: true,
+									keys: [],
+									direction: subtract ? "Subtract" : "Add",
+									duration: _this.state.powerKeys.duration,
+									style: { display: "block" }
+								}
+							});
+						};
+
+						if (keyMap.ACTION_ADD || keyMap.ACTION_SUBTRACT) {
+							initPowerKeys(keyMap.ACTION_SUBTRACT);
+							return;
+						}
+
+						if (keyMap.LEFT || keyMap.RIGHT) {
+							initPowerKeys(keyMap.LEFT);
+							return;
+						}
+
+						if (keyMap.ENTER) {
+							input.removeEventListener("keydown", keyUpHandler);
+							_this._onOkClick();
+							e.preventDefault();
+							e.stopPropagation();
+							return;
+						}
+
+						if (keyMap.ESC) {
+							input.removeEventListener("keydown", keyUpHandler);
+							_this._onBlur();
+							return;
+						}
+					}
+				};
+
+				input.addEventListener("keydown", keyUpHandler);
+				document.addEventListener("click", clickHandler);
+			}
+		}, {
+			key: "_createOverlay",
+			value: function _createOverlay() {
+				if (!document.getElementById("overlay")) {
+					var el = document.createElement("div");
+					el.id = "overlay";
+					el.classList.add(_DatePickerStyleCss2["default"].overlay);
+					document.body.appendChild(el);
+				}
+			}
+		}, {
+			key: "_removeOverlay",
+			value: function _removeOverlay() {
+				var el = document.getElementById("overlay");
+				if (el) {
+					el.outerHTML = "";
+				}
+			}
+		}, {
+			key: "_onBlur",
+			value: function _onBlur() {
+				this.props.onBlur();
+				this._removeOverlay();
+			}
+		}, {
+			key: "_onOkClick",
+			value: function _onOkClick() {
+				this.props.onOK();
+				this._removeOverlay();
+			}
+		}, {
+			key: "_onDayClick",
+			value: function _onDayClick(e) {
+				var day = Number(e.target.getAttribute("data-date").split("/")[2]),
+				    month = this.state.viewingMonth.month(),
+				    year = this.state.viewingYear.year(),
+				    newDate = moment().year(year).month(month).date(day);
+
+				this.props.onUpdate(newDate.endOf("day"));
+				this.setState({
+					selectedDate: newDate,
+					moveToDate: newDate
+				});
+
+				if (this.state.range && this.state.isFrom) {
+					this.setState({ toDate: newDate });
+				}
+
+				if (this.state.closeOnSelect) {
+					this._onOkClick(newDate.endOf("day"));
+				}
+			}
+		}, {
+			key: "_onMonthClick",
+			value: function _onMonthClick(e) {
+				var moveBack = undefined,
+				    update = undefined;
+
+				if (e.target) {
+					moveBack = e.target.classList.contains(_DatePickerStyleCss2["default"]["arrow-left"]) ? true : false;
+				} else {
+					moveBack = e === -1 ? true : false;
+				}
+
+				if (moveBack) {
+					update = this.state.viewingMonth.subtract(1, "month");
+				} else {
+					update = this.state.viewingMonth.add(1, "month");
+				}
+
+				this.setState({ viewingMonth: update, viewingYear: update });
+			}
+		}, {
+			key: "_onYearClick",
+			value: function _onYearClick(e) {
+				var moveBack = undefined,
+				    update = undefined;
+
+				if (e.target) {
+					moveBack = e.target.classList.contains(_DatePickerStyleCss2["default"]["arrow-left"]) ? true : false;
+				} else {
+					moveBack = e === -1 ? true : false;
+				}
+
+				if (moveBack) {
+					update = this.state.viewingYear.subtract(1, "year");
+				} else {
+					update = this.state.viewingYear.add(1, "year");
+				}
+
+				var viewingMonth = this.state.viewingMonth.format("MMM");
+				update.month(viewingMonth);
+
+				this.setState({ viewingMonth: update, viewingYear: update });
+			}
+		}, {
+			key: "_getDate",
+			value: function _getDate(type) {
+				var format = undefined;
+
+				switch (type) {
+					case "DAYOFWEEK":
+						format = "dddd";
+						break;
+					case "DAYOFMONTH":
+						format = "DD";
+						break;
+					case "MONTH":
+						format = "MMM";
+						break;
+					case "YEAR":
+						format = "YYYY";
+						break;
+				}
+
+				return this.state.selectedDate.format(format);
+			}
+		}, {
+			key: "_getCalendarDate",
+			value: function _getCalendarDate(type) {
+				var format = undefined,
+				    state = this.state.viewingMonth;
+
+				switch (type) {
+					case "DAYOFWEEK":
+						format = "dddd";
+						state = this.state.viewingDay;
+						break;
+					case "DAYOFMONTH":
+						format = "DD";
+						break;
+					case "MONTH":
+						format = "MMM";
+						break;
+					case "YEAR":
+						format = "YYYY";
+						state = this.state.viewingYear;
+						break;
+				}
+
+				return state.format(format);
+			}
+		}, {
+			key: "_getDaysInMonth",
+			value: function _getDaysInMonth() {
+				var days = [];
+
+				// If first day of month is Sunday & the user display is M - S
+				// TODO: fix this ugly hack
+				if (this.state.firstDayOfWeek > this._getFirstDayOfMonth()) {
+					days.push("", "", "", "", "", "");
+				} else {
+					for (var x = this.state.firstDayOfWeek; x < this._getFirstDayOfMonth(); x++) {
+						days.push("");
+					}
+				}
+
+				for (var y = 0; y < this.state.viewingMonth.daysInMonth(); y++) {
+					days.push(this.state.viewingMonth.startOf("month").add(y, "days").format("DD"));
+				}
+
+				return _.chunk(days, 7);
+			}
+		}, {
+			key: "_getFirstDayOfMonth",
+			value: function _getFirstDayOfMonth() {
+				return Number(this.state.viewingMonth.startOf("month").format("d"));
+			}
+		}, {
+			key: "_getCellDate",
+			value: function _getCellDate(cell) {
+				return this.state.viewingYear.year() + "/" + this.state.viewingMonth.format("MM") + "/" + cell;
+			}
+		}, {
+			key: "_getCellDateAsISO",
+			value: function _getCellDateAsISO(cell) {
+				return moment(this._getCellDate(cell), "YYYY/MM/DD");
+			}
+		}, {
+			key: "_getCellDateClass",
+			value: function _getCellDateClass(cell) {
+				if (cell && this.state.selectedDate.format("YYYY/MM/DD") === this._getCellDate(cell)) {
+					return _DatePickerStyleCss2["default"].selected;
+				}
+
+				if (cell && this.state.moveToDate && this.state.moveToDate.format("YYYY/MM/DD") === this._getCellDate(cell)) {
+					return _DatePickerStyleCss2["default"]["move-to"];
+				}
+
+				if (cell && this.state.today.format("YYYY/MM/DD") === this._getCellDate(cell)) {
+					return _DatePickerStyleCss2["default"].today;
+				}
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				var _this2 = this;
+
+				return React.createElement(
+					"div",
+					{ ref: "wrapper" },
+					React.createElement(
+						"div",
+						{ className: _DatePickerStyleCss2["default"].modal },
+						React.createElement(
+							"div",
+							{ className: _DatePickerStyleCss2["default"].wrapper, ref: "wrapper" },
+							React.createElement(
+								"div",
+								{ className: _DatePickerStyleCss2["default"].header },
+								this._getDate("DAYOFWEEK")
+							),
+							React.createElement(
+								"div",
+								{ className: _DatePickerStyleCss2["default"].date },
+								React.createElement(
+									"div",
+									{ className: _DatePickerStyleCss2["default"].month },
+									React.createElement("span", { className: _DatePickerStyleCss2["default"]["arrow-left"], onClick: this._onMonthClick }),
+									this._getCalendarDate("MONTH"),
+									React.createElement("span", { className: _DatePickerStyleCss2["default"]["arrow-right"], onClick: this._onMonthClick })
+								),
+								React.createElement(
+									"div",
+									{ className: _DatePickerStyleCss2["default"].day },
+									this._getDate("DAYOFMONTH")
+								),
+								React.createElement(
+									"div",
+									{ className: _DatePickerStyleCss2["default"].year },
+									React.createElement("span", { className: _DatePickerStyleCss2["default"]["arrow-left"], onClick: this._onYearClick }),
+									this._getCalendarDate("YEAR"),
+									React.createElement("span", { className: _DatePickerStyleCss2["default"]["arrow-right"], onClick: this._onYearClick })
+								)
+							),
+							React.createElement(
+								"table",
+								{ className: _DatePickerStyleCss2["default"].table },
+								React.createElement(
+									"thead",
+									null,
+									React.createElement(
+										"tr",
+										null,
+										this.state.daysOfWeek.map(function (day, j) {
+											return React.createElement(
+												"th",
+												{ key: j },
+												day
+											);
+										})
+									)
+								),
+								React.createElement(
+									"tbody",
+									null,
+									this._getDaysInMonth().map(function (row, i) {
+										return React.createElement(
+											"tr",
+											{ key: i },
+											row.map(function (cell, j) {
+												if (cell) {
+													var min = _this2.state.minDate.toISOString();
+													if (_this2._getCellDateAsISO(cell).isBetween(moment(min).subtract(1, "day"), _this2.state.maxDate, "day")) {
+														return React.createElement(
+															"td",
+															{ key: j },
+															React.createElement(
+																"a",
+																{
+																	"data-date": _this2._getCellDate(cell),
+																	className: _this2._getCellDateClass(cell),
+																	onClick: _this2._onDayClick },
+																cell
+															)
+														);
+													} else {
+														return React.createElement(
+															"td",
+															{ key: j },
+															cell
+														);
+													}
+												} else {
+													return React.createElement("td", { key: j });
+												}
+											})
+										);
+									})
+								)
+							),
+							React.createElement(
+								"div",
+								{ className: _DatePickerStyleCss2["default"].footer },
+								React.createElement(
+									"div",
+									{ className: _DatePickerStyleCss2["default"].buttons },
+									React.createElement(
+										"button",
+										{ className: _DatePickerStyleCss2["default"].btn, onClick: this._onBlur },
+										"Cancel"
+									),
+									this.state.closeOnSelect ? null : React.createElement(
+										"button",
+										{ className: _DatePickerStyleCss2["default"].btn, onClick: this._onOkClick },
+										"OK"
+									)
+								)
+							),
+							React.createElement(
+								"div",
+								{ className: _DatePickerStyleCss2["default"]["power-keys"], style: this.state.powerKeys.style },
+								React.createElement(
+									"li",
+									{ className: _DatePickerStyleCss2["default"]["power-keys-item"] },
+									this.state.powerKeys.direction
+								),
+								this.state.powerKeys.keys.length ? React.createElement(
+									"li",
+									{ className: _DatePickerStyleCss2["default"]["power-keys-item"] },
+									Math.abs(this.state.powerKeys.value)
+								) : null,
+								this.state.powerKeys.keys.length ? React.createElement(
+									"li",
+									{ className: _DatePickerStyleCss2["default"]["power-keys-item"] },
+									this.state.powerKeys.duration
+								) : null
+							),
+							React.createElement(
+								"div",
+								{ className: _DatePickerStyleCss2["default"]["hidden-input"] },
+								React.createElement("input", { type: "text", ref: "hidden-input", onFocus: this._onFocus })
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return CalendarView;
+	})(React.Component);
+
+	exports["default"] = CalendarView;
+	module.exports = exports["default"];
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _constants = __webpack_require__(3);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	var _store = __webpack_require__(2);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _utils = __webpack_require__(4);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _DatePickerStyleCss = __webpack_require__(12);
+
+	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
+
+	var DateRangeMenu = (function (_React$Component) {
+	  function DateRangeMenu(props) {
+	    _classCallCheck(this, DateRangeMenu);
+
+	    _get(Object.getPrototypeOf(DateRangeMenu.prototype), "constructor", this).call(this, props);
+	    this.state = {};
+	    this._onClick = this._onClick.bind(this);
+	    this._onRangeClick = this._onRangeClick.bind(this);
+	    this._onBlur = this._onBlur.bind(this);
+	  }
+
+	  _inherits(DateRangeMenu, _React$Component);
+
+	  _createClass(DateRangeMenu, [{
+	    key: "componentDidMount",
+	    value: function componentDidMount() {
+	      this.setState({
+	        isReady: true
+	      });
+	    }
+	  }, {
+	    key: "_onBlur",
+	    value: function _onBlur() {
+	      this.refs.menu.getDOMNode().style.display = "none";
+	    }
+	  }, {
+	    key: "_onClick",
+	    value: function _onClick() {
+	      var _this = this;
+
+	      this.refs.menu.getDOMNode().style.display = "block";
+
+	      var clickHandler = function clickHandler(e) {
+	        var hasFocus = _utils2["default"].closest(e.target, _DatePickerStyleCss2["default"]["date-ranges"]);
+
+	        if (!hasFocus) {
+	          document.removeEventListener("click", clickHandler);
+	          _this._onBlur();
+	        }
+	      };
+
+	      document.addEventListener("click", clickHandler);
+	    }
+	  }, {
+	    key: "_onRangeClick",
+	    value: function _onRangeClick(e) {
+	      var range = e.target.getAttribute("data-name"),
+	          selected = _.findWhere(this.props.ranges, { name: range });
+
+	      _utils2["default"].dispatch(this, _constants2["default"].DATE_RANGE_CHANGE, _store2["default"].buildOutput(selected));
+	      this._onBlur();
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var _this2 = this;
+
+	      var isSelected = function isSelected(item) {
+	        if (item.name === _this2.props.selected.name) {
+	          return _DatePickerStyleCss2["default"].selected;
+	        }
+	      };
+
+	      if (this.state.isReady) {
+	        return React.createElement(
+	          "div",
+	          { ref: "menu-wrapper" },
+	          React.createElement(
+	            "div",
+	            { className: _DatePickerStyleCss2["default"]["date-range-wrapper"], onClick: this._onClick },
+	            React.createElement(
+	              "div",
+	              { className: _DatePickerStyleCss2["default"]["date-range-wrapper-text"] },
+	              this.props.selected.name
+	            ),
+	            React.createElement(
+	              "div",
+	              { className: _DatePickerStyleCss2["default"]["date-range-wrapper-icon-caret"] },
+	              React.createElement(
+	                "i",
+	                { className: "material-icons" },
+	                "arrow_drop_down"
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            "ul",
+	            { className: _DatePickerStyleCss2["default"]["date-ranges"], ref: "menu" },
+	            this.props.ranges.map(function (item, i) {
+	              return React.createElement(
+	                "li",
+	                {
+	                  className: isSelected(item),
+	                  key: i,
+	                  "data-name": item.name,
+	                  onClick: _this2._onRangeClick },
+	                item.name
+	              );
+	            })
+	          )
+	        );
+	      } else {
+	        return React.createElement("div", null);
+	      }
+	    }
+	  }]);
+
+	  return DateRangeMenu;
+	})(React.Component);
+
+	exports["default"] = DateRangeMenu;
+	module.exports = exports["default"];
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _DatePickerStyleCss = __webpack_require__(12);
+
+	var _DatePickerStyleCss2 = _interopRequireDefault(_DatePickerStyleCss);
+
+	var _ClockCss = __webpack_require__(13);
+
+	var _ClockCss2 = _interopRequireDefault(_ClockCss);
+
+	var ClockView = (function (_React$Component) {
+		function ClockView(props) {
+			_classCallCheck(this, ClockView);
+
+			_get(Object.getPrototypeOf(ClockView.prototype), "constructor", this).call(this, props);
+			this.state = this.props;
+
+			this._createOverlay = this._createOverlay.bind(this);
+			this._removeOverlay = this._removeOverlay.bind(this);
+			this._onBlur = this._onBlur.bind(this);
+			this._onOkClick = this._onOkClick.bind(this);
+			this._onCancelClick = this._onCancelClick.bind(this);
+			this._getTime = this._getTime.bind(this);
+			this._onHoursClick = this._onHoursClick.bind(this);
+			this._onMinutesClick = this._onMinutesClick.bind(this);
+			this._onPointClick = this._onPointClick.bind(this);
+			this._onAMPMClick = this._onAMPMClick.bind(this);
+		}
+
+		_inherits(ClockView, _React$Component);
+
+		_createClass(ClockView, [{
+			key: "componentDidMount",
+			value: function componentDidMount() {
+				this.setState({ viewingHours: true, viewingMinutes: false });
+
+				this._createOverlay();
+				this._attachEvents();
+			}
+		}, {
+			key: "_attachEvents",
+			value: function _attachEvents() {
+				var _this = this;
+
+				var clickHandler = function clickHandler(e) {
+					var lostFocus = e.target.classList.contains(_DatePickerStyleCss2["default"].modal);
+					if (lostFocus) {
+						document.removeEventListener("click", clickHandler);
+						_this._onBlur();
+					}
+				};
+
+				document.addEventListener("click", clickHandler);
+			}
+		}, {
+			key: "_createOverlay",
+			value: function _createOverlay() {
+				if (!document.getElementById("overlay")) {
+					var el = document.createElement("div");
+					el.id = "overlay";
+					el.classList.add(_DatePickerStyleCss2["default"].overlay);
+					document.body.appendChild(el);
+				}
+			}
+		}, {
+			key: "_removeOverlay",
+			value: function _removeOverlay() {
+				var el = document.getElementById("overlay");
+				if (el) {
+					el.outerHTML = "";
+				}
+			}
+		}, {
+			key: "_onBlur",
+			value: function _onBlur() {
+				this.props.onBlur();
+				this._removeOverlay();
+			}
+		}, {
+			key: "_onCancelClick",
+			value: function _onCancelClick() {
+				this.props.onCancel();
+				this._removeOverlay();
+			}
+		}, {
+			key: "_onOkClick",
+			value: function _onOkClick() {
+				this.props.onOK();
+				this._removeOverlay();
+			}
+		}, {
+			key: "_getTime",
+			value: function _getTime(format) {
+				return this.state.selectedTime.format(format);
+			}
+		}, {
+			key: "_onHoursClick",
+			value: function _onHoursClick() {
+				this.setState({ viewingHours: true, viewingMinutes: false });
+			}
+		}, {
+			key: "_onMinutesClick",
+			value: function _onMinutesClick() {
+				this.setState({ viewingHours: false, viewingMinutes: true });
+			}
+		}, {
+			key: "_onAMPMClick",
+			value: function _onAMPMClick(e) {
+				var period = e.currentTarget.getAttribute("data-period"),
+				    currentPeriod = this.state.selectedTime.format("a");
+
+				if (period !== currentPeriod) {
+					this.setState({ selectedTime: this.state.selectedTime.subtract(12, "hours") });
+				}
+			}
+		}, {
+			key: "_onPointClick",
+			value: function _onPointClick(e) {
+				var point = e.currentTarget.getAttribute("data-point"),
+				    period = this.state.viewingHours ? "HH" : "mm";
+
+				var isPM = this.state.selectedTime.format("a") === "pm" ? true : false;
+
+				if (isPM && period === "HH") {
+					point = Number(point) + 12;
+					if (point === 24) {
+						point = 12;
+					}
+				}
+
+				if (!isPM && period === "HH" && point >= 12) {
+					point = Number(point) - 12;
+				}
+
+				if (period === "HH") {
+					this.setState({
+						viewingHours: !this.state.viewingHours,
+						viewingMinutes: !this.state.viewingMinutes,
+						selectedTime: this.state.selectedTime.hours(point).seconds(0).milliseconds(0)
+					});
+				} else {
+					this.setState({ selectedTime: this.state.selectedTime.minutes(point).seconds(0).milliseconds(0) });
+				}
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				var _this2 = this;
+
+				var buildClockPoints = function buildClockPoints(period) {
+					var buildStyles = function buildStyles(point) {
+						var classes = _ClockCss2["default"]["clock-face-point"];
+						classes += " " + _ClockCss2["default"][period + point];
+
+						if (period === "h" && _this2._getTime("h") === point) {
+							classes += " " + _ClockCss2["default"].selected;
+						}
+
+						if (period === "m" && _this2._getTime("mm") === point) {
+							classes += " " + _ClockCss2["default"].selected;
+						}
+
+						return classes;
+					};
+
+					var hours = ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
+					    minutes = ["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"],
+					    arr = hours;
+
+					if (period === "m") {
+						arr = minutes;
+					}
+
+					return arr.map(function (item, i) {
+						return React.createElement(
+							"div",
+							{
+								key: i,
+								onClick: _this2._onPointClick,
+								"data-point": item,
+								className: buildStyles(item) },
+							item
+						);
+					});
+				};
+
+				var ampmClasses = function ampmClasses(period) {
+					var classes = _ClockCss2["default"].ampm;
+
+					if (_this2.state.selectedTime.format("a") === period) {
+						classes += " " + _ClockCss2["default"].selected;
+					}
+
+					return classes;
+				};
+
+				return React.createElement(
+					"div",
+					{ ref: "wrapper" },
+					React.createElement(
+						"div",
+						{ className: _DatePickerStyleCss2["default"].modal },
+						React.createElement(
+							"div",
+							{ className: _DatePickerStyleCss2["default"].wrapper, ref: "wrapper" },
+							React.createElement(
+								"div",
+								{ className: _ClockCss2["default"].header },
+								React.createElement(
+									"ul",
+									{ className: _ClockCss2["default"].time },
+									React.createElement(
+										"li",
+										{
+											className: this.state.viewingHours ? _ClockCss2["default"].selected : null, onClick: this._onHoursClick },
+										this._getTime("h")
+									),
+									React.createElement(
+										"li",
+										{ className: _ClockCss2["default"].ignore },
+										":"
+									),
+									React.createElement(
+										"li",
+										{
+											className: this.state.viewingMinutes ? _ClockCss2["default"].selected : null, onClick: this._onMinutesClick },
+										this._getTime("mm")
+									),
+									React.createElement(
+										"li",
+										{ className: _ClockCss2["default"].ampm },
+										React.createElement(
+											"div",
+											{ className: ampmClasses("am"), "data-period": "am", onClick: this._onAMPMClick },
+											"AM"
+										),
+										React.createElement(
+											"div",
+											{ className: ampmClasses("pm"), "data-period": "pm", onClick: this._onAMPMClick },
+											"PM"
+										)
+									)
+								)
+							),
+							React.createElement(
+								"div",
+								{ className: _ClockCss2["default"].wrapper },
+								React.createElement(
+									"div",
+									{ className: _ClockCss2["default"]["clock-face"] },
+									buildClockPoints(this.state.viewingHours ? "h" : "m"),
+									React.createElement("div", { className: _ClockCss2["default"].center })
+								)
+							),
+							React.createElement(
+								"div",
+								{ className: _DatePickerStyleCss2["default"].footer },
+								React.createElement(
+									"div",
+									{ className: _DatePickerStyleCss2["default"].buttons },
+									React.createElement(
+										"button",
+										{ className: _DatePickerStyleCss2["default"].btn, onClick: this._onCancelClick },
+										"Cancel"
+									),
+									this.state.closeOnSelect ? null : React.createElement(
+										"button",
+										{ className: _DatePickerStyleCss2["default"].btn, onClick: this._onOkClick },
+										"OK"
+									)
+								)
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return ClockView;
+	})(React.Component);
+
+	exports["default"] = ClockView;
+	module.exports = exports["default"];
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	function EventEmitter() {
+	  this._events = this._events || {};
+	  this._maxListeners = this._maxListeners || undefined;
+	}
+	module.exports = EventEmitter;
+
+	// Backwards-compat with node 0.10.x
+	EventEmitter.EventEmitter = EventEmitter;
+
+	EventEmitter.prototype._events = undefined;
+	EventEmitter.prototype._maxListeners = undefined;
+
+	// By default EventEmitters will print a warning if more than 10 listeners are
+	// added to it. This is a useful default which helps finding memory leaks.
+	EventEmitter.defaultMaxListeners = 10;
+
+	// Obviously not all Emitters should be limited to 10. This function allows
+	// that to be increased. Set to zero for unlimited.
+	EventEmitter.prototype.setMaxListeners = function(n) {
+	  if (!isNumber(n) || n < 0 || isNaN(n))
+	    throw TypeError('n must be a positive number');
+	  this._maxListeners = n;
+	  return this;
+	};
+
+	EventEmitter.prototype.emit = function(type) {
+	  var er, handler, len, args, i, listeners;
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // If there is no 'error' event listener then throw.
+	  if (type === 'error') {
+	    if (!this._events.error ||
+	        (isObject(this._events.error) && !this._events.error.length)) {
+	      er = arguments[1];
+	      if (er instanceof Error) {
+	        throw er; // Unhandled 'error' event
+	      }
+	      throw TypeError('Uncaught, unspecified "error" event.');
+	    }
+	  }
+
+	  handler = this._events[type];
+
+	  if (isUndefined(handler))
+	    return false;
+
+	  if (isFunction(handler)) {
+	    switch (arguments.length) {
+	      // fast cases
+	      case 1:
+	        handler.call(this);
+	        break;
+	      case 2:
+	        handler.call(this, arguments[1]);
+	        break;
+	      case 3:
+	        handler.call(this, arguments[1], arguments[2]);
+	        break;
+	      // slower
+	      default:
+	        len = arguments.length;
+	        args = new Array(len - 1);
+	        for (i = 1; i < len; i++)
+	          args[i - 1] = arguments[i];
+	        handler.apply(this, args);
+	    }
+	  } else if (isObject(handler)) {
+	    len = arguments.length;
+	    args = new Array(len - 1);
+	    for (i = 1; i < len; i++)
+	      args[i - 1] = arguments[i];
+
+	    listeners = handler.slice();
+	    len = listeners.length;
+	    for (i = 0; i < len; i++)
+	      listeners[i].apply(this, args);
+	  }
+
+	  return true;
+	};
+
+	EventEmitter.prototype.addListener = function(type, listener) {
+	  var m;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // To avoid recursion in the case that type === "newListener"! Before
+	  // adding it to the listeners, first emit "newListener".
+	  if (this._events.newListener)
+	    this.emit('newListener', type,
+	              isFunction(listener.listener) ?
+	              listener.listener : listener);
+
+	  if (!this._events[type])
+	    // Optimize the case of one listener. Don't need the extra array object.
+	    this._events[type] = listener;
+	  else if (isObject(this._events[type]))
+	    // If we've already got an array, just append.
+	    this._events[type].push(listener);
+	  else
+	    // Adding the second element, need to change to array.
+	    this._events[type] = [this._events[type], listener];
+
+	  // Check for listener leak
+	  if (isObject(this._events[type]) && !this._events[type].warned) {
+	    var m;
+	    if (!isUndefined(this._maxListeners)) {
+	      m = this._maxListeners;
+	    } else {
+	      m = EventEmitter.defaultMaxListeners;
+	    }
+
+	    if (m && m > 0 && this._events[type].length > m) {
+	      this._events[type].warned = true;
+	      console.error('(node) warning: possible EventEmitter memory ' +
+	                    'leak detected. %d listeners added. ' +
+	                    'Use emitter.setMaxListeners() to increase limit.',
+	                    this._events[type].length);
+	      if (typeof console.trace === 'function') {
+	        // not supported in IE 10
+	        console.trace();
+	      }
+	    }
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+	EventEmitter.prototype.once = function(type, listener) {
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  var fired = false;
+
+	  function g() {
+	    this.removeListener(type, g);
+
+	    if (!fired) {
+	      fired = true;
+	      listener.apply(this, arguments);
+	    }
+	  }
+
+	  g.listener = listener;
+	  this.on(type, g);
+
+	  return this;
+	};
+
+	// emits a 'removeListener' event iff the listener was removed
+	EventEmitter.prototype.removeListener = function(type, listener) {
+	  var list, position, length, i;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events || !this._events[type])
+	    return this;
+
+	  list = this._events[type];
+	  length = list.length;
+	  position = -1;
+
+	  if (list === listener ||
+	      (isFunction(list.listener) && list.listener === listener)) {
+	    delete this._events[type];
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+
+	  } else if (isObject(list)) {
+	    for (i = length; i-- > 0;) {
+	      if (list[i] === listener ||
+	          (list[i].listener && list[i].listener === listener)) {
+	        position = i;
+	        break;
+	      }
+	    }
+
+	    if (position < 0)
+	      return this;
+
+	    if (list.length === 1) {
+	      list.length = 0;
+	      delete this._events[type];
+	    } else {
+	      list.splice(position, 1);
+	    }
+
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.removeAllListeners = function(type) {
+	  var key, listeners;
+
+	  if (!this._events)
+	    return this;
+
+	  // not listening for removeListener, no need to emit
+	  if (!this._events.removeListener) {
+	    if (arguments.length === 0)
+	      this._events = {};
+	    else if (this._events[type])
+	      delete this._events[type];
+	    return this;
+	  }
+
+	  // emit removeListener for all listeners on all events
+	  if (arguments.length === 0) {
+	    for (key in this._events) {
+	      if (key === 'removeListener') continue;
+	      this.removeAllListeners(key);
+	    }
+	    this.removeAllListeners('removeListener');
+	    this._events = {};
+	    return this;
+	  }
+
+	  listeners = this._events[type];
+
+	  if (isFunction(listeners)) {
+	    this.removeListener(type, listeners);
+	  } else {
+	    // LIFO order
+	    while (listeners.length)
+	      this.removeListener(type, listeners[listeners.length - 1]);
+	  }
+	  delete this._events[type];
+
+	  return this;
+	};
+
+	EventEmitter.prototype.listeners = function(type) {
+	  var ret;
+	  if (!this._events || !this._events[type])
+	    ret = [];
+	  else if (isFunction(this._events[type]))
+	    ret = [this._events[type]];
+	  else
+	    ret = this._events[type].slice();
+	  return ret;
+	};
+
+	EventEmitter.listenerCount = function(emitter, type) {
+	  var ret;
+	  if (!emitter._events || !emitter._events[type])
+	    ret = 0;
+	  else if (isFunction(emitter._events[type]))
+	    ret = 1;
+	  else
+	    ret = emitter._events[type].length;
+	  return ret;
+	};
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
+	}
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"overlay":"DatePickerStyle__overlay___2LzVe","modal":"DatePickerStyle__modal___1ErLw","fadeIn":"DatePickerStyle__fadeIn___pe3Rh","wrapper":"DatePickerStyle__wrapper___3Emxc","input":"DatePickerStyle__input___3oQ6t","hidden-input":"DatePickerStyle__hidden-input___2-B40","header":"DatePickerStyle__header___IS3_k","date":"DatePickerStyle__date___1vfXM","left":"DatePickerStyle__left___g_KzY","right":"DatePickerStyle__right___22ruE","hide":"DatePickerStyle__hide___13Weh","show":"DatePickerStyle__show___SZ3Ll","month":"DatePickerStyle__month___2gpUF","day":"DatePickerStyle__day___2hqAq","year":"DatePickerStyle__year___1n785","arrow-left":"DatePickerStyle__arrow-left___3mDM7","arrow-right":"DatePickerStyle__arrow-right___CB9Tp","table":"DatePickerStyle__table___4qAHf","selected":"DatePickerStyle__selected___j7zX0","move-to":"DatePickerStyle__move-to___jDGLn","today":"DatePickerStyle__today___C9UIO","footer":"DatePickerStyle__footer___2Blrk","buttons":"DatePickerStyle__buttons___1oDgg","btn":"DatePickerStyle__btn___3cSbl","power-keys":"DatePickerStyle__power-keys___10dk6","power-keys-item":"DatePickerStyle__power-keys-item___1frz9","date-range-list":"DatePickerStyle__date-range-list___2c-Cd","date-range-list-item":"DatePickerStyle__date-range-list-item___3FlfZ","date-range-list-item-btn":"DatePickerStyle__date-range-list-item-btn___2Oyag","date-range-layout-vertical":"DatePickerStyle__date-range-layout-vertical___8jcq1","date-range-wrapper":"DatePickerStyle__date-range-wrapper___2_ZpW","date-range-wrapper-icon-calendar":"DatePickerStyle__date-range-wrapper-icon-calendar___Fkaq2","date-range-wrapper-text":"DatePickerStyle__date-range-wrapper-text___2IM2g","date-range-wrapper-icon-caret":"DatePickerStyle__date-range-wrapper-icon-caret___3Hosk","date-range-slim":"DatePickerStyle__date-range-slim___2lYZl","submit-btn":"DatePickerStyle__submit-btn___1oWxa","menu-items":"DatePickerStyle__menu-items___3VrmY","date-ranges":"DatePickerStyle__date-ranges___1gSZQ"};
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// removed by extract-text-webpack-plugin
+	module.exports = {"header":"Clock__header___3nj4c","time":"Clock__time___30xaB","selected":"Clock__selected___3OyXs","ignore":"Clock__ignore___3_qPf","ampm":"Clock__ampm___3YtC5","wrapper":"Clock__wrapper___BmBGi","clock-face":"Clock__clock-face___275r-","clock-face-point":"Clock__clock-face-point___1VrCC","h12":"Clock__h12___3BZpU","m00":"Clock__m00___VSINN","h1":"Clock__h1___3q9j_","m05":"Clock__m05___1IgqT","h2":"Clock__h2___jbbsR","m10":"Clock__m10___LjRNB","h3":"Clock__h3___19_Dt","m15":"Clock__m15___3nEwt","h4":"Clock__h4___3cEaf","m20":"Clock__m20___1xP3z","h5":"Clock__h5___1qPjH","m25":"Clock__m25___5KcPD","h6":"Clock__h6___n14sL","m30":"Clock__m30___1xMeT","h7":"Clock__h7___3jA1K","m35":"Clock__m35___W3pI7","h8":"Clock__h8___VSBvL","m40":"Clock__m40___2T0oj","h9":"Clock__h9___27B8R","m45":"Clock__m45___2b3yh","h10":"Clock__h10___3-ZEU","m50":"Clock__m50___3Wh0w","h11":"Clock__h11___3wfWG","m55":"Clock__m55___2ET6p","center":"Clock__center___3sPC4"};
+
+/***/ }
+/******/ ])
+});
+;

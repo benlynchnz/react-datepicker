@@ -151,7 +151,7 @@ export default class DatePickerRangeView extends React.Component {
 	}
 
 	_onFocus(e) {
-		let isFrom = (e.target.getAttribute("data-range") === "from") ? true : false;
+		let isFrom = (e.target.getAttribute("data-range") === "from");
 
 		this.setState({
 			isFrom: isFrom,
@@ -162,21 +162,31 @@ export default class DatePickerRangeView extends React.Component {
 	}
 
 	_onUpdate(date) {
-		let isFrom = this.state.isFrom,
-			customRange = _.findWhere(Store.getConvenienceDates(), { name: "Custom" });
+		const isFrom = this.state.isFrom;
+		const currStartDate = this.state.fromDate;
+		const currEndDate = this.state.toDate;
 
-		customRange.dates = this.state.selectedDateRange.dates;
+		let customRange = {
+			name: "Custom",
+			period: "days",
+			dates: {
+				query: {
+					from: isFrom ? date.startOf("day") : currStartDate,
+					to: isFrom ? currEndDate : date.endOf("day")
+				},
+				display: {
+					from: isFrom ? date.startOf("day") : currStartDate,
+					to: isFrom ? currEndDate : date.endOf("day")
+				}
+			}
+		};
 
 		if (isFrom) {
-			customRange.dates.query.from = date.startOf("day");
-			customRange.dates.display.from = date.startOf("day");
 			this.setState({
 				fromDate: date.startOf("day"),
 				selectedDateRange: customRange
 			});
 		} else {
-			customRange.dates.query.to = date.endOf("day");
-			customRange.dates.display.to = date.endOf("day");
 			this.setState({
 				toDate: date.endOf("day"),
 				selectedDateRange: customRange

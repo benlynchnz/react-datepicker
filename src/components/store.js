@@ -203,6 +203,10 @@ class Store extends EventEmitter {
 		return convenienceDates;
 	}
 
+	getCustomRange() {
+		return _.findWhere(convenienceDates, { name: "Custom" });
+	}
+
 	buildOutput(range) {
 		const display_from = moment(range.dates.display.from).toISOString();
 		const display_to = moment(range.dates.display.to).toISOString();

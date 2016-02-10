@@ -256,6 +256,7 @@ export default class CalendarView extends React.Component {
 			year = this.state.viewingYear.year(),
 			newDate = moment().year(year).month(month).date(day);
 
+
 		this.props.onUpdate(newDate.endOf("day"));
 		this.setState({
 			selectedDate: newDate,
