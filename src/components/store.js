@@ -80,6 +80,14 @@ let convenienceDates = [
 		default: true
 	},
 	{
+		name: "Last 4 weeks",
+		period: "days",
+		dates: {
+			display: last_x_days(28, true),
+			query: last_x_days(28)
+		}
+	},
+	{
 		name: "This week",
 		period: "weeks",
 		dates: {
