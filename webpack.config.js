@@ -32,6 +32,13 @@ module.exports = {
     modulesDirectories: ['node_modules', 'components']
   },
 
+  externals: {
+    react: "React",
+    "react-dom": "ReactDOM",
+    moment: "moment",
+    _: "lodash"
+  },
+
   plugins: [
     new ExtractTextPlugin('datepicker.css', { allChunks: true })
   ]

@@ -20,11 +20,11 @@ export default class DateRangeMenu extends React.Component {
   }
 
   _onBlur() {
-    this.refs.menu.getDOMNode().style.display = "none";
+    this.refs.menu.style.display = "none";
   }
 
   _onClick() {
-    this.refs.menu.getDOMNode().style.display = "block";
+    this.refs.menu.style.display = "block";
 
     let clickHandler = (e) => {
       let hasFocus = utils.closest(e.target, styles["date-ranges"]);
@@ -40,7 +40,7 @@ export default class DateRangeMenu extends React.Component {
 
   _onRangeClick(e) {
     let range = e.target.getAttribute("data-name"),
-      selected = _.findWhere(this.props.ranges, { name: range });
+      selected = _.find(this.props.ranges, { name: range });
 
     utils.dispatch(this, Constants.DATE_RANGE_CHANGE, Store.buildOutput(selected));
     this._onBlur();
@@ -49,8 +49,10 @@ export default class DateRangeMenu extends React.Component {
   render() {
     let isSelected = (item) => {
       if (item.name === this.props.selected.name) {
-        return styles.selected;
+        return true;
       }
+
+      return false;
     };
 
     if (this.state.isReady) {
@@ -64,11 +66,12 @@ export default class DateRangeMenu extends React.Component {
               <i className="material-icons">arrow_drop_down</i>
             </div>
           </div>
-          <ul className={styles["date-ranges"]} ref="menu">
+          <ul className={styles["date-ranges"]} ref="menu" data-automationid="date-ranges-list">
             {this.props.ranges.map((item, i) => {
               return (
                 <li
-                  className={isSelected(item)}
+                  className={isSelected(item) ? styles.selected : null}
+                  data-selected={isSelected(item) ? true : false}
                   key={i}
                   data-name={item.name}
                   onClick={this._onRangeClick}>

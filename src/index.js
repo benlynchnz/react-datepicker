@@ -1,4 +1,5 @@
-'use strict';
+import React from "react";
+import { render } from "react-dom";
 
 // Polyfill CustomEvent for IE
 try {
@@ -28,11 +29,13 @@ let renderHandler = () => {
 		classComp = document.getElementsByClassName('react-datepicker');
 
 	Array.prototype.forEach.call(reactComp, (el) => {
-	    React.render(<DatePicker element={el}/>, el);
+	    // React.render(<DatePicker element={el}/>, el);
+			render(<DatePicker element={el}/>, el);
 	});
 
 	Array.prototype.forEach.call(classComp, (el) => {
-	    React.render(<DatePicker element={el}/>, el);
+	    // React.render(<DatePicker element={el}/>, el);
+			render(<DatePicker element={el}/>, el);
 	});
 };
 

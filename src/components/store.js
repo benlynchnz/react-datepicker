@@ -170,7 +170,7 @@ let _state = {
 	selectedTime: moment().minutes(round5(moment().format("mm"))),
 	fromDate: moment().endOf("day"),
 	toDate: moment().endOf("day"),
-	selectedDateRange: _.findWhere(convenienceDates, { default: true }),
+	selectedDateRange: _.find(convenienceDates, { default: true }),
 	convenienceDateOptions: [],
 	moveToDate: moment().endOf("day"),
 	today: moment().endOf("day"),
@@ -186,6 +186,7 @@ let _state = {
 	moveDates: false,
 	showRanges: true,
 	timepicker: false,
+	overlay: true,
 	show: false,
 	powerKeys: {
 		active: false,
@@ -212,7 +213,7 @@ class Store extends EventEmitter {
 	}
 
 	getCustomRange() {
-		return _.findWhere(convenienceDates, { name: "Custom" });
+		return _.find(convenienceDates, { name: "Custom" });
 	}
 
 	buildOutput(range) {

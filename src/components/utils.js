@@ -1,3 +1,5 @@
+import ReactDOM from "react-dom";
+
 let utils = {};
 
 let closest = (elem, selector) => {
@@ -119,7 +121,7 @@ let keyMap = (e) => {
 utils.keyMap = keyMap;
 
 let componentDidMount = (ctx) => {
-  let rootNode = React.findDOMNode(ctx),
+  let rootNode = ReactDOM.findDOMNode(ctx),
   hasNextProps = false,
   nextProps = {},
   parentNode = rootNode.parentNode;

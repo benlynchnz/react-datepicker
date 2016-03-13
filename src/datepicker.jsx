@@ -31,7 +31,7 @@ export default class DatePickerView extends React.Component {
 				from = moment(dates[0]),
 				to = moment(dates[1]);
 
-			let customRange = _.findWhere(Store.getConvenienceDates(), { name: "Custom" });
+			let customRange = _.find(Store.getConvenienceDates(), { name: "Custom" });
 			customRange.dates = {
 				display: {
 					from: from,
@@ -51,7 +51,7 @@ export default class DatePickerView extends React.Component {
 
 		if (props["data-default-range"] && !props["data-dates"]) {
 			let range = props["data-default-range"],
-				rangeValues = _.findWhere(Store.getConvenienceDates(), { name: range });
+				rangeValues = _.find(Store.getConvenienceDates(), { name: range });
 
 			this.setState({
 				defaultRange: rangeValues

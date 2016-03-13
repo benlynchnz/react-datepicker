@@ -7,6 +7,7 @@ export default class CalendarView extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = this.props;
+		console.log(props);
 
 		this._createOverlay = this._createOverlay.bind(this);
 		this._attachEvents = this._attachEvents.bind(this);
@@ -52,7 +53,7 @@ export default class CalendarView extends React.Component {
 	}
 
 	_attachEvents() {
-		let input = this.refs["hidden-input"].getDOMNode();
+		let input = this.refs["hidden-input"];
 		input.focus();
 
 		let clickHandler = (e) => {
