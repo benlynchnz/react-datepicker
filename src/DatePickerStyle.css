@@ -15,7 +15,6 @@
 	-webkit-animation:fadeIn ease-in 1;
 	-moz-animation:fadeIn ease-in 1;
 	animation:fadeIn ease-in 1;
-
 	-webkit-animation-fill-mode:forwards;
 	-moz-animation-fill-mode:forwards;
 	animation-fill-mode:forwards;

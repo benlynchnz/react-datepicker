@@ -12,8 +12,6 @@ export default class DatePickerSingleView extends React.Component {
 		super(props);
 		this.state = Store.getState();
 
-		console.log("single", props);
-
 		this._updateState = this._updateState.bind(this);
 		this._onBlur = this._onBlur.bind(this);
 		this._onFocus = this._onFocus.bind(this);
@@ -31,8 +29,6 @@ export default class DatePickerSingleView extends React.Component {
 				displayFormat: props['data-display-format']
 			});
 		}
-
-		// if (props['data-overlay'])
 
 		if (props['data-selected-date']) {
 			let date,

@@ -7,7 +7,6 @@ export default class CalendarView extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = this.props;
-		console.log(props);
 
 		this._createOverlay = this._createOverlay.bind(this);
 		this._attachEvents = this._attachEvents.bind(this);
