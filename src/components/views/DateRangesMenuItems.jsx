@@ -49,8 +49,10 @@ export default class DateRangeMenu extends React.Component {
   render() {
     let isSelected = (item) => {
       if (item.name === this.props.selected.name) {
-        return styles.selected;
+        return true;
       }
+
+      return false;
     };
 
     if (this.state.isReady) {
@@ -64,11 +66,12 @@ export default class DateRangeMenu extends React.Component {
               <i className="material-icons">arrow_drop_down</i>
             </div>
           </div>
-          <ul className={styles["date-ranges"]} ref="menu">
+          <ul className={styles["date-ranges"]} ref="menu" data-automationid="date-ranges-list">
             {this.props.ranges.map((item, i) => {
               return (
                 <li
-                  className={isSelected(item)}
+                  className={isSelected(item) ? styles.selected : null}
+                  data-selected={isSelected(item) ? true : false}
                   key={i}
                   data-name={item.name}
                   onClick={this._onRangeClick}>

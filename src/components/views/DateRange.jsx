@@ -310,10 +310,10 @@ export default class DatePickerRangeView extends React.Component {
 						) : null }
 
 						<li className={layoutStyle()}>
-							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-from" data-range="from" value={moment(this.state.selectedDateRange.dates.display.from).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
+							<input type="text" data-automationid="start-date-input" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-from" data-range="from" value={moment(this.state.selectedDateRange.dates.display.from).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
 						</li>
 						<li className={layoutStyle()}>
-							<input type="text" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-to" data-range="to" value={moment(this.state.selectedDateRange.dates.display.to).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
+							<input type="text" data-automationid="end-date-input" style={this.state.hideInputs ? { display: "none"} : null} className={styles.input} ref="datepicker-input-to" data-range="to" value={moment(this.state.selectedDateRange.dates.display.to).format(this.state.displayFormat)} onFocus={this._onFocus} onClick={this._onFocus} readOnly />
 						</li>
 
 						{this.state.moveDates ? (
