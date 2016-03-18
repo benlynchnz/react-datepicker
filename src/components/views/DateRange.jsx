@@ -232,8 +232,8 @@ export default class DatePickerRangeView extends React.Component {
 			period: period,
 			dates: {
 				query: {
-					from: moment(from).subtract(diff, period),
-					to: moveTo
+					from: moment(from).subtract(diff, period).add(1, "ms"),
+					to: moveTo.add(1, "ms")
 				},
 				display: {
 					from: moment(from).subtract(diff, period),
