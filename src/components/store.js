@@ -218,9 +218,12 @@ class Store extends EventEmitter {
 	buildOutput(range) {
 		const display_from = moment(range.dates.display.from).toISOString();
 		const display_to = moment(range.dates.display.to).toISOString();
-		const query_from = moment(range.dates.query.from).toISOString();
+		let query_from = moment(range.dates.query.from).toISOString();
 		let query_to = moment(range.dates.query.to).toISOString();
 
+		if (moment(query_from).format("SSS") !== "000") {
+			query_from = moment(query_from).add(1, "ms").toISOString();
+		}
 		if (moment(query_to).format("SSS") !== "000") {
 			query_to = moment(query_to).add(1, "ms").toISOString();
 		}
