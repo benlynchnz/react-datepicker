@@ -216,17 +216,16 @@ class Store extends EventEmitter {
 	}
 
 	buildOutput(range) {
-		const display_from = moment(range.dates.display.from).toISOString();
-		const display_to = moment(range.dates.display.to).toISOString();
-		let query_from = moment(range.dates.query.from).toISOString();
-		let query_to = moment(range.dates.query.to).toISOString();
+		let display_from = moment(range.dates.display.from).toISOString();
+		let display_to = moment(range.dates.display.to).toISOString();
 
-		if (moment(query_from).format("SSS") !== "000") {
-			query_from = moment(query_from).add(1, "ms").toISOString();
+		if (moment(display_from).format("SSS") !== "000") {
+			console.warn("display from wrong", display_from);
+			display_from = moment(display_from).startOf("day").toISOString();
 		}
-		if (moment(query_to).format("SSS") !== "000") {
-			query_to = moment(query_to).add(1, "ms").toISOString();
-		}
+
+		let query_to = moment(display_to).clone();
+		query_to = moment(query_to).add(1, "ms").toISOString();
 
 		let payload = {
 			dates: {
@@ -235,14 +234,14 @@ class Store extends EventEmitter {
 					to: display_to
 				},
 				query: {
-					from: query_from,
+					from: display_from,
 					to: query_to
 				}
 			},
 			name: range.name,
 			period: range.period,
-			diff_in_days: moment(query_to).diff(moment(query_from), "days"),
-			diff_in_hours: moment(query_to).diff(moment(query_from), "hours")
+			diff_in_days: moment(query_to).diff(moment(display_from), "days"),
+			diff_in_hours: moment(query_to).diff(moment(display_from), "hours")
 		};
 
 		return JSON.stringify(payload);
