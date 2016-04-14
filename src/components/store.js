@@ -220,7 +220,7 @@ class Store extends EventEmitter {
 		let display_to = moment(range.dates.display.to).toISOString();
 
 		if (moment(display_from).format("SSS") !== "000") {
-			console.warn("display from wrong", display_from);
+			console.log("display from wrong", display_from);
 			display_from = moment(display_from).startOf("day").toISOString();
 		}
 
